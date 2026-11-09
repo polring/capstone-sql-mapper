@@ -7,8 +7,12 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
-from src.data_generation.generalized_pairs.generate import MAPPINGS, generate_pairs, load_catalog, plan_contrasts, write_pairs
-from src.data_generation.generalized_pairs.sql_types import Distribution, SQL_TYPES, apportion, subtype_blocks, subtype_names
+from src.data_generation.generalized_pairs.catalog import Block, Phrase
+from src.data_generation.generalized_pairs.contrasts import ContrastPair
+from src.data_generation.generalized_pairs.generate import (
+    MAPPINGS, check_ordinary_capacity, generate_pairs, load_catalog, prepare_quota_streams, write_pairs,
+)
+from src.data_generation.generalized_pairs.sql_types import Distribution, SQL_TYPES, apportion, subtype_names
 
 
 PREDICATE = re.compile(r"<TABLE1\.COL\d+, \w+> (>=|<=|!=|=|<|>|IN|LIKE|BETWEEN) ")
@@ -113,15 +117,65 @@ class TypeDistributionTest(unittest.TestCase):
         self.assertEqual(families, {"rows": 250_000, "aggregate": 125_000, "group": 62_500, "scalar": 62_500})
         quotas = {f: apportion(n, profile.targets[f]) for f, n in families.items()}
         self.assertEqual(sum(n for k, n in quotas["rows"].items() if k.startswith("where1:")), 177_500)
-        plans, _, reserved_count = plan_contrasts(profile, catalog, quotas, 42, None)
-        paired = sum(2 * n for group in plans.values() for _, n in group)
+        streams, _ = prepare_quota_streams(500_000, 42, catalog, None, profile)
+        self.assertEqual(sum(s.quota for s in streams), 500_000)
+        paired = sum(2 * n for s in streams if s.paired for _, n in s.stream)
         self.assertLess(abs(paired / 500_000 - 1 / 9), .001)
-        sizes = Counter()
-        for block in catalog.rows():
-            for key, part in subtype_blocks("rows", block):
-                sizes[key] += part.size
-        for key, n in quotas["rows"].items():
-            self.assertLessEqual(n, (sizes[key] - reserved_count["rows", key]) * 64, key)
+
+        # At the same scale, 0.03% of the rows family requires 75 different bare SELECTs/wordings.
+        raw = json.loads(SQL_TYPES.with_name("sql_types_large.json").read_bytes())
+        raw["subtype_percent"]["rows"].update({"where0/plain": 0.03, "where0/limit": 1.97})
+        with self.assertRaisesRegex(ValueError, "rows/where0/plain.*75 ordinary records.*at most 74"):
+            next(generate_pairs(500_000, 42, sql_types=self.path(raw)))
+
+    def test_partially_matched_sqls_fill_their_remaining_ordinary_slots(self):
+        for key, count, expected_pairs in (("SUM/where1", 102, 5), ("COUNT/where1", 75, 4)):
+            path = self.path({"family_percent": {"aggregate": 100}, "example_weights": {"ordinary": 8, "contrast": 1},
+                              "subtype_percent": {"aggregate": {key: 100}}})
+            for seed in (2, 42):
+                with self.subTest(key=key, seed=seed):
+                    rows = list(generate_pairs(count, seed, sql_types=path, max_questions_per_sql=3))
+                    self.assertEqual(len(rows), count)
+                    self.assertEqual(len({(r["output"], r["input"]) for r in rows}), count)
+                    self.assertEqual({emitted_type(r["output"]) for r in rows}, {("aggregate", key)})
+                    parents = [rows[i:i + 3] for i in range(0, count, 3)]
+                    self.assertEqual(len({p[0]["output"] for p in parents}), count // 3)
+                    for i, p in enumerate(parents, 1):
+                        self.assertEqual(len({r["output"] for r in p}), 1)
+                        self.assertEqual([r["id"] for r in p], [f"{i}.{child}" for child in (1, 2, 3)])
+                    peers = {r["id"]: r for r in rows}
+                    paired = [r for r in rows if "contrast" in r]
+                    self.assertEqual(len(paired), expected_pairs)
+                    for r in paired:
+                        parent, child = r["id"].split(".")
+                        peer_id = r["contrast"]["paired_id"]
+                        self.assertEqual(peer_id, f"{int(parent)-1}.{child}")
+                        self.assertNotEqual(peers[peer_id]["output"], r["output"])
+                    self.assertTrue(any("contrast" in p[0] and "contrast" not in p[-1] for p in parents))
+
+    def test_only_the_scarce_side_of_a_cross_subtype_pair_takes_fillers(self):
+        having = "SUM/where0/having:>/plain"
+        where = "SUM/where1/having:none/plain"
+        path = self.path({"family_percent": {"group": 100}, "example_weights": {"ordinary": 8, "contrast": 1},
+                          "subtype_percent": {"group": {having: 30, where: 70}}})
+        rows = list(generate_pairs(30, 42, sql_types=path, max_questions_per_sql=3))
+        self.assertEqual(Counter(emitted_type(r["output"])[1] for r in rows), {having: 9, where: 21})
+        right, = [r for r in rows if "contrast" in r]
+        left = next(r for r in rows if r["id"] == right["contrast"]["paired_id"])
+        self.assertEqual(sum(r["output"] == left["output"] for r in rows), 1)
+        siblings = [r for r in rows if r["output"] == right["output"]]
+        self.assertEqual([r["id"].split(".")[1] for r in siblings], ["1", "2", "3"])
+        self.assertTrue(all("contrast" not in r for r in siblings[1:]))
+
+    def test_matched_wording_is_excluded_from_actual_ordinary_capacity(self):
+        left = Phrase("SELECT 1", ("shared wording",))
+        pair = ContrastPair("boundary", left, Phrase("SELECT 2", ("other side",)))
+        block = Block(Phrase(left.sql, ("shared wording", "ordinary wording")), {}, (0, 0, False, False))
+        held = {left.sql: (pair, 1)}
+        self.assertEqual(check_ordinary_capacity([block], held, 1, 3, 42, "rows", None),
+                         {left.sql: ("ordinary wording",)})
+        with self.assertRaisesRegex(ValueError, "2 ordinary records.*at most 1 available"):
+            check_ordinary_capacity([block], held, 2, 3, 42, "rows", None)
 
     def test_percentages_apply_to_records_including_contrasts(self):
         path = self.path({"family_percent": {"rows": 40, "aggregate": 60},
@@ -178,7 +232,7 @@ class TypeDistributionTest(unittest.TestCase):
             rows = list(generate_pairs(74, seed, sql_types=path))
             self.assertEqual(len({(r["output"], r["input"]) for r in rows}), 74)
             with self.assertRaisesRegex(ValueError, "at most 74 available"):
-                list(generate_pairs(75, seed, sql_types=path))
+                next(generate_pairs(75, seed, sql_types=path))
 
     def test_config_errors_and_insufficient_capacity_preserve_output(self):
         profile = {"family_percent": {"rows": 100}, "example_weights": {"ordinary": 1}}

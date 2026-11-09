@@ -1,13 +1,13 @@
 """Stream team 2's generalized question/SQL pairs to a UTF-8 JSON array."""
 
 import argparse
-from collections import Counter, defaultdict
+from collections import defaultdict
 from collections.abc import Iterator
 from dataclasses import dataclass
 from fractions import Fraction
 import heapq
 import json
-from itertools import islice
+from itertools import chain, islice
 from math import gcd
 from pathlib import Path
 import random
@@ -25,6 +25,7 @@ else:
 
 MAPPINGS = Path(__file__).with_name("mappings.json")
 AUTO_MAX_QUESTIONS = 64
+EXACT_ERROR_SOURCE_LIMIT = 64
 AGGREGATE_FAMILY = 1
 
 
@@ -48,7 +49,7 @@ def sources(block, rng, max_questions_per_sql, seed, reserved):
     for index in permuted_indices(block.size, rng):
         sql, questions = block.source(index, max_questions_per_sql, seed=seed)
         if sql not in reserved:
-            yield sql, questions, None
+            yield sql, questions, None, 0
 
 
 def balanced_batches(ordinary, contrasts, initial_limit, ordinary_per_contrast):
@@ -116,9 +117,10 @@ def ordinary_stream(blocks, rng, cap, seed, reserved):
     return shuffled_round_robin(shapes, rng)
 
 
-def matched_parents(pair, seed, budget):
-    left, right = pair.sources(seed, budget)
-    return ((*left, None), (*right, pair.kind))
+def matched_parents(pair, seed, matched, fillers):
+    for (sql, questions), kind in zip(pair.sources(seed, matched), (None, pair.kind)):
+        # Append ordinary children after all paired children to preserve paired_id on both sides.
+        yield sql, chain(questions, fillers.get(sql, ())), kind, matched
 
 
 def automatic_batches(count, seed, catalog, max_questions_per_sql, weights):
@@ -145,7 +147,7 @@ def automatic_batches(count, seed, catalog, max_questions_per_sql, weights):
         index, paired, item = batch
         # Ordinary standalone aggregates have a small, finite SQL catalogue.
         budget = question_budget(emitted, paired or index == AGGREGATE_FAMILY, max_questions_per_sql)
-        parents = matched_parents(item, seed, budget) if paired else (item,)
+        parents = matched_parents(item, seed, budget, {}) if paired else (item,)
         written = yield parents, budget
         emitted += written
         try:
@@ -156,11 +158,10 @@ def automatic_batches(count, seed, catalog, max_questions_per_sql, weights):
 
 def plan_contrasts(profile, catalog, quotas, seed, limit):
     """Debit both parents' subtype quotas before assigning any ordinary examples."""
-    reserved = set()
-    used_sources = Counter()
+    reserved = defaultdict(dict)
     plans = defaultdict(list)
     if not profile.weights["contrast"]:
-        return plans, reserved, used_sources
+        return plans, reserved
     families, _ = contrast_catalog(catalog, seed)
     for stream in families:
         candidates = list(stream)
@@ -195,14 +196,60 @@ def plan_contrasts(profile, catalog, quotas, seed, limit):
             if n:
                 remaining[a] -= n
                 remaining[b] -= n
-                used_sources[family, a] += 1
-                used_sources[family, b] += 1
-                reserved.update((left[0], right[0]))
-                plans[family].append((pair, n))
+                plan = pair, n
+                reserved[family, a][left[0]] = plan
+                reserved[family, b][right[0]] = plan
+                plans[family].append(plan)
                 needed -= n
         if needed and not profile.weights["ordinary"]:
             raise ValueError(f"{family}: subtype quotas or available pairs cannot supply {2 * needed} contrast records")
-    return plans, reserved, used_sources
+    return plans, reserved
+
+
+def capacity_error(family, bucket, quota, available, cap):
+    return ValueError(f"{family}/{bucket or 'automatic'} cannot supply its quota of {quota} ordinary records "
+                      f"(at most {available} available, per-SQL maximum {cap})")
+
+
+def check_ordinary_capacity(parts, reserved, quota, cap, seed, family, bucket):
+    """Prove the ordinary quota and plan any extra questions needed on matched parents."""
+    source_count = sum(block.size for block in parts)
+    # Every unreserved SQL has at least one wording. Only count variants until
+    # the remaining quota is proven; plentiful buckets need no enumeration.
+    missing = quota - (source_count - len(reserved))
+    if missing <= 0:
+        return {}
+
+    ceiling = source_count * cap - sum(n for _, n in reserved.values())
+    # Avoid traversing huge catalogues for requests beyond even their upper bound.
+    # For small catalogues, report the actual number of distinct wordings.
+    if quota > ceiling and source_count > EXACT_ERROR_SOURCE_LIMIT:
+        raise capacity_error(family, bucket, quota, ceiling, cap)
+
+    partial = []
+    for block in parts:
+        for index in range(block.size):
+            sql, questions = block.source(index, min(cap, missing + 1), seed=seed)
+            if sql in reserved:
+                if reserved[sql][1] < cap:
+                    partial.append((sql, block, index))
+                continue
+            missing -= sum(1 for _ in islice(questions, 1, None))
+            if not missing:
+                return {}
+
+    fillers = {}
+    for sql, block, index in partial:
+        pair, matched = reserved[sql]
+        used = next(set(words) for side, words in pair.sources(seed, matched) if side == sql)
+        _, ordinary = block.source(index, min(cap, matched + missing), seed=seed)
+        extra = tuple(islice((q for q in ordinary if q not in used), min(missing, cap - matched)))
+        if extra:
+            fillers[sql] = extra
+            missing -= len(extra)
+            if not missing:
+                return fillers
+    raise capacity_error(family, bucket, quota, quota - missing, cap)
 
 
 @dataclass
@@ -215,43 +262,51 @@ class QuotaStream:
     paired: bool = False
     written: int = 0
 
-    def exhausted(self, cap):
-        return ValueError(f"{self.family}/{self.bucket or 'automatic'} cannot supply its quota of "
-                          f"{self.quota} ordinary records (at most {self.written + self.sources_left * cap} "
-                          f"available, per-SQL maximum {cap})")
 
-
-def configured_batches(count, seed, catalog, limit, profile):
+def prepare_quota_streams(count, seed, catalog, limit, profile):
+    """Validate every bucket before the first output record and prepare its seeded stream."""
     family_counts = apportion(count, profile.families)
     quotas = {f: apportion(n, profile.targets[f]) if n else {} for f, n in family_counts.items()}
-    plans, reserved, used_sources = plan_contrasts(profile, catalog, quotas, seed, limit)
+    plans, reserved = plan_contrasts(profile, catalog, quotas, seed, limit)
     rng = random.Random(seed)
     cap = limit or AUTO_MAX_QUESTIONS
     streams = []
+    fillers = {}
     for family, blocks in zip(FAMILIES, block_families(catalog)):
-        if plans[family]:
-            size = sum(2 * n for _, n in plans[family])
-            streams.append(QuotaStream(family, None, size, iter(plans[family]), len(plans[family]), paired=True))
         remaining = quotas[family]
-        if not any(remaining.values()):
-            continue
         by_bucket = defaultdict(list)
-        if profile.automatic_family(family):
+        if remaining.get(None) and profile.automatic_family(family):
             by_bucket[None] = list(blocks)
-        else:
+        elif any(remaining.values()):
             for block in blocks:
                 for key, part in subtype_blocks(family, block):
                     bucket = profile.buckets[family][key]
                     if remaining.get(bucket, 0):
                         by_bucket[bucket].append(part)
+        ordinary = []
+        paired_quota = sum(2 * n for _, n in plans[family])
         for bucket, n in remaining.items():
-            if n:
-                parts = by_bucket[bucket]
-                size = sum(b.size for b in parts) - used_sources[family, bucket]
-                state = QuotaStream(family, bucket, n, ordinary_stream(parts, rng, cap, seed, reserved), size)
-                if size * cap < n:
-                    raise state.exhausted(cap)
-                streams.append(state)
+            if not n:
+                continue
+            parts = by_bucket[bucket]
+            held = reserved[family, bucket]
+            extra = check_ordinary_capacity(parts, held, n, cap, seed, family, bucket)
+            fillers.update(extra)
+            extra_count = sum(map(len, extra.values()))
+            paired_quota += extra_count
+            if n > extra_count:
+                size = sum(b.size for b in parts) - len(held)
+                stream = ordinary_stream(parts, rng, cap, seed, held)
+                ordinary.append(QuotaStream(family, bucket, n - extra_count, stream, size))
+        if paired_quota:
+            streams.append(QuotaStream(family, None, paired_quota, iter(plans[family]), len(plans[family]), paired=True))
+        streams.extend(ordinary)
+    return streams, fillers
+
+
+def configured_batches(count, seed, catalog, limit, profile):
+    streams, fillers = prepare_quota_streams(count, seed, catalog, limit, profile)
+    cap = limit or AUTO_MAX_QUESTIONS
     # Interleave quotas by progress; keep all children of each parent adjacent.
     heap = [(Fraction(1, s.quota), i) for i, s in enumerate(streams)]
     heapq.heapify(heap)
@@ -261,10 +316,11 @@ def configured_batches(count, seed, catalog, limit, profile):
         state = streams[i]
         item = next(state.stream, None)
         if item is None:
-            raise state.exhausted(cap)
+            raise capacity_error(state.family, state.bucket, state.quota, state.written, cap)
         if state.paired:
-            pair, budget = item
-            parents = matched_parents(pair, seed, budget)
+            pair, matched = item
+            parents = matched_parents(pair, seed, matched, fillers)
+            budget = matched + max(len(fillers.get(side.sql, ())) for side in (pair.left, pair.right))
         else:
             remaining = state.quota - state.written
             normal = question_budget(emitted, state.family == "aggregate", limit)
@@ -300,11 +356,11 @@ def generate_pairs(count, seed=0, mappings=MAPPINGS, *, max_questions_per_sql=No
     while batch is not None:
         parents, budget = batch
         start = emitted
-        for sql, questions, contrast in parents:
+        for sql, questions, contrast, matched in parents:
             parent += 1
             for child, question in enumerate(islice(questions, min(budget, count - emitted)), 1):
                 record = {"id": f"{parent}.{child}", "input": question, "output": sql}
-                if contrast:
+                if contrast and child <= matched:
                     record["contrast"] = {"kind": contrast, "paired_id": f"{parent - 1}.{child}"}
                 yield record
                 emitted += 1
