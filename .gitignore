@@ -1,2 +1,21 @@
 .DS_Store
 .idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# 환경 변수
+.env
+
+
+
+# 학습 출력·체크포인트
+checkpoints/
+outputs/
+runs/
+wandb/
