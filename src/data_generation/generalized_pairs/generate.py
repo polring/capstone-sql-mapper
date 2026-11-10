@@ -16,11 +16,11 @@ from tempfile import NamedTemporaryFile
 if __package__:
     from .catalog import Catalog, DEFAULT_QUESTIONS_PER_SQL, round_robin
     from .contrasts import average_scope_pairs, boundary_pairs, filter_level_pairs, rank_pairs
-    from .sql_types import Distribution, FAMILIES, PAIR_FAMILY, SQL_TYPES, apportion, contrast_subtypes, subtype_blocks
+    from .sql_types import Distribution, FAMILIES, PAIR_FAMILY, apportion, contrast_subtypes, subtype_blocks
 else:
     from catalog import Catalog, DEFAULT_QUESTIONS_PER_SQL, round_robin
     from contrasts import average_scope_pairs, boundary_pairs, filter_level_pairs, rank_pairs
-    from sql_types import Distribution, FAMILIES, PAIR_FAMILY, SQL_TYPES, apportion, contrast_subtypes, subtype_blocks
+    from sql_types import Distribution, FAMILIES, PAIR_FAMILY, apportion, contrast_subtypes, subtype_blocks
 
 
 MAPPINGS = Path(__file__).with_name("mappings.json")
@@ -337,10 +337,12 @@ def configured_batches(count, seed, catalog, limit, profile):
             heapq.heappush(heap, (Fraction(state.written + 1, state.quota), i))
 
 
-def generate_pairs(count, seed=0, mappings=MAPPINGS, *, max_questions_per_sql=None, sql_types=SQL_TYPES):
+def generate_pairs(count, seed, mappings=MAPPINGS, *, sql_types, max_questions_per_sql=None):
     """Yield count records using the family and subtype distribution in sql_types."""
     if type(count) is not int or count < 0:
         raise ValueError("count must be a nonnegative integer")
+    if type(seed) is not int:
+        raise ValueError("seed must be an integer")
     if max_questions_per_sql is not None and (type(max_questions_per_sql) is not int or max_questions_per_sql < 1):
         raise ValueError("max_questions_per_sql must be a positive integer")
     profile = Distribution.load(sql_types)
@@ -395,11 +397,11 @@ def write_pairs(path, records):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--count", type=int, required=True, help="number of question/SQL pairs")
-    parser.add_argument("--seed", type=int, default=0, help="seed for SQL and per-SQL wording (default: 0)")
+    parser.add_argument("--seed", type=int, required=True, help="seed for SQL and per-SQL wording")
     parser.add_argument("--max-questions-per-sql", type=int,
                         help="hard limit per SQL (default: automatic)")
-    parser.add_argument("--sql-types", type=Path, default=SQL_TYPES,
-                        help="path to the JSON file containing type proportions (default: sql_types.json)")
+    parser.add_argument("--sql-types", type=Path, required=True,
+                        help="path to the JSON file containing SQL type proportions")
     parser.add_argument("--output", type=Path, required=True, help="destination JSON file")
     args = parser.parse_args()
     try:

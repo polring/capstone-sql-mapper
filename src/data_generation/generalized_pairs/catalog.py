@@ -177,7 +177,7 @@ class Block:
         self.choices = list(slots.items())
         self.size = prod(len(options) for _, options in self.choices)
 
-    def source(self, index, max_questions_per_sql=DEFAULT_QUESTIONS_PER_SQL, *, seed=0):
+    def source(self, index, max_questions_per_sql=DEFAULT_QUESTIONS_PER_SQL, *, seed):
         selected = {}
         for name, options in self.choices:
             index, digit = divmod(index, len(options))

@@ -7,14 +7,16 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
+from src.data_generation.build_back import split_pairs
 from src.data_generation.generalized_pairs.catalog import Block, Phrase
 from src.data_generation.generalized_pairs.contrasts import ContrastPair
 from src.data_generation.generalized_pairs.generate import (
     MAPPINGS, check_ordinary_capacity, generate_pairs, load_catalog, prepare_quota_streams, write_pairs,
 )
-from src.data_generation.generalized_pairs.sql_types import Distribution, SQL_TYPES, apportion, subtype_names
+from src.data_generation.generalized_pairs.sql_types import Distribution, apportion, subtype_names
 
 
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 PREDICATE = re.compile(r"<TABLE1\.COL\d+, \w+> (>=|<=|!=|=|<|>|IN|LIKE|BETWEEN) ")
 
 
@@ -61,7 +63,7 @@ class TypeDistributionTest(unittest.TestCase):
         profile = {"family_percent": {"rows": 100}, "example_weights": {"ordinary": 1},
                    "subtype_percent": {"rows": {"where1:>/plain": 100}}}
         path, output = self.path(profile), self.path([])
-        command = [sys.executable, str(SQL_TYPES.with_name("generate.py")), "--count", "9",
+        command = [sys.executable, str(MAPPINGS.with_name("generate.py")), "--count", "9",
                    "--max-questions-per-sql", "1", "--seed", "42", "--output", str(output),
                    "--sql-types", str(path)]
         subprocess.run(command, check=True, capture_output=True)
@@ -80,10 +82,59 @@ class TypeDistributionTest(unittest.TestCase):
             with self.subTest(key=key), self.assertRaisesRegex(ValueError, f"unknown configuration key: {key}"):
                 Distribution.load(self.path({**profile, key: value}))
 
+    def test_cli_requires_seed_and_sql_types_before_writing_output(self):
+        with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as folder:
+            output = Path(folder) / "pairs.json"
+            for missing, supplied in (("--seed", ["--sql-types", "sql_types.json"]), ("--sql-types", ["--seed", "0"])):
+                with self.subTest(missing=missing):
+                    result = subprocess.run(
+                        [sys.executable, "-m", "src.data_generation.generalized_pairs.generate",
+                         "--count", "1", "--output", str(output), *supplied],
+                        capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, 2)
+                    self.assertIn(f"the following arguments are required: {missing}", result.stderr)
+                    self.assertFalse(output.exists())
+
+    def test_description_is_optional_string_metadata(self):
+        profile = {"family_percent": {"rows": 100}, "example_weights": {"ordinary": 1}}
+        expected = Distribution.load(self.path(profile))
+        self.assertEqual(Distribution.load(self.path({**profile, "description": "단순 조회"})), expected)
+        for value in (None, 1):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "description must be a string"):
+                Distribution.load(self.path({**profile, "description": value}))
+        with self.assertRaisesRegex(ValueError, "unknown family_percent key: description"):
+            Distribution.load(self.path({**profile, "family_percent": {"rows": 100, "description": "설명"}}))
+
+    def test_empty_template_lists_every_option_and_uses_automatic_percentages(self):
+        path = DATA_DIR / "example" / "sql_types.json"
+        types = subtype_names()
+        families = dict.fromkeys(types)
+        self.assertEqual(json.loads(path.read_bytes()), {
+            "description": "",
+            "family_percent": families,
+            "example_weights": {"ordinary": 1, "contrast": None},
+            "subtype_percent": {family: dict.fromkeys(names) for family, names in types.items()},
+        })
+        minimal = self.path({"family_percent": families, "example_weights": {"ordinary": 1}})
+        self.assertEqual(Distribution.load(path), Distribution.load(minimal))
+        rows = list(generate_pairs(8, 42, sql_types=path))
+        self.assertEqual(rows, list(generate_pairs(8, 42, sql_types=minimal)))
+        self.assertEqual(Counter(emitted_type(row["output"])[0] for row in rows), dict.fromkeys(types, 2))
+
+    def test_nullable_weights_still_require_a_positive_number(self):
+        profile = {"family_percent": {"rows": 100}}
+        contrast_only = Distribution.load(self.path({**profile, "example_weights": {"contrast": 1}}))
+        self.assertEqual(Distribution.load(self.path({
+            **profile, "example_weights": {"ordinary": None, "contrast": 1},
+        })), contrast_only)
+        for weights in ({"ordinary": None, "contrast": None}, {"ordinary": 1, "contrast": False},
+                        {"ordinary": -1, "contrast": 1}, {"ordinary": "1"}):
+            with self.subTest(weights=weights), self.assertRaises(ValueError):
+                Distribution.load(self.path({**profile, "example_weights": weights}))
+
     def test_all_653_keys_reach_their_sql(self):
         keys = subtype_names()
-        bundled = json.loads(SQL_TYPES.read_bytes())["subtype_percent"]
-        self.assertEqual({f: set(v) for f, v in bundled.items()}, {f: set(v) for f, v in keys.items()})
         def percentages(names):
             # Allocate 10,000 basis points equally with at most a one-point difference.
             each, extra = divmod(10_000, len(names))
@@ -97,34 +148,36 @@ class TypeDistributionTest(unittest.TestCase):
         self.assertEqual(Counter(emitted_type(r["output"]) for r in rows),
                          {(f, key): 1 for f, ids in keys.items() for key in ids})
 
-    def test_bundled_preview_guarantees_simple_queries(self):
-        rows = list(generate_pairs(1000, 42, max_questions_per_sql=3))
-        types = Counter(emitted_type(row["output"]) for row in rows)
-        profile = Distribution.load(SQL_TYPES)
-        targets = apportion(500, profile.targets["rows"])
-        self.assertEqual(len(targets), 56)
-        self.assertTrue(all(n > 0 for n in targets.values()))
-        self.assertEqual({key: n for (family, key), n in types.items() if family == "rows"}, targets)
-        self.assertEqual(sum(n for key, n in targets.items() if key.startswith("where1:") and key.endswith("/plain")), 180)
-        self.assertEqual(targets["where1:=/plain"], 40)
-        self.assertEqual(targets["where1:>/plain"], 25)
-        self.assertLessEqual(max(Counter(row["output"] for row in rows).values()), 3)
+    def test_simple_rows_profile_builds_100_training_pairs(self):
+        options = DATA_DIR / "example_for_100" / "sql_types_simple_rows_for_100_test.json"
+        rows = list(generate_pairs(103, 42, sql_types=options))
+        training, validation = split_pairs(rows, seed=42, validation_ratio=0.05)
+        self.assertEqual((len(training), len(validation)), (100, 3))
+        self.assertEqual(Counter(emitted_type(row["output"]) for row in rows), {
+            ("rows", "where0/plain"): 72, ("rows", "where0/limit"): 31,
+        })
+        self.assertTrue({row["output"] for row in training}.isdisjoint(row["output"] for row in validation))
 
-    def test_large_profile_allocations_without_generating_a_dataset(self):
-        profile = Distribution.load(SQL_TYPES.with_name("sql_types_large.json"))
+    def test_large_quotas_and_capacity_without_generating_a_dataset(self):
+        raw = {
+            "family_percent": {"rows": 50, "aggregate": 25, "group": 12.5, "scalar": 12.5},
+            "example_weights": {"ordinary": 99, "contrast": 1},
+            "subtype_percent": {"rows": {"where0/plain": 0.01, "where1:>/order_limit": 2}},
+        }
+        profile = Distribution.load(self.path(raw))
         catalog = load_catalog(MAPPINGS)
         families = apportion(500_000, profile.families)
         self.assertEqual(families, {"rows": 250_000, "aggregate": 125_000, "group": 62_500, "scalar": 62_500})
         quotas = {f: apportion(n, profile.targets[f]) for f, n in families.items()}
-        self.assertEqual(sum(n for k, n in quotas["rows"].items() if k.startswith("where1:")), 177_500)
+        self.assertEqual(quotas["rows"], {"where0/plain": 25, "where1:>/order_limit": 5_000, None: 244_975})
         streams, _ = prepare_quota_streams(500_000, 42, catalog, None, profile)
         self.assertEqual(sum(s.quota for s in streams), 500_000)
         paired = sum(2 * n for s in streams if s.paired for _, n in s.stream)
-        self.assertLess(abs(paired / 500_000 - 1 / 9), .001)
+        # Each family rounds its contrast quota down to a whole number of pairs.
+        self.assertEqual(paired, sum(count // 100 // 2 * 2 for count in families.values()))
 
         # At the same scale, 0.03% of the rows family requires 75 different bare SELECTs/wordings.
-        raw = json.loads(SQL_TYPES.with_name("sql_types_large.json").read_bytes())
-        raw["subtype_percent"]["rows"].update({"where0/plain": 0.03, "where0/limit": 1.97})
+        raw["subtype_percent"]["rows"]["where0/plain"] = 0.03
         with self.assertRaisesRegex(ValueError, "rows/where0/plain.*75 ordinary records.*at most 74"):
             next(generate_pairs(500_000, 42, sql_types=self.path(raw)))
 

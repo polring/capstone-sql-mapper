@@ -14,7 +14,6 @@ else:
     from catalog import AGGREGATES, Block, COMPARISONS
 
 
-SQL_TYPES = Path(__file__).with_name("sql_types.json")
 FAMILIES = ("rows", "aggregate", "group", "scalar")
 PAIR_FAMILY = {"rank_direction": "rows", "boundary": "aggregate",
                "filter_level": "group", "average_scope": "scalar"}
@@ -131,7 +130,9 @@ class Distribution:
                              object_pairs_hook=unique_keys)
         except (OSError, ValueError) as error:
             raise ValueError(f"cannot read SQL type configuration {path}: {error}") from error
-        check_keys(raw, ("family_percent", "example_weights", "subtype_percent"), "configuration")
+        check_keys(raw, ("description", "family_percent", "example_weights", "subtype_percent"), "configuration")
+        if "description" in raw and not isinstance(raw["description"], str):
+            raise ValueError("description must be a string")
         family = raw.get("family_percent")
         check_keys(family, FAMILIES, "family_percent")
         automatic = [f for f in FAMILIES if f in family and family[f] is None]
@@ -142,9 +143,12 @@ class Distribution:
         if automatic:
             family.update(dict.fromkeys(automatic, Fraction(unassigned) / len(automatic)))
         family = {f: family[f] for f in FAMILIES}
-        weights = raw.get("example_weights")
-        check_keys(weights, ("ordinary", "contrast"), "example_weights")
-        weights = {k: number(weights.get(k, 0), f"example_weights.{k}") for k in ("ordinary", "contrast")}
+        weight_values = raw.get("example_weights")
+        weights = {"ordinary": Fraction(0), "contrast": Fraction(0)}
+        check_keys(weight_values, weights, "example_weights")
+        for key, value in weight_values.items():
+            if value is not None:
+                weights[key] = number(value, f"example_weights.{key}")
         if not any(weights.values()):
             raise ValueError("at least one example weight must be positive")
 

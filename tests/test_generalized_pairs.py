@@ -24,8 +24,6 @@ from src.data_generation.generalized_pairs.sql_types import Distribution
 COLUMN = re.compile(r"TABLE1\.COL(\d+), (numeric|string|date)")
 VALUE = re.compile(r"\[(?:TABLE1\.COL\d+|AGG_VALUE), (numeric|string|date), #([123])\]")
 QUESTION_TAG = re.compile(r"<[^>]+>|\{[^}]+\}|\[[^\]]+\]")
-AUTOMATIC_PROFILE = Path(__file__).parent / "fixtures" / "sql_types_automatic.json"
-automatic_pairs = partial(generate_pairs, sql_types=AUTOMATIC_PROFILE)
 
 
 def sqlite_sql(sql):
@@ -38,6 +36,15 @@ def sqlite_sql(sql):
 
 
 class GeneralizedPairsTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        with NamedTemporaryFile(mode="w", encoding="utf-8", dir=Path(__file__).parent, delete=False) as file:
+            cls.automatic_profile = Path(file.name)
+            cls.addClassCleanup(cls.automatic_profile.unlink, missing_ok=True)
+            json.dump({"family_percent": {"rows": None, "aggregate": None, "group": None, "scalar": None},
+                       "example_weights": {"ordinary": 8, "contrast": 1}}, file)
+        cls.automatic_pairs = staticmethod(partial(generate_pairs, sql_types=cls.automatic_profile))
+
     def setUp(self):
         self.mappings = json.loads(MAPPINGS.read_text(encoding="utf-8"))
         self.catalog = Catalog(self.mappings)
@@ -49,9 +56,9 @@ class GeneralizedPairsTest(unittest.TestCase):
         return path
 
     def test_seed_prefix_and_wording_independent_sql_ids(self):
-        records = list(automatic_pairs(37, 18))
-        self.assertEqual(records[:17], list(automatic_pairs(17, 18)))
-        self.assertNotEqual(records, list(automatic_pairs(37, 19)))
+        records = list(self.automatic_pairs(37, 18))
+        self.assertEqual(records[:17], list(self.automatic_pairs(17, 18)))
+        self.assertNotEqual(records, list(self.automatic_pairs(37, 19)))
         for start in range(0, 36, 3):
             group = records[start:start + 3]
             parent = start // 3 + 1
@@ -65,14 +72,14 @@ class GeneralizedPairsTest(unittest.TestCase):
         for frames in frames_to_edit:
             frames[:] = ["please answer this question. " + frame for frame in frames]
         path.write_text(json.dumps(self.mappings), encoding="utf-8")
-        revised = list(automatic_pairs(37, 18, path))
+        revised = list(self.automatic_pairs(37, 18, path))
         for original, changed in zip(records, revised):
             self.assertEqual((original["id"], original["output"]), (changed["id"], changed["output"]))
             self.assertEqual(changed["input"], "please answer this question. " + original["input"])
 
     def test_each_available_structure_gets_a_turn(self):
         for seed in (0, 42):
-            sample = list(automatic_pairs(72, seed, max_questions_per_sql=1))
+            sample = list(self.automatic_pairs(72, seed, max_questions_per_sql=1))
             matched = {key for r in sample if "contrast" in r for key in (r["id"], r["contrast"]["paired_id"])}
             sample = [r for r in sample if r["id"] not in matched]
             for offset, count, turns in ((0, 4, 16), (2, 3, 12)):
@@ -107,9 +114,9 @@ class GeneralizedPairsTest(unittest.TestCase):
         self.assertNotEqual(all_forms, questions(43, 100))
 
     def test_per_sql_limit_and_sequential_ids(self):
-        first_sources = [r["output"] for r in automatic_pairs(17, 42, max_questions_per_sql=1)]
+        first_sources = [r["output"] for r in self.automatic_pairs(17, 42, max_questions_per_sql=1)]
         for limit in (1, 2, 5, 8):
-            records = list(automatic_pairs(17, 42, max_questions_per_sql=limit))
+            records = list(self.automatic_pairs(17, 42, max_questions_per_sql=limit))
             self.assertEqual(len(records), 17)
             for parent, (sql, rows) in enumerate(groupby(records, key=lambda r: r["output"]), 1):
                 group = list(rows)
@@ -120,7 +127,7 @@ class GeneralizedPairsTest(unittest.TestCase):
             self.assertEqual(records[limit - 1]["id"], f"1.{limit}")
         for invalid in (0, -1):
             with self.assertRaisesRegex(ValueError, "positive integer"):
-                list(generate_pairs(0, max_questions_per_sql=invalid))
+                list(self.automatic_pairs(0, 42, max_questions_per_sql=invalid))
 
     def test_exhausted_question_forms_do_not_repeat(self):
         self.mappings["questions"]["all_rows"] = [
@@ -128,27 +135,27 @@ class GeneralizedPairsTest(unittest.TestCase):
             "list {*} from <TABLE1>{where}.{order}{limit}",
         ]
         block = next(Catalog(self.mappings).rows())
-        sql, questions = block.source(0, max_questions_per_sql=10)
+        sql, questions = block.source(0, max_questions_per_sql=10, seed=0)
         self.assertEqual(sql, "SELECT {*} FROM <TABLE1>")
         self.assertEqual(list(questions), ["list {*} from <TABLE1>."])
 
     def test_json_count_and_failed_write(self):
         path = self.temp_file()
         for count in (0, 1, 4):
-            records = list(generate_pairs(count, 2))
+            records = list(self.automatic_pairs(count, 2))
             write_pairs(path, iter(records))
             self.assertEqual(json.loads(path.read_bytes()), records)
         before = path.read_bytes()
         for bad_count in (-1, 10**30):
             with self.assertRaises(ValueError):
-                write_pairs(path, generate_pairs(bad_count))
+                write_pairs(path, self.automatic_pairs(bad_count, 42))
             self.assertEqual(path.read_bytes(), before)
 
     def test_thousand_pairs_compile_and_tags_match(self):
         db = sqlite3.connect(":memory:")
         self.addCleanup(db.close)
         db.execute("CREATE TABLE sample (c1, c2, c3, c4, c5, c6)")
-        sample = list(generate_pairs(1000, 42, max_questions_per_sql=3))
+        sample = list(self.automatic_pairs(1000, 42, max_questions_per_sql=3))
         self.assertEqual(len({record["id"] for record in sample}), 1000)
         parents = {}
         for record in sample:
@@ -186,7 +193,7 @@ class GeneralizedPairsTest(unittest.TestCase):
         ):
             block = self.catalog.scalar_block(target, measure, inner, outer, shared)
             for i in range(block.size):
-                sql, questions = block.source(i)
+                sql, questions = block.source(i, seed=0)
                 if "> (SELECT AVG" in sql and f"{category.ref} = " in sql:
                     break
             else:
@@ -273,9 +280,9 @@ class GeneralizedPairsTest(unittest.TestCase):
 
     def test_half_million_mix_from_batch_sizes(self):
         # Exercise the production scheduler without generating a training dataset.
-        preview = list(automatic_pairs(1000, 42))
-        self.assertEqual(preview, list(islice(automatic_pairs(500_000, 42), 1000)))
-        self.assertEqual(preview, list(automatic_pairs(1000, 42, max_questions_per_sql=3)))
+        preview = list(self.automatic_pairs(1000, 42))
+        self.assertEqual(preview, list(islice(self.automatic_pairs(500_000, 42), 1000)))
+        self.assertEqual(preview, list(self.automatic_pairs(1000, 42, max_questions_per_sql=3)))
         self.assertEqual(len({r["output"] for r in preview}), 334)
         def form_count(phrase, scope):
             if isinstance(phrase, int):
@@ -297,7 +304,7 @@ class GeneralizedPairsTest(unittest.TestCase):
                 available[1] -= 1
             else:
                 available[0] -= 1
-        weights = Distribution.load(AUTOMATIC_PROFILE).weights
+        weights = Distribution.load(self.automatic_profile).weights
         ratio = Fraction(weights["ordinary"]) / Fraction(weights["contrast"])
         schedule = balanced_batches([repeat(1, n) for n in available], pairs, 3, ratio)
         for block in self.catalog.aggregates(False):
@@ -334,7 +341,7 @@ class GeneralizedPairsTest(unittest.TestCase):
         self.assertEqual(question_budget(499_000, True, 3), 3)
 
     def test_matched_training_questions_differ_only_in_the_cue(self):
-        records = list(generate_pairs(1000, 42))
+        records = list(self.automatic_pairs(1000, 42))
         previous = {}
         kinds = set()
         for r in records:
@@ -366,7 +373,7 @@ class GeneralizedPairsTest(unittest.TestCase):
             previous[r["id"]] = r
         self.assertEqual(kinds, {"boundary", "rank_direction", "average_scope", "filter_level"})
         # An output ending halfway through the right parent only refers back to existing rows.
-        self.assertEqual(list(islice(automatic_pairs(1000, 42), 53)), list(automatic_pairs(53, 42)))
+        self.assertEqual(list(islice(self.automatic_pairs(1000, 42), 53)), list(self.automatic_pairs(53, 42)))
 
     def test_contrast_answers_on_sqlite(self):
         db = sqlite3.connect(":memory:")
@@ -390,7 +397,7 @@ class GeneralizedPairsTest(unittest.TestCase):
                 self.assertEqual(right, expected_right)
 
     def test_intent_frames_match_the_sql_clauses(self):
-        records = list(generate_pairs(1000, 42))
+        records = list(self.automatic_pairs(1000, 42))
         seen = set()
         for r in records:
             sql, q = r["output"], r["input"]
