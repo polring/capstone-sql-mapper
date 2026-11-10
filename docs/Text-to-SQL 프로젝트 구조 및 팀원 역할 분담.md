@@ -27,10 +27,14 @@ flowchart LR
 
 ## 프로젝트 구조
 
-추론과 학습은 저장소 루트의 `inference/`와 `training/`에서 각각 실행한다. 두 실행 경로는 `src/`의 모델 구현을 공유한다. 데이터 생성 코드는 `src/data_generation/`에 둔다. 아래 구조는 배포에 쓸 데이터셋과 대상 DB를 버전별로 묶는 예시다. 뒷모델 개발용 데이터와 옵션은 `data/example/` 같은 폴더에 두고 CLI로 경로를 지정할 수 있다. 학습이 끝나면 앞모델·뒷모델·대상 DB를 한 버전으로 묶어 `models/` 아래에 저장한다. 전처리기가 단어 사전을 사용하는 버전에는 해당 사전도 포함한다.
+현재 구현된 디렉터리와 실험별 체크포인트·GGUF 저장 위치는 [프로젝트 구조 가이드](<./프로젝트 구조 가이드.md>)에서 확인할 수 있다.
+
+추론과 학습은 각각 `inference/`와 `training/`에서 `src/`의 모델 구현을 공유한다. 데이터 생성과 분할은 `src/data_generation/`에서 담당한다. 같은 버전의 앞·뒷모델은 옵션과 데이터셋을 `data/<버전>/`에 함께 둔다. 로컬에서 생성한 데이터셋은 그 안의 `generated/`에 두면 Git에서 제외된다. 기존 뒷모델 옵션 예시는 `data/example/`에 있다. 배포할 때는 두 모델과 대상 DB를 `models/<버전>/`에 모으고, 전처리 사전을 쓰는 버전에는 해당 사전도 포함한다.
 
 ```text
 .
+├── front.py                        # 앞모델 명령 진입점 (구현 예정)
+├── back.py                         # 뒷모델 명령 진입점
 ├── inference/                      # 전처리기 → 앞모델 → 매퍼 → 뒷모델 → 후처리기 호출
 ├── training/
 │   ├── front/                      # 앞모델 학습·검증 실행 코드
@@ -42,6 +46,7 @@ flowchart LR
 │   ├── back/                       # 뒷모델 · 일반화된 태그 질문에서 일반화 SQL 생성
 │   ├── postprocessor/              # 팀원 1 · 일반화 SQL을 최종 SQL로 복원
 │   └── data_generation/            # 단계별 데이터 생성 스크립트
+│       ├── build_front.py          # 앞모델 학습·검증 데이터 구성 (구현 예정)
 │       ├── build_back.py           # 뒷모델 질문·SQL 쌍을 학습셋과 검증셋으로 분할
 │       ├── generalized_pairs/      # 팀원 2 · 일반화 SQL과 태그 질문 작성
 │       │   ├── mappings.json       # 일반화 태그 질문의 표현 변형 후보
@@ -52,25 +57,21 @@ flowchart LR
 │       └── natural_questions/      # 팀원 4 · 사용자 질문과 대응 라벨 작성
 │           ├── mappings.json       # DB 종속 태그에 사용할 자연어 표현과 조건값 후보
 │           └── generate.py         # 사용자 질문과 이에 대응하는 앞모델용 정답 생성
-├── data/                           # 버전별 학습 데이터셋, 뒷모델 생성·학습 옵션 JSON, 대상 DB
-│   ├── v1/
-│   │   ├── front_train.json        # 앞모델용 학습 데이터셋
-│   │   ├── v1_dataset_back_train.json       # 뒷모델용 학습 데이터셋
-│   │   ├── front_validation.json   # 앞모델용 검증 데이터셋
-│   │   ├── v1_dataset_back_validation.json  # 뒷모델용 검증 데이터셋
-│   │   ├── front_test.json         # 앞모델용 평가 데이터셋
-│   │   ├── back_test.json          # 뒷모델용 평가 데이터셋
-│   │   ├── e2e_test.json           # 전체 파이프라인 평가 데이터셋
-│   │   └── shop.db                 # v1 데이터에 대응하는 DB
-│   └── v2/
+├── data/
+│   └── v1/                         # 같은 버전의 앞·뒷모델 옵션과 데이터셋 예시
+│       ├── front_train_options.json # 앞모델용 학습 옵션 예시
+│       ├── back_train_options.json  # 뒷모델용 학습 옵션 예시
+│       ├── sql_types.json          # 뒷모델용 데이터 생성 옵션 예시
+│       ├── generated/              # Git에서 제외할 로컬 생성 데이터셋
 │       ├── front_train.json        # 앞모델용 학습 데이터셋
-│       ├── v2_dataset_back_train.json       # 뒷모델용 학습 데이터셋
 │       ├── front_validation.json   # 앞모델용 검증 데이터셋
-│       ├── v2_dataset_back_validation.json  # 뒷모델용 검증 데이터셋
 │       ├── front_test.json         # 앞모델용 평가 데이터셋
-│       ├── back_test.json          # 뒷모델용 평가 데이터셋
+│       ├── v1_dataset.json         # 뒷모델용 원본 질문·SQL 쌍
+│       ├── v1_dataset_back_train.json       # 뒷모델용 학습 데이터셋
+│       ├── v1_dataset_back_validation.json  # 뒷모델용 검증 데이터셋
+│       ├── back_test.json          # 뒷모델용 독립 평가 데이터셋
 │       ├── e2e_test.json           # 전체 파이프라인 평가 데이터셋
-│       └── shop.db                 # v2 데이터에 대응하는 DB
+│       └── shop.db                 # 스키마 매핑에 사용한 대상 DB
 ├── models/                         # 버전별 추론 파일과 전체 파이프라인 평가셋
 │   └── v1/                         # 하나의 완성 버전 예시
 │       ├── front.gguf              # 추론용 앞모델
