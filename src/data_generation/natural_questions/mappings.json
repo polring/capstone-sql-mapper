@@ -1,1 +1,193 @@
-{}
+{
+  "tables": {
+    "customers": {
+      "singular": ["customer", "client", "buyer", "shopper"],
+      "plural": ["customers", "clients", "buyers", "shoppers"]
+    },
+    "items": {
+      "singular": ["item", "product"],
+      "plural": ["items", "products"]
+    },
+    "orders": {
+      "singular": ["order", "purchase"],
+      "plural": ["orders", "purchases"]
+    }
+  },
+  "columns": {
+    "customers.customer_id": {
+      "singular": ["customer id", "customer ID", "customer number"],
+      "plural": ["customer ids", "customer IDs", "customer numbers"]
+    },
+    "customers.name": {
+      "singular": ["name", "customer name", "full name"],
+      "plural": ["names", "customer names", "full names"]
+    },
+    "customers.city": {
+      "singular": ["city", "home city", "location"],
+      "plural": ["cities", "home cities", "locations"]
+    },
+    "customers.membership": {
+      "singular": ["membership", "membership level", "membership tier", "tier"],
+      "plural": ["memberships", "membership levels", "membership tiers", "tiers"]
+    },
+    "items.item_id": {
+      "singular": ["item id", "item ID", "product id", "product ID"],
+      "plural": ["item ids", "item IDs", "product ids", "product IDs"]
+    },
+    "items.item_name": {
+      "singular": ["name", "item name", "product name"],
+      "plural": ["names", "item names", "product names"]
+    },
+    "items.category": {
+      "singular": ["category", "product category", "type"],
+      "plural": ["categories", "product categories", "types"]
+    },
+    "items.price": {
+      "singular": ["price", "cost", "unit price"],
+      "plural": ["prices", "costs", "unit prices"]
+    },
+    "items.stock": {
+      "singular": ["stock", "stock level", "inventory", "quantity in stock"],
+      "plural": ["stock levels", "inventories", "quantities in stock"]
+    },
+    "orders.order_id": {
+      "singular": ["order id", "order ID", "order number"],
+      "plural": ["order ids", "order IDs", "order numbers"]
+    },
+    "orders.customer_id": {
+      "singular": ["customer id", "customer ID", "customer number"],
+      "plural": ["customer ids", "customer IDs", "customer numbers"]
+    },
+    "orders.item_id": {
+      "singular": ["item id", "item ID", "product id", "product ID"],
+      "plural": ["item ids", "item IDs", "product ids", "product IDs"]
+    },
+    "orders.quantity": {
+      "singular": ["quantity", "order quantity", "amount ordered"],
+      "plural": ["quantities", "order quantities", "amounts ordered"]
+    },
+    "orders.status": {
+      "singular": ["status", "order status", "state"],
+      "plural": ["statuses", "order statuses", "states"]
+    },
+    "orders.order_date": {
+      "singular": ["order date", "date", "purchase date"],
+      "plural": ["order dates", "dates", "purchase dates"]
+    }
+  },
+  "values": {
+    "customers.customer_id": {
+      "type": "numeric",
+      "range": [1000, 1998],
+      "integer": true
+    },
+    "customers.name": {
+      "type": "string",
+      "candidates": [
+        "savannah roberts", "marcus moore", "victor myers", "sara powell", "trevor evans",
+        "jacob patel", "fernando parker", "emma williams", "elena hall", "russell green",
+        "lynn mendoza", "joel lopez", "dawn thompson", "amber gonzalez", "victor martinez",
+        "michael jones", "charles sanchez", "walter lee", "anthony campbell", "ashley gonzalez"
+      ],
+      "like_fragments": {
+        "starts": ["adam", "emma", "victor", "ma"],
+        "ends": ["lee", "son", "gonzalez", "ez"],
+        "contains": ["an", "ma", "ll", "rob"]
+      }
+    },
+    "customers.city": {
+      "type": "string",
+      "candidates": ["boston", "chicago", "denver", "houston", "new york", "seattle"],
+      "aliases": {
+        "new york": ["new york city", "nyc"]
+      }
+    },
+    "customers.membership": {
+      "type": "string",
+      "candidates": ["bronze", "silver", "gold", "platinum"]
+    },
+    "items.item_id": {
+      "type": "numeric",
+      "range": [3001, 3998],
+      "integer": true
+    },
+    "items.item_name": {
+      "type": "string",
+      "candidates": [
+        "knitted parka", "thermal blazer", "portable tray", "portable marker", "usb monitor",
+        "waterproof goggles", "portable ladle", "desktop mouse", "glass funnel", "waterproof barbell",
+        "aluminum wetsuit", "casual sandals", "enamel steamer", "compact pitcher", "durable laminator",
+        "portable carafe", "wooden carafe", "heavy envelope", "inflatable wetsuit", "upholstered desk",
+        "colorful stapler", "modular desk", "metal tape", "leather clipboard"
+      ],
+      "like_fragments": {
+        "starts": ["portable", "wooden", "aluminum", "adjustable", "leather"],
+        "ends": ["desk", "carafe", "wetsuit", "er", "cam", "mouse"],
+        "contains": ["cam", "ball", "desk", "port", "steel"]
+      }
+    },
+    "items.category": {
+      "type": "string",
+      "candidates": ["clothing", "electronics", "furniture", "kitchen", "office supplies", "sports"],
+      "aliases": {
+        "office supplies": ["office"],
+        "electronics": ["electronic"]
+      }
+    },
+    "items.price": {
+      "type": "numeric",
+      "unit": {"singular": "dollar", "plural": "dollars", "prefix": "$"},
+      "decimals": 2,
+      "candidates": [5, 10, 15, 20, 25, 30, 50, 75, 100, 120, 150, 199.99, 9.99, 49.5]
+    },
+    "items.stock": {
+      "type": "numeric",
+      "integer": true,
+      "unit": {"singular": "unit", "plural": "units"},
+      "candidates": [0, 1, 5, 10, 20, 25, 30, 50, 75, 80, 100]
+    },
+    "orders.order_id": {
+      "type": "numeric",
+      "range": [5000, 14999],
+      "integer": true
+    },
+    "orders.customer_id": {
+      "type": "numeric",
+      "range": [1000, 1998],
+      "integer": true
+    },
+    "orders.item_id": {
+      "type": "numeric",
+      "range": [3001, 3998],
+      "integer": true
+    },
+    "orders.quantity": {
+      "type": "numeric",
+      "integer": true,
+      "unit": {"singular": "unit", "plural": "units"},
+      "candidates": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    "orders.status": {
+      "type": "string",
+      "candidates": ["pending", "shipped", "delivered", "cancelled"],
+      "aliases": {
+        "cancelled": ["canceled"]
+      }
+    },
+    "orders.order_date": {
+      "type": "date",
+      "range": ["2025-01-01", "2026-12-31"],
+      "candidates": ["2025-01-01", "2025-03-05", "2025-06-15", "2025-09-30", "2025-12-25", "2026-02-14", "2026-07-04", "2026-11-11"],
+      "formats": ["{month} {day}, {year}", "{year}-{mm}-{dd}", "{mon} {day}, {year}", "{day} {month} {year}"]
+    }
+  },
+  "star": ["all information", "all details", "all columns", "everything"],
+  "agg_value": {
+    "type": "numeric",
+    "candidates": [1, 2, 3, 5, 10, 20, 50, 100]
+  },
+  "generation": {
+    "max_per_parent": 3,
+    "seed": 42
+  }
+}
