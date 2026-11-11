@@ -1,1 +1,576 @@
-{}
+{
+  "intent": {
+    "count": [
+      "how many <TABLE1> records are there{where}?",
+      "count the rows in <TABLE1>{where}.",
+      "how many entries in <TABLE1> do we have{where}?",
+      "give me a count of the <TABLE1> records{where}.",
+      "if i count the rows in <TABLE1>{where}, how many do i get?",
+      "what is the size of the set of <TABLE1> rows{where}?",
+      "i need to know how many rows there are in <TABLE1>{where}.",
+      "what does the row count come to for <TABLE1>{where}?",
+      "how many <TABLE1> are there{where}?",
+      "how many <TABLE1> rows{where}?",
+      "count <TABLE1> records{where}.",
+      "row count for <TABLE1>{where}?"
+    ],
+    "group_count": [
+      "for each {group_col} in <TABLE1>, how many rows are there? show {key} with its count.{where}{having}{order}{limit}",
+      "group <TABLE1> by {group_col}. count the entries in each group and return {key} with that number.{where}{having}{order}{limit}",
+      "how many <TABLE1> records share each {group_col}? list {key} and the number of records.{where}{having}{order}{limit}",
+      "break <TABLE1> down by {group_col}. give me {key} and the size of each group.{where}{having}{order}{limit}",
+      "per {group_col}, show {key} and its row count.{where}{having}{order}{limit}",
+      "how many per {group_col}? return {key} and its count.{where}{having}{order}{limit}"
+    ],
+    "ranked": [
+      " give me the {edge} {n} by {key}, {rank} first.{tie}",
+      " keep the {n} {result_unit} ranked {rank} by {key}.{tie}",
+      " rank by {key}, {rank} first, and take the first {n}.{tie}",
+      " i only need the {edge} {n} by {key}, starting with the {rank} value.{tie}",
+      " which {n} rank {rank} by {key}? list them {rank} first.{tie}",
+      "{explicit_order}{explicit_limit}"
+    ],
+    "average_comparison": [
+      "show {target} from <TABLE1> where {measure} {op} its average across {population}.{outer}",
+      "i need {target} from <TABLE1>. use the mean of {measure} for {population} as the cutoff. keep rows whose {measure} {op} that cutoff.{outer}",
+      "which {target} should i return from <TABLE1> if {measure} {op} the mean for that field over {population}?{outer}",
+      "list {target} from <TABLE1>. calculate the average {measure} for {population}, then select rows whose {measure} {op} that average.{outer}",
+      "from <TABLE1>, give me {target} for records whose {measure} {op} the average value of that field for {population}.{outer}",
+      "return {target} from <TABLE1> if the row's {measure} {op} the mean of {measure} over {population}.{outer}",
+      "list {target} where {measure} {op} its mean over {population}.{outer}",
+      "{target} where {measure} {op} its average over {population}?{outer}"
+    ],
+    "ranked_date_asc": [
+      " take the {n} oldest by {key}, earliest first.{tie}",
+      " first {n} by {key}, oldest first.{tie}",
+      " order by {key} from earliest to latest and return {n}.{tie}"
+    ],
+    "ranked_date_desc": [
+      " take the {n} most recent by {key}, newest first.{tie}",
+      " latest {n} by {key}, newest first.{tie}",
+      " order by {key} from newest to oldest and return {n}.{tie}"
+    ]
+  },
+  "contrast_questions": {
+    "boundary": [
+      "how many <TABLE1> rows are there where {measure} {op} {value}{extra}?",
+      "count the <TABLE1> records where {measure} {op} {value}{extra}.",
+      "from <TABLE1>, give me a row count where {measure} {op} {value}{extra}.",
+      "how many entries in <TABLE1> satisfy the condition that {measure} {op} {value}{extra}?"
+    ],
+    "rank_direction": [
+      "show {target} from <TABLE1> for the {n} {unit} ranked {rank} by {sort_key}.{tail}",
+      "from <TABLE1>, list {target} for the {n} {unit} with the {rank} values of {sort_key}, {rank} first.{tail}",
+      "return {target} from <TABLE1>. rank by {sort_key}, {rank} first, and keep up to {n}.{tail}",
+      "i need {target} from <TABLE1> for up to {n} {unit}, starting with the {rank} values of {sort_key}.{tail}"
+    ],
+    "average_scope": [
+      "show {target} from <TABLE1> where {measure} {op} the average for that field. return only rows where {filter}. take the average over {scope}.",
+      "from <TABLE1>, list {target} when {measure} {op} its mean. keep only rows where {filter}. use {scope} to calculate the mean.",
+      "i need {target} from <TABLE1> when {measure} {op} its mean. only return rows where {filter}. calculate the mean over {scope}.",
+      "return {target} from <TABLE1> if {measure} {op} its average. restrict the output to rows where {filter}. base the average on {scope}."
+    ],
+    "filter_level": [
+      "for each {group_col} in <TABLE1>, show {key} and {agg}. keep {level} {op} {threshold}.{tail}",
+      "group <TABLE1> by {group_col}. return {key} and {agg}. include only {level} {op} {threshold}.{tail}",
+      "break <TABLE1> down by {group_col} and report {key} alongside {agg}. include {level} {op} {threshold}.{tail}",
+      "give me one result per {group_col} in <TABLE1>, with {key} and {agg}. keep only {level} {op} {threshold}.{tail}"
+    ],
+    "aggregate_boundary": [
+      "give {agg} where {measure} {op} {value}{extra}.",
+      "what is {agg} where {measure} {op} {value}{extra}?",
+      "calculate {agg} for rows where {measure} {op} {value}{extra}.",
+      "return {agg} for <TABLE1> where {measure} {op} {value}{extra}."
+    ]
+  },
+  "contrast_cues": {
+    "all_rows": ["all rows in the table"],
+    "same_subset": ["only rows in that same subset"],
+    "row_level": ["rows whose {measure}"],
+    "group_level": ["groups whose aggregate"]
+  },
+  "questions": {
+    "rows": [
+      "show {target} from <TABLE1>{where}.{order}{limit}",
+      "from <TABLE1>, list {target}{where}.{order}{limit}",
+      "show me {target} for the records{where}.{order}{limit}",
+      "retrieve {target} from <TABLE1>{where}.{order}{limit}",
+      "in <TABLE1>, return {target} for the rows{where}.{order}{limit}",
+      "which {target} values appear in <TABLE1>{where}?{order}{limit}",
+      "give me one {target} value per row in <TABLE1>{where}.{order}{limit}",
+      "i need {target} for the records in <TABLE1>{where}.{order}{limit}",
+      "what does <TABLE1> list for {target} in the rows{where}?{order}{limit}",
+      "could you look up {target} for the entries{where}?{order}{limit}",
+      "the field i want is {target}. read it from the rows in <TABLE1>{where}.{order}{limit}",
+      "pull the {target} values for entries in <TABLE1>{where}.{order}{limit}",
+      "if i look at {target} for the records in <TABLE1>{where}, what values will i see?{order}{limit}",
+      "{target}{where}?{order}{limit}",
+      "list {target}{where}.{order}{limit}",
+      "which {target}{where}?{order}{limit}",
+      "get {target}{where}.{order}{limit}",
+      "show {target}{where}.{order}{limit}",
+      "return {target}{where}.{order}{limit}"
+    ],
+    "all_rows": [
+      "show {*} from <TABLE1>{where}.{order}{limit}",
+      "from <TABLE1>, return {*} for each row{where}.{order}{limit}",
+      "list {*} for the records in <TABLE1>{where}.{order}{limit}",
+      "retrieve {*} from <TABLE1>{where}.{order}{limit}",
+      "in <TABLE1>, show {*} for the rows{where}.{order}{limit}",
+      "for the records in <TABLE1>{where}, can you show {*}?{order}{limit}",
+      "what is {*} for each entry in <TABLE1>{where}?{order}{limit}",
+      "i need {*} for the rows in <TABLE1>{where}.{order}{limit}",
+      "which entries in <TABLE1>{where} can you show me? include {*} for each.{order}{limit}",
+      "give me the records in <TABLE1>{where}, with {*} for each record.{order}{limit}",
+      "look up the entries in <TABLE1>{where} and return {*} for each one.{order}{limit}",
+      "what do the records in <TABLE1>{where} look like? show {*} for each one.{order}{limit}",
+      "for each entry in <TABLE1>{where}, the information i need is {*}.{order}{limit}",
+      "list {*} from <TABLE1>{where}.{order}{limit}",
+      "which <TABLE1> rows{where}? show {*}.{order}{limit}",
+      "all <TABLE1> details{where}, please. return {*}.{order}{limit}",
+      "get {*} from <TABLE1>{where}.{order}{limit}"
+    ],
+    "aggregate": [
+      "what is {agg} for <TABLE1>{where}?",
+      "calculate {agg} using the rows in <TABLE1>{where}.",
+      "find {agg} across the rows in <TABLE1>{where}.",
+      "report {agg} for the records in <TABLE1>{where}.",
+      "using <TABLE1>, find {agg} for rows{where}.",
+      "for <TABLE1>, what is {agg} across the records{where}?",
+      "can you work out {agg} for entries in <TABLE1>{where}?",
+      "i need a single value for <TABLE1>. give me {agg} across the rows{where}.",
+      "tell me {agg} for the rows of <TABLE1>{where}.",
+      "if i calculate {agg} over the records in <TABLE1>{where}, what do i get?",
+      "the value i want is {agg}. use the entries in <TABLE1>{where}.",
+      "for this calculation, take {agg} over the rows in <TABLE1>{where}.",
+      "from <TABLE1>, could you give me {agg} for the records{where}?",
+      "{agg} in <TABLE1>{where}?",
+      "give {agg} for <TABLE1>{where}.",
+      "from <TABLE1>, find {agg}{where}.",
+      "calculate {agg} for <TABLE1>{where}."
+    ],
+    "group": [
+      "for each {group_col} in <TABLE1>, show {key} and {agg}.{where}{having}{order}{limit}",
+      "group <TABLE1> by {group_col} and report {key} alongside {agg}.{where}{having}{order}{limit}",
+      "break down the rows of <TABLE1> by {group_col}. for each group, return {key} and {agg}.{where}{having}{order}{limit}",
+      "within <TABLE1>, group the rows by {group_col} and list {key} and {agg} for each group.{where}{having}{order}{limit}",
+      "split <TABLE1> into groups by {group_col}. give me {key} and {agg} for each group.{where}{having}{order}{limit}",
+      "what are {key} and {agg} for each {group_col} in <TABLE1>?{where}{having}{order}{limit}",
+      "take each {group_col} in <TABLE1> separately. i need {key} and {agg} for each group.{where}{having}{order}{limit}",
+      "can you summarize <TABLE1> by {group_col}? include {key} and {agg} for each group.{where}{having}{order}{limit}",
+      "i need a breakdown by {group_col}. from <TABLE1>, give me {key} and {agg} for each group.{where}{having}{order}{limit}",
+      "list {key} alongside {agg}, calculated separately for each {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "collect the <TABLE1> rows that share a {group_col} value. for each group, report {key} and {agg}.{where}{having}{order}{limit}",
+      "give me one result per {group_col} in <TABLE1>, showing {key} and {agg}.{where}{having}{order}{limit}",
+      "for each {group_col}, what summary does <TABLE1> give? return {key} and {agg} for that group.{where}{having}{order}{limit}",
+      "per {group_col}, give {key} and {agg}.{where}{having}{order}{limit}",
+      "by {group_col}, list {key} and {agg}.{where}{having}{order}{limit}",
+      "group by {group_col}. show {key} and {agg}.{where}{having}{order}{limit}"
+    ],
+    "scalar": [
+      "show {target} from <TABLE1> where {measure} {op} {stat} {measure} across {population}.{outer}",
+      "from <TABLE1>, return {target} for rows whose {measure} {op} {stat} {measure} for {population}.{outer}",
+      "list {target} in <TABLE1> if {measure} {op} {stat} {measure} calculated over {population}.{outer}",
+      "give me {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} for {population}.{outer}",
+      "in <TABLE1>, retrieve {target} when {measure} {op} {stat} {measure} across {population}.{outer}",
+      "for each row of <TABLE1>, return {target} if its {measure} {op} {stat} {measure} for {population}.{outer}",
+      "i need {target} from <TABLE1>. keep a row if its {measure} {op} {stat} {measure} across {population}.{outer}",
+      "can you return {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} for {population}?{outer}",
+      "which {target} should i list from <TABLE1>? use rows whose {measure} {op} {stat} {measure} across {population}.{outer}",
+      "the output i need from <TABLE1> is {target}. take {stat} {measure} over {population}, then return rows whose {measure} {op} that value.{outer}",
+      "to look up {target} in <TABLE1>, first find {stat} {measure} for {population}. select rows whose {measure} {op} that result.{outer}",
+      "use <TABLE1> to list {target}. the benchmark is {stat} {measure} across {population}. keep a row if its {measure} {op} that benchmark.{outer}",
+      "looking at {target} in <TABLE1>, what do i get if i keep only rows whose {measure} {op} {stat} {measure} across {population}?{outer}",
+      "return {target} if {measure} {op} {stat} {measure} for {population}.{outer}",
+      "get {target} where {measure} {op} {stat} {measure} over {population}.{outer}"
+    ]
+  },
+  "aggregates": {
+    "COUNT": [
+      "the row count",
+      "the number of rows",
+      "the count of records",
+      "the number of records",
+      "the total number of rows",
+      "the count of matching rows",
+      "the number of entries",
+      "the total row count"
+    ],
+    "AVG": [
+      "the average {col}",
+      "the mean {col}",
+      "the arithmetic mean of {col}",
+      "the average value of {col}",
+      "the arithmetic average of {col}",
+      "the mean of the {col} values",
+      "the average across the values of {col}",
+      "the arithmetic mean for {col}"
+    ],
+    "SUM": [
+      "the sum of {col}",
+      "the total {col}",
+      "the sum of all {col} values",
+      "the total of the {col} values",
+      "the sum across all values of {col}",
+      "the combined total of {col}",
+      "the result of adding up {col}",
+      "the total obtained by summing {col}"
+    ],
+    "MIN": [
+      "the minimum {col}",
+      "the lowest {col}",
+      "the smallest value of {col}",
+      "the least value of {col}",
+      "the lowest recorded value for {col}",
+      "the minimum value of {col}",
+      "the smallest {col}",
+      "the minimum observed for {col}"
+    ],
+    "MAX": [
+      "the maximum {col}",
+      "the highest {col}",
+      "the largest value of {col}",
+      "the greatest value of {col}",
+      "the highest recorded value for {col}",
+      "the maximum value of {col}",
+      "the largest {col}",
+      "the maximum observed for {col}"
+    ],
+    "MIN_date": [
+      "the earliest {col}",
+      "the earliest date for {col}",
+      "the minimum {col}",
+      "the first date chronologically for {col}",
+      "the earliest recorded value of {col}",
+      "the oldest date in {col}",
+      "the earliest date listed under {col}",
+      "the minimum date for {col}"
+    ],
+    "MAX_date": [
+      "the latest {col}",
+      "the latest date for {col}",
+      "the maximum {col}",
+      "the last date chronologically for {col}",
+      "the latest recorded value of {col}",
+      "the most recent date in {col}",
+      "the latest date listed under {col}",
+      "the maximum date for {col}"
+    ]
+  },
+  "scalar_stats": {
+    "AVG": [
+      "the average",
+      "the mean",
+      "the arithmetic mean of",
+      "the average value of",
+      "the mean value of",
+      "the arithmetic average of"
+    ],
+    "MIN": [
+      "the minimum",
+      "the lowest",
+      "the smallest",
+      "the least value of",
+      "the minimum value of",
+      "the lowest recorded value of"
+    ],
+    "MAX": [
+      "the maximum",
+      "the highest",
+      "the largest",
+      "the greatest value of",
+      "the maximum value of",
+      "the highest recorded value of"
+    ]
+  },
+  "comparisons": {
+    "=": [
+      "equals",
+      "is equal to",
+      "is",
+      "is exactly",
+      "is the same as",
+      "has the same value as",
+      "exactly matches"
+    ],
+    "!=": [
+      "differs from",
+      "is not equal to",
+      "does not equal",
+      "is different from",
+      "has a value other than",
+      "is anything other than",
+      "does not have the same value as"
+    ],
+    "<": [
+      "is less than",
+      "is below",
+      "falls below",
+      "is under",
+      "is smaller than",
+      "is strictly less than",
+      "is lower than"
+    ],
+    ">": [
+      "is greater than",
+      "is above",
+      "exceeds",
+      "is over",
+      "is larger than",
+      "is strictly greater than",
+      "is higher than"
+    ],
+    "<=": [
+      "is at most",
+      "is no greater than",
+      "is less than or equal to",
+      "does not exceed",
+      "is at or below",
+      "is no higher than",
+      "is either below or equal to"
+    ],
+    ">=": [
+      "is at least",
+      "is no less than",
+      "is greater than or equal to",
+      "is at or above",
+      "is no lower than",
+      "is either above or equal to",
+      "meets or exceeds"
+    ]
+  },
+  "date_comparisons": {
+    "=": [
+      "falls on",
+      "is on",
+      "is exactly",
+      "is the same date as",
+      "falls exactly on",
+      "matches the date",
+      "is the very same day as"
+    ],
+    "!=": [
+      "is not on",
+      "falls on a date other than",
+      "differs from",
+      "is on a different date from",
+      "does not fall on",
+      "is any date except",
+      "is a date other than"
+    ],
+    "<": [
+      "is before",
+      "is earlier than",
+      "precedes",
+      "falls before",
+      "comes before",
+      "is strictly earlier than",
+      "is dated earlier than"
+    ],
+    ">": [
+      "is after",
+      "is later than",
+      "comes after",
+      "falls after",
+      "follows",
+      "is strictly later than",
+      "is dated later than"
+    ],
+    "<=": [
+      "is on or before",
+      "is no later than",
+      "is at or before",
+      "falls on or before",
+      "is earlier than or the same day as",
+      "is not later than",
+      "falls no later than"
+    ],
+    ">=": [
+      "is on or after",
+      "is no earlier than",
+      "is at or after",
+      "falls on or after",
+      "is later than or the same day as",
+      "is not earlier than",
+      "falls no earlier than"
+    ]
+  },
+  "predicates": {
+    "in": [
+      "{col} is one of ({values})",
+      "{col} matches any of ({values})",
+      "{col} belongs to the list ({values})",
+      "{col} equals one of the following values ({values})",
+      "{col} is among the values ({values})",
+      "the list ({values}) includes {col}",
+      "{col} matches a value in ({values})",
+      "at least one entry in ({values}) equals {col}"
+    ],
+    "between": [
+      "{col} is between {a} and {b}, inclusive",
+      "{col} is within the inclusive range bounded by {a} and {b}",
+      "{col} lies between {a} and {b}, including both endpoints",
+      "{col} falls between {a} and {b}, with both bounds included",
+      "{col} is in the closed interval with endpoints {a} and {b}",
+      "{col} falls in the range between {a} and {b}, endpoints included",
+      "the inclusive range defined by {a} and {b} contains {col}",
+      "{col} is anywhere between {a} and {b}, including either boundary"
+    ],
+    "prefix": [
+      "{col} starts with {a}",
+      "{col} begins with {a}",
+      "{col} has the prefix {a}",
+      "{col} begins with the text {a}",
+      "{a} is the prefix of {col}",
+      "{col} has {a} at the start",
+      "the first part of {col} matches {a}",
+      "{col} starts with the sequence {a}"
+    ],
+    "suffix": [
+      "{col} ends with {a}",
+      "{col} has the suffix {a}",
+      "{col} finishes with {a}",
+      "{col} ends with the text {a}",
+      "{a} is the suffix of {col}",
+      "{col} has {a} at the end",
+      "the final part of {col} matches {a}",
+      "{col} ends with the sequence {a}"
+    ],
+    "contains": [
+      "{col} contains {a}",
+      "{col} includes the text {a}",
+      "{col} has {a} somewhere in it",
+      "{a} occurs somewhere in {col}",
+      "{col} contains the substring {a}",
+      "{a} appears within {col}",
+      "{col} includes {a} anywhere in its text",
+      "{a} is part of the text in {col}"
+    ]
+  },
+  "clauses": {
+    "where": [
+      " where {filters}",
+      " for which {filters}",
+      " satisfying the condition that {filters}",
+      " such that {filters}",
+      " for which it is true that {filters}",
+      " meeting the condition that {filters}"
+    ],
+    "group_where": [
+      " before grouping, keep only rows where {filters}.",
+      " use only rows where {filters} to form the groups.",
+      " filter the rows to those where {filters} before grouping.",
+      " form the groups using only rows where {filters}.",
+      " first restrict the input to rows where {filters}, then group them.",
+      " when forming each group, include only records where {filters}.",
+      " apply the row condition before grouping, keeping only records where {filters}.",
+      " for the group calculation, use only entries where {filters}.",
+      " group only rows where {filters}.",
+      " before grouping, require that {filters}."
+    ],
+    "having": [
+      " keep only groups where this aggregate {op} {value}.",
+      " include a group only if its aggregate {op} {value}.",
+      " return groups whose aggregate {op} {value}.",
+      " after calculating the aggregate, keep a group only if its result {op} {value}.",
+      " show only groups whose aggregate {op} {value}.",
+      " a group qualifies if its aggregate {op} {value}.",
+      " filter the groups to those for which the aggregate {op} {value}.",
+      " the only groups i need are those where the aggregate {op} {value}.",
+      " keep groups whose result {op} {value}."
+    ],
+    "all": [
+      "all rows",
+      "the entire table",
+      "every row in the table",
+      "all records in the table",
+      "the full set of rows",
+      "all entries in the table",
+      "the table as a whole",
+      "the entire set of records"
+    ],
+    "inner": [
+      "rows where {filters}",
+      "the subset of rows where {filters}",
+      "only the records where {filters}",
+      "records satisfying the condition that {filters}",
+      "just the entries where {filters}",
+      "the rows for which {filters}",
+      "the subset consisting of rows where {filters}",
+      "the records that meet the condition that {filters}"
+    ],
+    "outer": [
+      " only return rows where {filters}.",
+      " restrict the returned rows to those where {filters}.",
+      " the returned records must also satisfy the condition that {filters}.",
+      " among the rows that pass that comparison, keep only those where {filters}.",
+      " for the output, keep only records where {filters}.",
+      " also require the rows you return to satisfy the condition that {filters}.",
+      " filter the returned rows further to those where {filters}.",
+      " a row can appear in the output only if {filters}.",
+      " keep rows where {filters}."
+    ],
+    "shared": [
+      " only return rows from that same subset.",
+      " apply the same subset restriction to the returned rows.",
+      " return only records meeting those same filters.",
+      " use the same subset for the comparison and for the rows you return.",
+      " only rows in the subset used to calculate that value may appear in the output.",
+      " also restrict the output to the rows used for that calculation.",
+      " apply the calculation's row filters to the output as well.",
+      " keep a matching row only if it belongs to the subset used in the calculation."
+    ],
+    "order": [
+      " sort by {key} in {direction} order.",
+      " order the results by {key} in {direction} order.",
+      " use {direction} order for {key}.",
+      " arrange the results in {direction} order by {key}.",
+      " use {key} as the sort key, in {direction} order.",
+      " list the results by {key} in {direction} order.",
+      " i want the results in {direction} order of {key}.",
+      " put the rows in {direction} order according to {key}."
+    ],
+    "tie": [
+      " break ties by {key} in {direction} order.",
+      " for ties, use {key} in {direction} order.",
+      " when tied, sort by {key} in {direction} order.",
+      " if the first sort key is tied, use {key} in {direction} order.",
+      " when two results tie, compare {key} in {direction} order.",
+      " use {key} in {direction} order as the tiebreaker.",
+      " within each tie, list the results by {key} in {direction} order.",
+      " resolve equal values of the first sort key by taking {key} in {direction} order."
+    ],
+    "limit": [
+      " return at most {n} {result_unit}.",
+      " limit the output to {n} {result_unit}.",
+      " keep up to {n} {result_unit}.",
+      " show no more than {n} {result_unit}.",
+      " stop after {n} {result_unit}.",
+      " cap the number of results at {n}.",
+      " i only need the first {n} {result_unit}.",
+      " restrict the output to at most {n} {result_unit}.",
+      " give me up to {n} {result_unit} in total.",
+      " first {n} {result_unit} only."
+    ],
+    "date_asc": [
+      " sort by {key}, oldest first.",
+      " by {key}, earliest first.",
+      " order by {key} from earliest to latest.",
+      " use chronological order for {key}."
+    ],
+    "date_desc": [
+      " sort by {key}, newest first.",
+      " by {key}, latest first.",
+      " order by {key} from most recent to oldest.",
+      " use reverse chronological order for {key}."
+    ],
+    "date_tie_asc": [
+      " for ties, use {key}, earliest first.",
+      " break ties by {key}, oldest first."
+    ],
+    "date_tie_desc": [
+      " for ties, use {key}, latest first.",
+      " break ties by {key}, newest first."
+    ]
+  }
+}
