@@ -80,8 +80,11 @@ def _settings(metadata):
     return config, tokenizer
 
 
-def load_gguf(path, device="cpu"):
-    """Restore the model and tokenizer from an exported GGUF for greedy inference."""
+def load_gguf(path, device="cpu", settings=_settings):
+    """Restore the model and tokenizer from an exported GGUF for greedy inference.
+
+    The front model passes its own metadata reader; the tensor layout is shared.
+    """
     with Path(path).open("rb") as file:
         file_size = os.fstat(file.fileno()).st_size
         magic, version, tensor_count, metadata_count = _unpack(file, "4sIQQ")
@@ -93,7 +96,7 @@ def load_gguf(path, device="cpu"):
             if key in metadata:
                 raise ValueError(f"duplicate GGUF metadata: {key}")
             metadata[key] = _value(file, file_size)
-        config, tokenizer = _settings(metadata)
+        config, tokenizer = settings(metadata)
 
         tensors = {}
         for _ in range(tensor_count):
