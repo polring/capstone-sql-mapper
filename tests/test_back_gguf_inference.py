@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import torch
 
@@ -13,7 +14,7 @@ from src.back.generate import generate_results
 from src.back.gguf import load_gguf
 from src.back.model import BackModel
 from src.back.tokenizer import BackTokenizer
-from training.back.export_gguf import write_gguf
+from training.back.export_gguf import _metadata, _string, write_gguf
 
 
 class GgufInferenceTests(unittest.TestCase):
@@ -50,17 +51,31 @@ class GgufInferenceTests(unittest.TestCase):
         self.assertEqual(generate_results(model, tokenizer, [self.question], max_new_tokens=4),
                          generate_results(self.model, self.tokenizer, [self.question], max_new_tokens=4))
 
-    def test_rejects_incompatible_contract_or_incomplete_tensor_data(self):
+    def test_rejects_missing_sql_ids_or_incomplete_tensor_data(self):
         write_gguf(self.model, self.tokenizer, self.path)
         raw = self.path.read_bytes()
-        version_entry = b"capstone_sql.contract_version" + struct.pack("<II", 4, 3)
-        self.assertEqual(raw.count(version_entry), 1)
-        v2 = raw.replace(version_entry, version_entry[:-4] + struct.pack("<I", 2))
-        for label, corrupted in (("contract v2", v2), ("truncated", raw[:len(raw) // 2])):
+        key = b"capstone_sql.tokenizer.sql_ids"
+        self.assertEqual(raw.count(key), 1)
+        missing_ids = raw.replace(key, b"capstone_sql.tokenizer.unused_")
+        for label, corrupted in (("missing SQL IDs", missing_ids), ("truncated", raw[:len(raw) // 2])):
             with self.subTest(label=label):
                 self.path.write_bytes(corrupted)
                 with self.assertRaises(ValueError):
                     load_gguf(self.path)
+
+    def test_previous_atomic_gguf_reads_the_same_ids_but_incompatible_tags_are_rejected(self):
+        entries = _metadata(self.model.config, self.tokenizer)
+        entries.append(("capstone_sql.contract_version", 4, struct.pack("<I", 3)))
+        entries.append(("capstone_sql.tokenizer.profile", 8, _string("tagged_sql_v2")))
+        with patch("training.back.export_gguf._metadata", return_value=entries):
+            write_gguf(self.model, self.tokenizer, self.path)
+        _, loaded = load_gguf(self.path)
+        self.assertEqual(loaded.to_dict(), self.tokenizer.to_dict())
+        raw = self.path.read_bytes()
+        self.assertIn(b"<TABLE1>", raw)
+        self.path.write_bytes(raw.replace(b"<TABLE1>", b"<TABLE2>"))
+        with self.assertRaisesRegex(ValueError, "atomic"):
+            load_gguf(self.path)
 
     def test_inference_cli_runs_with_only_gguf(self):
         # Program a tiny deterministic decoder whose next tokens are SEP -> SELECT -> EOS.

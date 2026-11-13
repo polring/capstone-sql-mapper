@@ -1,7 +1,7 @@
 import unittest
 
 from src.back.config import ModelConfig
-from src.back.tokenizer import BackTokenizer
+from src.back.tokenizer import ATOMIC_TAGS, BackTokenizer
 
 
 class TokenizerTests(unittest.TestCase):
@@ -22,12 +22,45 @@ class TokenizerTests(unittest.TestCase):
             self.tok.encode_sql("SELECT made_up_identifier")
 
     def test_reload_and_whitelist(self):
-        restored = BackTokenizer.from_dict(self.tok.to_dict())
+        saved = self.tok.to_dict()
+        self.assertNotIn("version", saved)
+        restored = BackTokenizer.from_dict(saved)
+        self.assertEqual(restored.to_dict(), saved)
         self.assertEqual(self.tok.encode_question("unseen DATE and <TABLE1>"),
                          restored.encode_question("unseen DATE and <TABLE1>"))
         self.assertEqual(tuple(restored.sql_ids), tuple(self.tok.sql_ids))
         self.assertNotIn(ord("x"), self.tok.sql_ids)
         self.assertIn(self.tok.eos_id, self.tok.sql_ids)
+
+    def test_whole_tag_ids_are_shared_unique_and_independent_of_training_examples(self):
+        self.assertEqual(len(set(ATOMIC_TAGS)), 95)
+        ids = []
+        for tag in ATOMIC_TAGS:
+            token, = self.tok.encode_question(tag)
+            self.assertEqual(self.tok.encode_sql(tag), [token])
+            self.assertEqual(self.tok.decode_sql([token]), tag)
+            self.assertIn(token, self.tok.sql_ids)
+            ids.append(token)
+        self.assertEqual(ids, list(range(297, 392)))
+
+    def test_sql_matches_inner_tags_in_expressions_and_quoted_values(self):
+        sql = "SELECT {MAX(<TABLE1.COL6, numeric>)} FROM <TABLE1> WHERE <TABLE1.COL2, string> = '[TABLE1.COL2, string, #1]'"
+        pieces = ["SELECT", " ", "{", "MAX", "(", "<TABLE1.COL6, numeric>", ")", "}", " ", "FROM",
+                  " ", "<TABLE1>", " ", "WHERE", " ", "<TABLE1.COL2, string>", " ", "=", " ",
+                  "'", "[TABLE1.COL2, string, #1]", "'"]
+        ids = self.tok.encode_sql(sql)
+        self.assertEqual([self.tok.decode_sql([i]) for i in ids], pieces)
+        # Only an exact match forms one token. Columns and types sharing a name
+        # with parts of a canonical tag keep their original spelling.
+        for text in ("<TABLE2>", "<TABLE1.COL6,numeric>", "[TABLE1.COL6, numeric, #4]"):
+            self.assertGreater(len(self.tok.encode_question(text)), 1)
+
+    def test_rejects_missing_or_reordered_seeds(self):
+        saved = self.tok.to_dict()
+        seeds = saved["seeds"]
+        for invalid_seeds in (seeds[:-len(ATOMIC_TAGS)], seeds[::-1]):
+            with self.subTest(seeds=invalid_seeds), self.assertRaisesRegex(ValueError, "atomic-tag checkpoint"):
+                BackTokenizer.from_dict({**saved, "seeds": invalid_seeds})
 
 
 class ModelTests(unittest.TestCase):

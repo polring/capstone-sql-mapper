@@ -14,7 +14,7 @@ from training.back.export_gguf import write_gguf
 
 
 class ExportTest(unittest.TestCase):
-    def test_f32_weights_and_tokenizer_contract_round_trip(self):
+    def test_f32_weights_and_tokenizer_metadata_round_trip(self):
         tok = BackTokenizer.fit(["what is the maximum in <TABLE1>?"] * 2, vocab_size=512)
         model = BackModel(ModelConfig(vocab_size=512, d_model=16, num_layers=1,
                                       num_heads=2, ffn_dim=32), tok.sql_ids)
@@ -45,7 +45,8 @@ class ExportTest(unittest.TestCase):
             key = string()
             metadata[key] = value(unpack("<I")[0])
         prefix = "capstone_sql."
-        self.assertEqual(metadata[prefix + "contract_version"], 3)
+        self.assertNotIn(prefix + "contract_version", metadata)
+        self.assertNotIn(prefix + "tokenizer.profile", metadata)
         self.assertEqual(metadata[prefix + "dim"], model.config.d_model)
         self.assertEqual(metadata[prefix + "tokenizer.sql_ids"], list(tok.sql_ids))
         self.assertEqual(metadata[prefix + "tokenizer.seeds"], tok.to_dict()["seeds"])

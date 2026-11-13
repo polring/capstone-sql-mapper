@@ -52,8 +52,6 @@ def _settings(metadata):
     if metadata.get("general.alignment") != 32:
         raise ValueError("expected a 32-byte GGUF alignment")
     sql = {k.removeprefix("capstone_sql."): v for k, v in metadata.items() if k.startswith("capstone_sql.")}
-    if sql.get("contract_version") != 3 or sql.get("tokenizer.profile") != "tagged_sql_v1":
-        raise ValueError("expected capstone_sql contract 3 with the tagged_sql_v1 tokenizer")
     try:
         for field in ("eps", "theta"):
             if type(sql[field]) is not float:
@@ -61,20 +59,17 @@ def _settings(metadata):
         config = ModelConfig(d_model=sql["dim"], num_layers=sql["layers"], num_heads=sql["heads"],
                              ffn_dim=sql["ffn_dim"], context_length=sql["context"], vocab_size=sql["vocab_size"],
                              eps=sql["eps"], theta=sql["theta"])
-        for name in ("bos_id", "eos_id", "sep_id", "pad_id", "seed_base", "merge_base"):
-            if sql["tokenizer." + name] != getattr(BackTokenizer, name):
-                raise ValueError(f"unexpected tokenizer {name}")
         triples = sql["tokenizer.merges"]
         if not isinstance(triples, list) or len(triples) % 3:
             raise ValueError("expected tokenizer merge triples")
-        merges = []
-        for index in range(0, len(triples), 3):
-            left, right, new_id = triples[index:index + 3]
-            if new_id != BackTokenizer.merge_base + len(merges):
-                raise ValueError("unexpected tokenizer merge ID")
-            merges.append((left, right))
-        tokenizer = BackTokenizer.from_dict({"version": 1, "vocab_size": config.vocab_size, "merges": merges,
+        merges = list(zip(triples[::3], triples[1::3]))
+        tokenizer = BackTokenizer.from_dict({"vocab_size": config.vocab_size, "merges": merges,
                                              "seeds": sql["tokenizer.seeds"], "sql_ids": sql["tokenizer.sql_ids"]})
+        for name in ("bos_id", "eos_id", "sep_id", "pad_id", "seed_base", "merge_base"):
+            if sql["tokenizer." + name] != getattr(tokenizer, name):
+                raise ValueError(f"unexpected tokenizer {name}")
+        if any(new_id != tokenizer.merge_base + i for i, new_id in enumerate(triples[2::3])):
+            raise ValueError("unexpected tokenizer merge ID")
     except KeyError as exc:
         raise ValueError(f"missing GGUF metadata: capstone_sql.{exc.args[0]}") from exc
     return config, tokenizer

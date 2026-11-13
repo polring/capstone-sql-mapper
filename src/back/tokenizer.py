@@ -8,14 +8,22 @@ from functools import lru_cache
 KEYWORDS = "SELECT FROM WHERE AND OR IN BETWEEN LIKE ORDER BY ASC DESC LIMIT COUNT AVG SUM MIN MAX GROUP HAVING".split()
 TAG_ATOMS = ["TABLE1", *(f"COL{i}" for i in range(1, 7)), "AGG_VALUE",
              "string", "numeric", "date", "#1", "#2", "#3"]
-SEEDS = tuple(TAG_ATOMS + KEYWORDS + ["<=", ">=", "!="])
+# Seed order is part of the checkpoint and GGUF contract, including tags that a
+# particular training split never contains.
+_FIELD_NAMES = tuple(f"TABLE1.COL{col}, {kind}" for col in range(1, 7)
+                     for kind in ("string", "numeric", "date"))
+ATOMIC_TAGS = ("<TABLE1>", *(f"<{field}>" for field in _FIELD_NAMES),
+               *(f"{{{field}}}" for field in _FIELD_NAMES), "{*}",
+               *(f"[{field}, #{slot}]" for field in _FIELD_NAMES for slot in range(1, 4)),
+               *(f"[AGG_VALUE, numeric, #{slot}]" for slot in range(1, 4)))
+SEEDS = tuple(TAG_ATOMS + KEYWORDS + ["<=", ">=", "!="]) + ATOMIC_TAGS
 SQL_CHARS = " 0123456789<>=.,{}()[]*'%"
 FIELDS = r"TABLE1\.COL[1-6], (?:string|numeric|date)"
 TAG = (rf"(?:<TABLE1>|<{FIELDS}>|\{{{FIELDS}\}}|\{{\*\}}"
        rf"|\[(?:{FIELDS}|AGG_VALUE, numeric), #[1-3]\])")
 TAG_RE = re.compile(TAG)
 QUESTION_RE = re.compile(rf"(?P<tag>{TAG})|(?P<word>[A-Za-z]+)|.", re.DOTALL)
-LEXEME_RE = re.compile(r"#[0-9]+|[A-Za-z_][A-Za-z_0-9]*|<=|>=|!=|.", re.DOTALL)
+LEXEME_RE = re.compile(rf"{TAG}|#[0-9]+|[A-Za-z_][A-Za-z_0-9]*|<=|>=|!=|.", re.DOTALL)
 
 
 def _merge(tokens, pair, new_id):
@@ -33,8 +41,9 @@ def _merge(tokens, pair, new_id):
 
 class BackTokenizer:
     pad_id, bos_id, eos_id, sep_id = range(256, 260)
+    seeds = SEEDS
     seed_base = 260
-    merge_base = seed_base + len(SEEDS)
+    merge_base = seed_base + len(seeds)
 
     def __init__(self, vocab_size, merges):
         if type(vocab_size) is not int or vocab_size < self.merge_base + len(merges):
@@ -43,7 +52,7 @@ class BackTokenizer:
         self.merges = []
         self._merge_ids = {}
         self._sql_encode = {c: ord(c) for c in SQL_CHARS}
-        self._sql_encode.update({s: self.seed_base + i for i, s in enumerate(SEEDS)})
+        self._sql_encode.update({s: self.seed_base + i for i, s in enumerate(self.seeds)})
         self._sql_decode = {i: s for s, i in self._sql_encode.items()}
         self.sql_ids = (self.eos_id, *sorted(self._sql_decode))
         for i, entry in enumerate(merges, self.merge_base):
@@ -98,7 +107,7 @@ class BackTokenizer:
         result = []
         for match in QUESTION_RE.finditer(question):
             if match.lastgroup == "tag":
-                result.extend(self.encode_sql(match[0]))
+                result.append(self._sql_encode[match[0]])
             elif match.lastgroup == "word":
                 result.extend(self._word_ids(match[0]))
             else:
@@ -121,14 +130,14 @@ class BackTokenizer:
             raise ValueError(f"invalid SQL token ID {exc.args[0]}") from None
 
     def to_dict(self):
-        return {"version": 1, "vocab_size": self.vocab_size,
-                "seeds": list(SEEDS), "merges": [list(p) for p in self.merges],
-                "sql_ids": list(self.sql_ids)}
+        return {"vocab_size": self.vocab_size, "seeds": list(self.seeds),
+                "merges": [list(p) for p in self.merges], "sql_ids": list(self.sql_ids)}
 
     @classmethod
     def from_dict(cls, state):
-        if state.get("version") != 1 or state.get("seeds") != list(SEEDS):
-            raise ValueError("unsupported tokenizer format or fixed vocabulary")
+        if state.get("seeds") != list(cls.seeds):
+            raise ValueError("incompatible tokenizer: an atomic-tag checkpoint is required; "
+                             "retrain the back model to use whole-tag IDs")
         tok = cls(state["vocab_size"], state["merges"])
         if state.get("sql_ids") != list(tok.sql_ids):
             raise ValueError("checkpoint SQL whitelist does not match this tokenizer")
