@@ -1,0 +1,13 @@
+{
+  "description": "Colab 1만 쌍 실험용 분포. 일반 질문·SQL 쌍을 네 가지 조회 유형에 균등하게 배정한다.",
+  "family_percent": {
+    "rows": 25,
+    "aggregate": 25,
+    "group": 25,
+    "scalar": 25
+  },
+  "example_weights": {
+    "ordinary": 1,
+    "contrast": 0
+  }
+}

@@ -1,4 +1,4 @@
-"""Export the tagged-SQL decoder as an F32 GGUF v3 file (capstone_sql contract 3)."""
+"""Export the whole-tag SQL decoder as an F32 GGUF v3 file."""
 
 import argparse
 import io
@@ -30,7 +30,6 @@ def _metadata(config, tokenizer):
         for token in (left, right, i)
     ]
     integers = {
-        "contract_version": 3,
         "dim": config.d_model,
         "layers": config.num_layers,
         "heads": config.num_heads,
@@ -44,7 +43,6 @@ def _metadata(config, tokenizer):
     entries = [
         ("general.architecture", 8, _string("capstone_sql")),
         ("general.alignment", 4, struct.pack("<I", 32)),
-        (prefix + "tokenizer.profile", 8, _string("tagged_sql_v1")),
         (prefix + "tokenizer.seeds", 9, struct.pack("<IQ", 8, len(seeds)) + b"".join(map(_string, seeds))),
         (prefix + "tokenizer.merges", 9, _uints(triples)),
         (prefix + "tokenizer.sql_ids", 9, _uints(tokenizer.sql_ids)),
@@ -100,7 +98,7 @@ def main():
         parser.error("--output must differ from --checkpoint")
     model, tokenizer, _ = load_model(args.checkpoint, device="cpu")
     write_gguf(model, tokenizer, args.output)
-    print(f"saved {args.output} (capstone_sql contract 3, tagged_sql_v1, F32)")
+    print(f"saved {args.output} (capstone_sql, F32)")
 
 
 if __name__ == "__main__":

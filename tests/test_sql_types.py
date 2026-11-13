@@ -16,7 +16,6 @@ from src.data_generation.generalized_pairs.generate import (
 from src.data_generation.generalized_pairs.sql_types import Distribution, apportion, subtype_names
 
 
-DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 PREDICATE = re.compile(r"<TABLE1\.COL\d+, \w+> (>=|<=|!=|=|<|>|IN|LIKE|BETWEEN) ")
 
 
@@ -106,12 +105,10 @@ class TypeDistributionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown family_percent key: description"):
             Distribution.load(self.path({**profile, "family_percent": {"rows": 100, "description": "설명"}}))
 
-    def test_empty_template_lists_every_option_and_uses_automatic_percentages(self):
-        path = DATA_DIR / "example" / "sql_types.json"
+    def test_null_subtype_percentages_match_omitted_subtypes(self):
         types = subtype_names()
         families = dict.fromkeys(types)
-        self.assertEqual(json.loads(path.read_bytes()), {
-            "description": "",
+        path = self.path({
             "family_percent": families,
             "example_weights": {"ordinary": 1, "contrast": None},
             "subtype_percent": {family: dict.fromkeys(names) for family, names in types.items()},
@@ -149,7 +146,11 @@ class TypeDistributionTest(unittest.TestCase):
                          {(f, key): 1 for f, ids in keys.items() for key in ids})
 
     def test_simple_rows_profile_builds_100_training_pairs(self):
-        options = DATA_DIR / "example_for_100" / "sql_types_simple_rows_for_100_test.json"
+        options = self.path({
+            "family_percent": {"rows": 100},
+            "example_weights": {"ordinary": 1},
+            "subtype_percent": {"rows": {"where0/plain": 70, "where0/limit": 30}},
+        })
         rows = list(generate_pairs(103, 42, sql_types=options))
         training, validation = split_pairs(rows, seed=42, validation_ratio=0.05)
         self.assertEqual((len(training), len(validation)), (100, 3))

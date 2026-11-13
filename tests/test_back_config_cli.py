@@ -17,7 +17,7 @@ class TrainingConfigCliTests(unittest.TestCase):
         folder = tempfile.TemporaryDirectory(dir=Path(__file__).parent)
         self.addCleanup(folder.cleanup)
         self.path = Path(folder.name) / "run.json"
-        self.cli = {"config": str(self.path), "data_dir": "data/example", "run_dir": "runs/example",
+        self.cli = {"config": str(self.path), "data_dir": "data/v1", "run_dir": "runs/example",
                     "seed": "19", "device": "cpu"}
 
     @staticmethod
@@ -30,7 +30,7 @@ class TrainingConfigCliTests(unittest.TestCase):
 
     def test_normal_and_memorization_defaults(self):
         args = self.args_for({})
-        self.assertEqual(args.data_dir, Path("data/example"))
+        self.assertEqual(args.data_dir, Path("data/v1"))
         self.assertEqual(args.run_dir, Path("runs/example"))
         self.assertIsNone(args.overfit)
         self.assertEqual(read_configs(args, None), (ModelConfig(), TrainConfig(seed=19)))
@@ -139,15 +139,16 @@ class TrainingConfigCliTests(unittest.TestCase):
         settings = {"train_config": {"epochs": 3}}
         self.assertEqual(self.args_for(settings | {"description": "학습 설정 설명"}), self.args_for(settings))
 
-    def test_blank_template_matches_omitted_options(self):
-        path = Path(__file__).resolve().parents[1] / "data" / "example" / "train.json"
-        template = json.loads(path.read_text(encoding="utf-8"))
-        for section, cls in (("model_config", ModelConfig), ("train_config", TrainConfig)):
-            self.assertEqual(template[section], {f.name: None for f in fields(cls) if f.name != "seed"})
-        self.assertEqual(self.args_for(template), self.args_for({}))
-        self.assertEqual(self.args_for(template | {"overfit": 4}), self.args_for({"overfit": 4}))
-        template["train_config"]["epochs"] = 7
-        self.assertEqual(self.args_for(template), self.args_for({"train_config": {"epochs": 7}}))
+    def test_null_settings_match_omitted_options(self):
+        settings = {
+            "overfit": None, "threads": None, "eval_every": None, "eval_batch_size": None,
+            "model_config": {field.name: None for field in fields(ModelConfig)},
+            "train_config": {field.name: None for field in fields(TrainConfig) if field.name != "seed"},
+        }
+        self.assertEqual(self.args_for(settings), self.args_for({}))
+        self.assertEqual(self.args_for(settings | {"overfit": 4}), self.args_for({"overfit": 4}))
+        settings["train_config"]["epochs"] = 7
+        self.assertEqual(self.args_for(settings), self.args_for({"train_config": {"epochs": 7}}))
 
     def test_resume_reuses_original_json_after_context_expansion(self):
         model = ModelConfig(context_length=600)
