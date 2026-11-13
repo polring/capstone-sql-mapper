@@ -1,0 +1,58 @@
+"""Generate a DB-tagged sentence from a user question or a JSON file using a front-model GGUF."""
+
+import argparse
+from pathlib import Path
+
+import torch
+
+from inference.back import predict_pairs, read_questions
+from src.back.generate import generate_results
+from src.data_generation.generalized_pairs.generate import write_pairs
+from src.front.gguf import load_gguf
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model", required=True, type=Path, help="F32 capstone_sql contract 3 front-model GGUF")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--question", help="natural-language user question")
+    source.add_argument("--input", type=Path, help="read questions from the input fields of a JSON array")
+    parser.add_argument("--output", type=Path, help="write input/output pairs to this JSON file (required with --input)")
+    parser.add_argument("--batch-size", type=int, help="questions per batch in file mode (default: 32)")
+    parser.add_argument("--device", choices=("cpu", "cuda", "gpu"), required=True)
+    args = parser.parse_args(argv)
+    if args.input is not None:
+        if args.output is None:
+            parser.error("--input requires --output")
+        if any(path.suffix.lower() != ".json" for path in (args.input, args.output)):
+            parser.error("--input and --output must be .json paths")
+        if args.output.resolve() in (args.input.resolve(), args.model.resolve()):
+            parser.error("--output must be separate from --input and --model")
+        if args.batch_size is not None and args.batch_size < 1:
+            parser.error("--batch-size must be positive")
+    else:
+        if args.output is not None or args.batch_size is not None:
+            parser.error("--output and --batch-size require --input")
+        if not args.question.strip():
+            parser.error("--question must contain a question")
+    device = "cuda" if args.device == "gpu" else args.device
+    if device == "cuda" and not torch.cuda.is_available():
+        parser.error("CUDA is unavailable in this environment")
+    try:
+        model, tokenizer = load_gguf(args.model, device=device)
+        if args.input is not None:
+            questions = read_questions(args.input)
+            pairs = predict_pairs(model, tokenizer, questions, args.batch_size or 32, device)
+            write_pairs(args.output, pairs)
+            print(f"Saved {len(questions)} input/output pairs to {args.output}")
+            return
+        result, = generate_results(model, tokenizer, [args.question], device=device)
+    except (OSError, ValueError) as error:
+        parser.exit(1, f"{parser.prog}: {error}\n")
+    if result.stop_reason != "eos":
+        parser.exit(1, "Model reached its context limit before completing the tagged sentence.\n")
+    print(result.sql)
+
+
+if __name__ == "__main__":
+    main()
