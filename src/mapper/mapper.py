@@ -18,8 +18,8 @@ TAG_DELIMITER = re.compile(r"[<>{}\[\]]")
 TOKEN = re.compile(r"\w+|[^\w\s]")
 
 
-def value_spans(question, fragments, tags):
-    """Find one unambiguous assignment of value tags to source character ranges."""
+def align_values(question, fragments, value_tags):
+    """Return every distinct, consistent assignment of original values to tags."""
     source = list(TOKEN.finditer(question))
     words = [token[0].casefold() for token in source]
     anchors = [TOKEN.findall(fragment.casefold()) for fragment in fragments]
@@ -29,7 +29,7 @@ def value_spans(question, fragments, tags):
         actual = words[start:start + len(anchor)]
         if len(actual) != len(anchor):
             return False
-        if index < len(tags) and anchor and {anchor[-1], actual[-1]} <= {"a", "an"}:
+        if index < len(value_tags) and anchor and {anchor[-1], actual[-1]} <= {"a", "an"}:
             # The question generator adjusts the article after substituting a tag.
             return actual[:-1] == anchor[:-1]
         return actual == anchor
@@ -39,35 +39,38 @@ def value_spans(question, fragments, tags):
         if not matches(index, start):
             return ()
         start += len(anchors[index])
-        if index == len(tags):
+        if index == len(value_tags):
             return ((),) if start == len(words) else ()
 
-        solutions = []
+        solutions = {}
         last_end = len(words) - len(anchors[index + 1])
-        first_end = max(start + 1, last_end) if index + 1 == len(tags) else start + 1
+        first_end = max(start + 1, last_end) if index + 1 == len(value_tags) else start + 1
+        tag = value_tags[index]
         for end in range(first_end, last_end + 1):
             for suffix in align(index + 1, end):
-                if tags[index].group("value") is None:
-                    candidate = suffix
-                else:
-                    span = (index, source[start].start(), source[end - 1].end())
-                    candidate = (span,) + suffix
-                if candidate not in solutions:
-                    solutions.append(candidate)
-                if len(solutions) == 2:
-                    return tuple(solutions)
+                if tag is None:
+                    solutions[suffix] = None
+                    continue
+                value = question[source[start].start():source[end - 1].end()]
+                previous = dict(suffix).get(tag)
+                if previous is None:
+                    solutions[((tag, value), *suffix)] = None
+                elif previous == value:
+                    solutions[suffix] = None
         return tuple(solutions)
 
     solutions = align(0, 0)
     if not solutions:
         raise ValueError("tagged sentence cannot be aligned with the question")
-    if len(solutions) != 1:
-        raise ValueError("condition value boundaries are ambiguous")
-    return {index: question[start:end] for index, start, end in solutions[0]}
+    return [dict(solution) for solution in solutions]
 
 
 def map_question(question, tagged_question):
-    """Return the back-model question and its tables, columns and original values."""
+    """Return the back-model question and the data needed to restore SQL.
+
+    A unique assignment is stored in ``values``. Multiple assignments are stored
+    as complete dictionaries in ``value_candidates``.
+    """
     if not all(isinstance(text, str) and text.strip() for text in (question, tagged_question)):
         raise ValueError("question and tagged_question must be nonempty strings")
 
@@ -77,12 +80,11 @@ def map_question(question, tagged_question):
     fragments = [tagged_question[start:end] for start, end in zip(starts, ends, strict=True)]
     if not tags or any(TAG_DELIMITER.search(text) for text in fragments):
         raise ValueError("missing or malformed DB tags")
-    spans = value_spans(question, fragments, tags)
-
     table_ids = {}
     columns_by_table = {}
     column_types = {}
-    values = {}
+    value_tags = [None] * len(tags)
+    seen_value_tags = set()
     parts = []
     for index, tag in enumerate(tags):
         parts.append(fragments[index])
@@ -117,10 +119,10 @@ def map_question(question, tagged_question):
         if tag.group("value"):
             number = int(tag.group("number"))
             value_tag = f"[{name}, {kind}, #{number}]"
-            if number > 1 and f"[{name}, {kind}, #{number - 1}]" not in values:
+            if number > 1 and f"[{name}, {kind}, #{number - 1}]" not in seen_value_tags:
                 raise ValueError(f"out-of-order condition value {value_tag}")
-            if values.setdefault(value_tag, spans[index]) != spans[index]:
-                raise ValueError(f"conflicting values for {value_tag}")
+            seen_value_tags.add(value_tag)
+            value_tags[index] = value_tag
             parts.append(value_tag)
         elif tag.group("select"):
             parts.append(f"{{{name}, {kind}}}")
@@ -132,12 +134,17 @@ def map_question(question, tagged_question):
     if not table_ids:
         raise ValueError("tagged sentence needs a table or column tag")
     parts.append(fragments[-1])
-    return "".join(parts), {
+    candidates = align_values(question, fragments, value_tags)
+    mapping = {
         "tables": {alias: table for table, alias in table_ids.items()},
         "columns": {
             f"{table_ids[table]}.{alias}": f"{table}.{column}"
             for table, columns in columns_by_table.items()
             for column, alias in columns.items()
         },
-        "values": values,
     }
+    if len(candidates) == 1:
+        mapping["values"] = candidates[0]
+    else:
+        mapping["value_candidates"] = candidates
+    return "".join(parts), mapping

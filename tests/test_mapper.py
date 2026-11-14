@@ -53,10 +53,9 @@ class MapperTests(unittest.TestCase):
             "[TABLE2.COL1, date, #1]": "March 5, 2025",
         })
 
-    def test_invalid_or_ambiguous_front_output(self):
+    def test_invalid_front_output(self):
         examples = [
             ("Show the items.", "Find <items>.", "cannot be aligned"),
-            ("Show New York items.", "Show [customers.city, string, #1] <items>.", "ambiguous"),
             ("Show 10.", "Show [items.price, numeric, #4].", "malformed"),
             ("Show 10.", "Show [items.price, numeric, #2].", "out-of-order"),
             ("Show price above 10.", "Show {items.price, string} above [items.price, numeric, #1].",
@@ -65,6 +64,58 @@ class MapperTests(unittest.TestCase):
         for question, tagged, reason in examples:
             with self.subTest(tagged=tagged), self.assertRaisesRegex(ValueError, reason):
                 map_question(question, tagged)
+
+    def test_returns_more_than_two_candidate_mappings_in_one_record(self):
+        records = [{
+            "id": "1.1",
+            "input": "Show Greater New York customers.",
+            "output": "Show [customers.city, string, #1] <customers>.",
+        }]
+        with TemporaryDirectory(dir=Path(__file__).parent) as folder:
+            source = Path(folder) / "front.json"
+            destination = Path(folder) / "back.json"
+            source.write_text(json.dumps(records), encoding="utf-8")
+            main(["--input", str(source), "--output", str(destination)])
+            record, = json.loads(destination.read_text(encoding="utf-8"))
+
+        self.assertEqual(record["id"], "1.1")
+        self.assertEqual(record["input"], "Show [TABLE1.COL1, string, #1] <TABLE1>.")
+        self.assertEqual(record["mapping"], {
+            "tables": {"TABLE1": "customers"},
+            "columns": {"TABLE1.COL1": "customers.city"},
+            "value_candidates": [
+                {"[TABLE1.COL1, string, #1]": value}
+                for value in ("Greater", "Greater New", "Greater New York")
+            ],
+        })
+
+    def test_keeps_values_from_the_same_alignment_together(self):
+        _, mapping = map_question(
+            "Find New and Old and York customers.",
+            "Find [customers.city, string, #1] and [customers.city, string, #2] <customers>.",
+        )
+        first = "[TABLE1.COL1, string, #1]"
+        second = "[TABLE1.COL1, string, #2]"
+        self.assertEqual(mapping["value_candidates"], [
+            {first: "New", second: "Old"},
+            {first: "New", second: "Old and"},
+            {first: "New", second: "Old and York"},
+            {first: "New and Old", second: "York"},
+        ])
+
+    def test_repeated_value_tag_keeps_only_consistent_assignments(self):
+        tagged = "Find [customers.city, string, #1] near [customers.city, string, #1] <customers>."
+        _, mapping = map_question("Find New York near New York customers.", tagged)
+        self.assertEqual(mapping["values"], {"[TABLE1.COL1, string, #1]": "New York"})
+        with self.assertRaisesRegex(ValueError, "cannot be aligned"):
+            map_question("Find Paris near London customers.", tagged)
+
+    def test_equivalent_alignments_produce_one_mapping(self):
+        _, mapping = map_question(
+            "Show all active customers in Paris.",
+            "Show {*} <customers> in [customers.city, string, #1].",
+        )
+        self.assertEqual(mapping["values"], {"[TABLE1.COL1, string, #1]": "Paris"})
 
     def test_cli_output_is_readable_by_the_back_model_file_interface(self):
         with TemporaryDirectory(dir=Path(__file__).parent) as folder:
