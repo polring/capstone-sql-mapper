@@ -1,0 +1,33 @@
+{
+  "description": "질문·SQL 4만 3천 쌍(seed 42)을 학습셋과 검증셋으로 나누어 4070 super 한 장에서 실행하는 뒷모델 설정.",
+  "overfit": null,
+  "threads": null,
+  "eval_every": 1,
+  "eval_batch_size": 32,
+  "model_config": {
+    "vocab_size": 2048,
+    "d_model": 192,
+    "num_layers": 4,
+    "num_heads": 4,
+    "ffn_dim": 768,
+    "context_length": 512,
+    "dropout": 0.05,
+    "eps": null,
+    "theta": null
+  },
+  "train_config": {
+    "batch_size": 16,
+    "accumulation_steps": 2,
+    "epochs": 20,
+    "lr": 0.0007,
+    "min_lr": 0.0001,
+    "warmup_ratio": 0.03,
+    "weight_decay": null,
+    "beta1": null,
+    "beta2": null,
+    "eps": null,
+    "max_grad_norm": null,
+    "patience": 4,
+    "precision": "fp32"
+  }
+}

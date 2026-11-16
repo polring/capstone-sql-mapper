@@ -1,0 +1,33 @@
+{
+  "description": "질문·SQL 4만 3천 쌍(seed 42)에서 만든 사용자 질문 약 30만 건을 검증 0.02·테스트 0.1로 나누어 RTX 4070 SUPER 한 장에서 학습하는 앞모델 설정.",
+  "overfit": null,
+  "threads": null,
+  "eval_every": null,
+  "eval_batch_size": 256,
+  "model_config": {
+    "vocab_size": 2048,
+    "d_model": 256,
+    "num_layers": 6,
+    "num_heads": 4,
+    "ffn_dim": 768,
+    "context_length": 576,
+    "dropout": 0.05,
+    "eps": null,
+    "theta": null
+  },
+  "train_config": {
+    "batch_size": 64,
+    "accumulation_steps": 1,
+    "epochs": 10,
+    "lr": 0.001,
+    "min_lr": 0.0001,
+    "warmup_ratio": 0.02,
+    "weight_decay": null,
+    "beta1": null,
+    "beta2": null,
+    "eps": null,
+    "max_grad_norm": null,
+    "patience": 2,
+    "precision": "bf16"
+  }
+}
