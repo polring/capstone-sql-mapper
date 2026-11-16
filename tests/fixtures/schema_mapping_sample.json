@@ -1,0 +1,57 @@
+[
+  {
+    "id": "1.1.1",
+    "input": "Show the {items.item_name, string} of <items> where the <items.price, numeric> is greater than [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "1.1.2",
+    "input": "Show the {items.item_name, string} of <items> where the <items.stock, numeric> is greater than [items.stock, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "1.2.1",
+    "input": "List the {items.item_name, string} of each <items> with <items.price, numeric> above [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of each <TABLE1> with <TABLE1.COL2, numeric> above [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "2.1.1",
+    "input": "Show {*} of <customers> whose <customers.city, string> is [customers.city, string, #1] or [customers.city, string, #2].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] or [TABLE1.COL1, string, #2]."
+  },
+  {
+    "id": "3.1.1",
+    "input": "List the {items.item_name, string} of <items> with a <items.stock, numeric> between [items.stock, numeric, #1] and [items.stock, numeric, #2].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "4.1.1",
+    "input": "Show {items.item_name, string} where the <items.item_name, string> ends with [items.item_name, string, #1].",
+    "output": "Show {TABLE1.COL1, string} where the <TABLE1.COL1, string> ends with [TABLE1.COL1, string, #1]."
+  },
+  {
+    "id": "5.1.1",
+    "input": "How many <orders> were placed on [orders.order_date, date, #1]?",
+    "output": "How many <TABLE1> were placed on [TABLE1.COL1, date, #1]?"
+  },
+  {
+    "id": "6.1.1",
+    "input": "For each <orders.customer_id, numeric> in <orders>, show the {orders.customer_id, numeric} and order count when that count is at least [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and order count when that count is at least [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "7.1.1",
+    "input": "Show {items.item_name, string} where the <items.price, numeric> is above the average <items.price, numeric>.",
+    "output": "Show {TABLE1.COL1, string} where the <TABLE1.COL2, numeric> is above the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "8.1.1",
+    "input": "Show the {items.price, numeric} of each <items>.",
+    "output": "Show the {TABLE1.COL1, numeric} of each <TABLE1>."
+  },
+  {
+    "id": "9.1.1",
+    "input": "Show the {orders.order_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.quantity, numeric> is at least [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is at least [TABLE1.COL3, numeric, #1]."
+  }
+]

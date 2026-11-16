@@ -1,0 +1,2027 @@
+[
+  {
+    "id": "1.1.1",
+    "input": "Show the {customers.membership, string} of each <customers>.",
+    "output": "Show the {TABLE1.COL1, string} of each <TABLE1>."
+  },
+  {
+    "id": "1.1.2",
+    "input": "Show the {orders.quantity, numeric} of each <orders>.",
+    "output": "Show the {TABLE1.COL1, numeric} of each <TABLE1>."
+  },
+  {
+    "id": "1.1.3",
+    "input": "Show the {orders.order_date, date} of each <orders>.",
+    "output": "Show the {TABLE1.COL1, date} of each <TABLE1>."
+  },
+  {
+    "id": "1.1.4",
+    "input": "Show the {items.price, numeric} of each <items>.",
+    "output": "Show the {TABLE1.COL1, numeric} of each <TABLE1>."
+  },
+  {
+    "id": "1.2.1",
+    "input": "List the {orders.item_id, numeric} of all <orders>.",
+    "output": "List the {TABLE1.COL1, numeric} of all <TABLE1>."
+  },
+  {
+    "id": "1.2.2",
+    "input": "List the {items.item_name, string} of all <items>.",
+    "output": "List the {TABLE1.COL1, string} of all <TABLE1>."
+  },
+  {
+    "id": "1.2.3",
+    "input": "List the {customers.city, string} of all <customers>.",
+    "output": "List the {TABLE1.COL1, string} of all <TABLE1>."
+  },
+  {
+    "id": "1.2.4",
+    "input": "List the {orders.customer_id, numeric} of all <orders>.",
+    "output": "List the {TABLE1.COL1, numeric} of all <TABLE1>."
+  },
+  {
+    "id": "1.3.1",
+    "input": "What are the {items.item_name, string} of the <items>?",
+    "output": "What are the {TABLE1.COL1, string} of the <TABLE1>?"
+  },
+  {
+    "id": "1.3.2",
+    "input": "What are the {items.item_id, numeric} of the <items>?",
+    "output": "What are the {TABLE1.COL1, numeric} of the <TABLE1>?"
+  },
+  {
+    "id": "1.3.3",
+    "input": "What are the {orders.quantity, numeric} of the <orders>?",
+    "output": "What are the {TABLE1.COL1, numeric} of the <TABLE1>?"
+  },
+  {
+    "id": "1.3.4",
+    "input": "What are the {orders.status, string} of the <orders>?",
+    "output": "What are the {TABLE1.COL1, string} of the <TABLE1>?"
+  },
+  {
+    "id": "2.1.1",
+    "input": "Show {*} of all <items>.",
+    "output": "Show {*} of all <TABLE1>."
+  },
+  {
+    "id": "2.1.2",
+    "input": "Show {*} of all <customers>.",
+    "output": "Show {*} of all <TABLE1>."
+  },
+  {
+    "id": "2.1.3",
+    "input": "Show {*} of all <orders>.",
+    "output": "Show {*} of all <TABLE1>."
+  },
+  {
+    "id": "2.2.1",
+    "input": "List {*} for every <items>.",
+    "output": "List {*} for every <TABLE1>."
+  },
+  {
+    "id": "2.2.2",
+    "input": "List {*} for every <orders>.",
+    "output": "List {*} for every <TABLE1>."
+  },
+  {
+    "id": "2.2.3",
+    "input": "List {*} for every <customers>.",
+    "output": "List {*} for every <TABLE1>."
+  },
+  {
+    "id": "3.1.1",
+    "input": "Show the {items.category, string} of <items> whose <items.item_name, string> is [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.1.2",
+    "input": "Show the {orders.quantity, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.1.3",
+    "input": "Show the {customers.customer_id, numeric} of <customers> whose <customers.name, string> is [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.1.4",
+    "input": "Show the {customers.name, string} of <customers> whose <customers.membership, string> is [customers.membership, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.2.1",
+    "input": "List the {orders.customer_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.2.3",
+    "input": "List the {customers.customer_id, numeric} of <customers> where the <customers.city, string> is [customers.city, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.2.4",
+    "input": "List the {orders.item_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "3.3.1",
+    "input": "Which <customers> have [customers.membership, string, #1] as their <customers.membership, string>? Show the {customers.customer_id, numeric}.",
+    "output": "Which <TABLE1> have [TABLE1.COL1, string, #1] as their <TABLE1.COL1, string>? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "3.3.2",
+    "input": "Which <orders> have [orders.status, string, #1] as their <orders.status, string>? Show the {orders.quantity, numeric}.",
+    "output": "Which <TABLE1> have [TABLE1.COL1, string, #1] as their <TABLE1.COL1, string>? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "3.3.3",
+    "input": "Which <items> have [items.category, string, #1] as their <items.category, string>? Show the {items.item_id, numeric}.",
+    "output": "Which <TABLE1> have [TABLE1.COL1, string, #1] as their <TABLE1.COL1, string>? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "3.3.4",
+    "input": "Which <items> have [items.item_name, string, #1] as their <items.item_name, string>? Show the {items.stock, numeric}.",
+    "output": "Which <TABLE1> have [TABLE1.COL1, string, #1] as their <TABLE1.COL1, string>? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "4.1.1",
+    "input": "Show the {orders.order_date, date} of <orders> whose <orders.status, string> is not [orders.status, string, #1].",
+    "output": "Show the {TABLE1.COL1, date} of <TABLE1> whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.1.2",
+    "input": "Show the {customers.membership, string} of <customers> whose <customers.city, string> is not [customers.city, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.1.3",
+    "input": "Show the {customers.customer_id, numeric} of <customers> whose <customers.name, string> is not [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.1.4",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.status, string> is not [orders.status, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.2.1",
+    "input": "List the {items.item_id, numeric} of <items> where the <items.item_name, string> is anything other than [items.item_name, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is anything other than [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> where the <orders.status, string> is anything other than [orders.status, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is anything other than [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.2.3",
+    "input": "List the {customers.city, string} of <customers> where the <customers.name, string> is anything other than [customers.name, string, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is anything other than [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "4.2.4",
+    "input": "List the {orders.order_date, date} of <orders> where the <orders.status, string> is anything other than [orders.status, string, #1].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> where the <TABLE1.COL2, string> is anything other than [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "5.1.1",
+    "input": "Show {*} of <customers> whose <customers.name, string> is [customers.name, string, #1] or [customers.name, string, #2].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] or [TABLE1.COL1, string, #2]."
+  },
+  {
+    "id": "5.1.2",
+    "input": "Show {*} of <orders> whose <orders.status, string> is [orders.status, string, #1] or [orders.status, string, #2].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] or [TABLE1.COL1, string, #2]."
+  },
+  {
+    "id": "5.1.3",
+    "input": "Show {*} of <items> whose <items.category, string> is [items.category, string, #1] or [items.category, string, #2].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] or [TABLE1.COL1, string, #2]."
+  },
+  {
+    "id": "5.1.4",
+    "input": "Show {*} of <customers> whose <customers.membership, string> is [customers.membership, string, #1] or [customers.membership, string, #2].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] or [TABLE1.COL1, string, #2]."
+  },
+  {
+    "id": "5.2.1",
+    "input": "List the {customers.customer_id, numeric} of <customers> where the <customers.membership, string> is either [customers.membership, string, #1] or [customers.membership, string, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is either [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2]."
+  },
+  {
+    "id": "5.2.2",
+    "input": "List the {orders.order_date, date} of <orders> where the <orders.status, string> is either [orders.status, string, #1] or [orders.status, string, #2].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> where the <TABLE1.COL2, string> is either [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2]."
+  },
+  {
+    "id": "5.2.3",
+    "input": "List the {items.item_id, numeric} of <items> where the <items.item_name, string> is either [items.item_name, string, #1] or [items.item_name, string, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is either [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2]."
+  },
+  {
+    "id": "5.2.4",
+    "input": "List the {customers.city, string} of <customers> where the <customers.name, string> is either [customers.name, string, #1] or [customers.name, string, #2].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is either [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2]."
+  },
+  {
+    "id": "6.1.1",
+    "input": "List the {items.category, string} of <items> where the <items.item_name, string> is one of [items.item_name, string, #1], [items.item_name, string, #2], or [items.item_name, string, #3].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is one of [TABLE1.COL2, string, #1], [TABLE1.COL2, string, #2], or [TABLE1.COL2, string, #3]."
+  },
+  {
+    "id": "6.1.2",
+    "input": "List the {customers.city, string} of <customers> where the <customers.name, string> is one of [customers.name, string, #1], [customers.name, string, #2], or [customers.name, string, #3].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is one of [TABLE1.COL2, string, #1], [TABLE1.COL2, string, #2], or [TABLE1.COL2, string, #3]."
+  },
+  {
+    "id": "6.1.3",
+    "input": "List the {items.price, numeric} of <items> where the <items.item_name, string> is one of [items.item_name, string, #1], [items.item_name, string, #2], or [items.item_name, string, #3].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is one of [TABLE1.COL2, string, #1], [TABLE1.COL2, string, #2], or [TABLE1.COL2, string, #3]."
+  },
+  {
+    "id": "6.1.4",
+    "input": "List the {items.stock, numeric} of <items> where the <items.item_name, string> is one of [items.item_name, string, #1], [items.item_name, string, #2], or [items.item_name, string, #3].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is one of [TABLE1.COL2, string, #1], [TABLE1.COL2, string, #2], or [TABLE1.COL2, string, #3]."
+  },
+  {
+    "id": "6.2.1",
+    "input": "Show {*} of <customers> whose <customers.name, string> is [customers.name, string, #1], [customers.name, string, #2], or [customers.name, string, #3].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1], [TABLE1.COL1, string, #2], or [TABLE1.COL1, string, #3]."
+  },
+  {
+    "id": "6.2.2",
+    "input": "Show {*} of <customers> whose <customers.membership, string> is [customers.membership, string, #1], [customers.membership, string, #2], or [customers.membership, string, #3].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1], [TABLE1.COL1, string, #2], or [TABLE1.COL1, string, #3]."
+  },
+  {
+    "id": "6.2.3",
+    "input": "Show {*} of <customers> whose <customers.city, string> is [customers.city, string, #1], [customers.city, string, #2], or [customers.city, string, #3].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1], [TABLE1.COL1, string, #2], or [TABLE1.COL1, string, #3]."
+  },
+  {
+    "id": "6.2.4",
+    "input": "Show {*} of <items> whose <items.category, string> is [items.category, string, #1], [items.category, string, #2], or [items.category, string, #3].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1], [TABLE1.COL1, string, #2], or [TABLE1.COL1, string, #3]."
+  },
+  {
+    "id": "7.1.1",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.customer_id, numeric> is greater than [orders.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.1.2",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_id, numeric> is greater than [orders.order_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.1.3",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.price, numeric> is greater than [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.1.4",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_id, numeric> is greater than [orders.order_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is greater than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.2.1",
+    "input": "List the {orders.customer_id, numeric} of <orders> with a <orders.quantity, numeric> above [orders.quantity, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> above [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.2.2",
+    "input": "List the {customers.membership, string} of <customers> with a <customers.customer_id, numeric> above [customers.customer_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> above [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.2.3",
+    "input": "List the {orders.order_date, date} of <orders> with a <orders.quantity, numeric> above [orders.quantity, numeric, #1].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> with a <TABLE1.COL2, numeric> above [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "7.2.4",
+    "input": "List the {orders.quantity, numeric} of <orders> with a <orders.order_id, numeric> above [orders.order_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> above [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.1.1",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.price, numeric> is less than [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.1.2",
+    "input": "Show the {items.price, numeric} of <items> whose <items.item_id, numeric> is less than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.1.3",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.quantity, numeric> is less than [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.1.4",
+    "input": "Show the {items.item_name, string} of <items> whose <items.price, numeric> is less than [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.2.1",
+    "input": "List the {items.item_id, numeric} of <items> with a <items.price, numeric> below [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.2.2",
+    "input": "List the {items.stock, numeric} of <items> with a <items.price, numeric> below [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.2.3",
+    "input": "List the {customers.membership, string} of <customers> with a <customers.customer_id, numeric> below [customers.customer_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "8.2.4",
+    "input": "List the {items.price, numeric} of <items> with a <items.stock, numeric> below [items.stock, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.1.1",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.customer_id, numeric> is at least [orders.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at least [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.1.2",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.quantity, numeric> is at least [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is at least [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.1.3",
+    "input": "Show the {items.price, numeric} of <items> whose <items.stock, numeric> is at least [items.stock, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at least [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.1.4",
+    "input": "Show the {customers.membership, string} of <customers> whose <customers.customer_id, numeric> is at least [customers.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is at least [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.2.1",
+    "input": "List the {items.price, numeric} of <items> with a <items.item_id, numeric> of no less than [items.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> of no less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.2.2",
+    "input": "List the {orders.order_id, numeric} of <orders> with a <orders.customer_id, numeric> of no less than [orders.customer_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> of no less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.2.3",
+    "input": "List the {customers.name, string} of <customers> with a <customers.customer_id, numeric> of no less than [customers.customer_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> of no less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "9.2.4",
+    "input": "List the {orders.customer_id, numeric} of <orders> with a <orders.item_id, numeric> of no less than [orders.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> of no less than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.1.1",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.price, numeric> is at most [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at most [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.1.2",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.quantity, numeric> is at most [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at most [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.1.3",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.customer_id, numeric> is at most [orders.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at most [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.1.4",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.quantity, numeric> is at most [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is at most [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.2.1",
+    "input": "List the {items.item_name, string} of <items> with a <items.item_id, numeric> of no more than [items.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> of no more than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.2.2",
+    "input": "List the {items.item_id, numeric} of <items> with a <items.price, numeric> of no more than [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> of no more than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.2.3",
+    "input": "List the {items.category, string} of <items> with a <items.price, numeric> of no more than [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> of no more than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "10.2.4",
+    "input": "List the {items.item_name, string} of <items> with a <items.stock, numeric> of no more than [items.stock, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> of no more than [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.1.1",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_id, numeric> is exactly [orders.order_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is exactly [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.1.2",
+    "input": "Show the {items.price, numeric} of <items> whose <items.item_id, numeric> is exactly [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is exactly [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.1.3",
+    "input": "Show the {items.stock, numeric} of <items> whose <items.price, numeric> is exactly [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is exactly [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.1.4",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.quantity, numeric> is exactly [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is exactly [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.2.1",
+    "input": "List the {orders.status, string} of <orders> with a <orders.customer_id, numeric> equal to [orders.customer_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> equal to [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.2.2",
+    "input": "List the {orders.customer_id, numeric} of <orders> with a <orders.item_id, numeric> equal to [orders.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> equal to [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.2.3",
+    "input": "List the {orders.customer_id, numeric} of <orders> with a <orders.order_id, numeric> equal to [orders.order_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> equal to [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "11.2.4",
+    "input": "List the {items.item_id, numeric} of <items> with a <items.stock, numeric> equal to [items.stock, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> equal to [TABLE1.COL2, numeric, #1]."
+  },
+  {
+    "id": "12.1.1",
+    "input": "List the {items.stock, numeric} of <items> with a <items.item_id, numeric> between [items.item_id, numeric, #1] and [items.item_id, numeric, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.1.2",
+    "input": "List the {orders.order_date, date} of <orders> with a <orders.item_id, numeric> between [orders.item_id, numeric, #1] and [orders.item_id, numeric, #2].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> with a <TABLE1.COL2, numeric> between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.1.3",
+    "input": "List the {orders.item_id, numeric} of <orders> with a <orders.customer_id, numeric> between [orders.customer_id, numeric, #1] and [orders.customer_id, numeric, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.1.4",
+    "input": "List the {orders.quantity, numeric} of <orders> with a <orders.customer_id, numeric> between [orders.customer_id, numeric, #1] and [orders.customer_id, numeric, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.2.1",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.customer_id, numeric> is between [orders.customer_id, numeric, #1] and [orders.customer_id, numeric, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.2.2",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_id, numeric> is between [orders.order_id, numeric, #1] and [orders.order_id, numeric, #2].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.2.3",
+    "input": "Show the {orders.quantity, numeric} of <orders> whose <orders.item_id, numeric> is between [orders.item_id, numeric, #1] and [orders.item_id, numeric, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "12.2.4",
+    "input": "Show the {items.price, numeric} of <items> whose <items.item_id, numeric> is between [items.item_id, numeric, #1] and [items.item_id, numeric, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is between [TABLE1.COL2, numeric, #1] and [TABLE1.COL2, numeric, #2]."
+  },
+  {
+    "id": "13.1.1",
+    "input": "Show the {items.price, numeric} of <items> whose <items.item_name, string> starts with [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> starts with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "13.1.2",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.item_name, string> starts with [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> starts with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "13.1.3",
+    "input": "Show the {customers.customer_id, numeric} of <customers> whose <customers.name, string> starts with [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> starts with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "13.1.4",
+    "input": "Show the {items.stock, numeric} of <items> whose <items.item_name, string> starts with [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> starts with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "13.2.1",
+    "input": "Which <items> have a <items.item_name, string> starting with [items.item_name, string, #1]? Show the {items.item_id, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> starting with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "13.2.2",
+    "input": "Which <customers> have a <customers.name, string> starting with [customers.name, string, #1]? Show the {customers.customer_id, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> starting with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "13.2.3",
+    "input": "Which <customers> have a <customers.name, string> starting with [customers.name, string, #1]? Show the {customers.membership, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> starting with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "13.2.4",
+    "input": "Which <customers> have a <customers.name, string> starting with [customers.name, string, #1]? Show the {customers.city, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> starting with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "14.1.1",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.item_name, string> ends with [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> ends with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "14.1.2",
+    "input": "Show the {customers.membership, string} of <customers> whose <customers.name, string> ends with [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> ends with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "14.1.3",
+    "input": "Show the {customers.customer_id, numeric} of <customers> whose <customers.name, string> ends with [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> ends with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "14.1.4",
+    "input": "Show the {customers.city, string} of <customers> whose <customers.name, string> ends with [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> ends with [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "14.2.1",
+    "input": "Which <items> have a <items.item_name, string> ending with [items.item_name, string, #1]? Show the {items.item_id, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> ending with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "14.2.2",
+    "input": "Which <items> have a <items.item_name, string> ending with [items.item_name, string, #1]? Show the {items.category, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> ending with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "14.2.3",
+    "input": "Which <items> have a <items.item_name, string> ending with [items.item_name, string, #1]? Show the {items.price, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> ending with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "14.2.4",
+    "input": "Which <items> have a <items.item_name, string> ending with [items.item_name, string, #1]? Show the {items.stock, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> ending with [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "15.1.1",
+    "input": "Show the {items.stock, numeric} of <items> whose <items.item_name, string> contains [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> contains [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "15.1.2",
+    "input": "Show the {customers.membership, string} of <customers> whose <customers.name, string> contains [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> contains [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "15.1.3",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.item_name, string> contains [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> contains [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "15.1.4",
+    "input": "Show the {customers.city, string} of <customers> whose <customers.name, string> contains [customers.name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> contains [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "15.2.1",
+    "input": "Which <customers> have a <customers.name, string> containing [customers.name, string, #1]? Show the {customers.city, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> containing [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "15.2.2",
+    "input": "Which <items> have a <items.item_name, string> containing [items.item_name, string, #1]? Show the {items.price, numeric}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> containing [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "15.2.3",
+    "input": "Which <customers> have a <customers.name, string> containing [customers.name, string, #1]? Show the {customers.membership, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> containing [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "15.2.4",
+    "input": "Which <items> have a <items.item_name, string> containing [items.item_name, string, #1]? Show the {items.category, string}.",
+    "output": "Which <TABLE1> have a <TABLE1.COL1, string> containing [TABLE1.COL1, string, #1]? Show the {TABLE1.COL2, string}."
+  },
+  {
+    "id": "16.1.1",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_date, date> is [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, date> is [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.1.2",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_date, date> is [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.1.3",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.order_date, date> is [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.1.4",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.order_date, date> is [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.2.1",
+    "input": "List the {orders.item_id, numeric} of <orders> with an <orders.order_date, date> of [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> of [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> with an <orders.order_date, date> of [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> of [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.2.3",
+    "input": "List the {orders.order_id, numeric} of <orders> with an <orders.order_date, date> of [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> of [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "16.2.4",
+    "input": "List the {orders.status, string} of <orders> with an <orders.order_date, date> of [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with an <TABLE1.COL2, date> of [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.1.1",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.order_date, date> is before [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is before [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.1.2",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_date, date> is before [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is before [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.1.3",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.order_date, date> is before [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is before [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.1.4",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_date, date> is before [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, date> is before [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.2.1",
+    "input": "List the {orders.customer_id, numeric} of <orders> with an <orders.order_date, date> earlier than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> earlier than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> with an <orders.order_date, date> earlier than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> earlier than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.2.3",
+    "input": "List the {orders.status, string} of <orders> with an <orders.order_date, date> earlier than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with an <TABLE1.COL2, date> earlier than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "17.2.4",
+    "input": "List the {orders.order_id, numeric} of <orders> with an <orders.order_date, date> earlier than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> earlier than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.1.1",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, date> is after [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.1.2",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is after [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.1.3",
+    "input": "Show the {orders.quantity, numeric} of <orders> whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is after [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.1.4",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is after [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.2.1",
+    "input": "List the {orders.status, string} of <orders> with an <orders.order_date, date> later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with an <TABLE1.COL2, date> later than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> with an <orders.order_date, date> later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> later than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.2.3",
+    "input": "List the {orders.order_id, numeric} of <orders> with an <orders.order_date, date> later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> later than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "18.2.4",
+    "input": "List the {orders.customer_id, numeric} of <orders> with an <orders.order_date, date> later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> later than [TABLE1.COL2, date, #1]."
+  },
+  {
+    "id": "19.1.1",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.order_date, date> is between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.1.2",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.order_date, date> is between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, date> is between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.1.3",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.order_date, date> is between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.1.4",
+    "input": "Show the {orders.quantity, numeric} of <orders> whose <orders.order_date, date> is between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, date> is between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.2.1",
+    "input": "List the {orders.order_id, numeric} of <orders> with an <orders.order_date, date> between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.2.2",
+    "input": "List the {orders.item_id, numeric} of <orders> with an <orders.order_date, date> between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.2.3",
+    "input": "List the {orders.status, string} of <orders> with an <orders.order_date, date> between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with an <TABLE1.COL2, date> between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "19.2.4",
+    "input": "List the {orders.quantity, numeric} of <orders> with an <orders.order_date, date> between [orders.order_date, date, #1] and [orders.order_date, date, #2].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with an <TABLE1.COL2, date> between [TABLE1.COL2, date, #1] and [TABLE1.COL2, date, #2]."
+  },
+  {
+    "id": "20.1.1",
+    "input": "Show the {items.stock, numeric} of <items> whose <items.item_name, string> is [items.item_name, string, #1] and whose <items.item_id, numeric> is greater than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is greater than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.1.2",
+    "input": "Show the {items.category, string} of <items> whose <items.item_name, string> is [items.item_name, string, #1] and whose <items.item_id, numeric> is greater than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is greater than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.1.3",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.customer_id, numeric> is greater than [orders.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is greater than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.1.4",
+    "input": "Show the {items.stock, numeric} of <items> whose <items.category, string> is [items.category, string, #1] and whose <items.item_id, numeric> is greater than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is greater than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.2.1",
+    "input": "List the {items.price, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.item_id, numeric> is above [items.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is above [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.2.2",
+    "input": "List the {items.price, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.stock, numeric> is above [items.stock, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is above [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.2.3",
+    "input": "List the {items.stock, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.price, numeric> is above [items.price, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is above [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "20.2.4",
+    "input": "List the {orders.item_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.quantity, numeric> is above [orders.quantity, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is above [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "21.1.1",
+    "input": "Show {*} of <customers> whose <customers.membership, string> is [customers.membership, string, #1] and whose <customers.city, string> is not [customers.city, string, #1].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] and whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "21.1.2",
+    "input": "Show {*} of <customers> whose <customers.name, string> is [customers.name, string, #1] and whose <customers.membership, string> is not [customers.membership, string, #1].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] and whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "21.1.3",
+    "input": "Show {*} of <customers> whose <customers.name, string> is [customers.name, string, #1] and whose <customers.city, string> is not [customers.city, string, #1].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] and whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "21.1.4",
+    "input": "Show {*} of <items> whose <items.item_name, string> is [items.item_name, string, #1] and whose <items.category, string> is not [items.category, string, #1].",
+    "output": "Show {*} of <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1] and whose <TABLE1.COL2, string> is not [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "21.2.1",
+    "input": "List the {customers.customer_id, numeric} of <customers> where the <customers.membership, string> is [customers.membership, string, #1] and the <customers.city, string> is not [customers.city, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, string> is not [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "21.2.2",
+    "input": "List the {items.price, numeric} of <items> where the <items.category, string> is [items.category, string, #1] and the <items.item_name, string> is not [items.item_name, string, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, string> is not [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "21.2.3",
+    "input": "List the {customers.city, string} of <customers> where the <customers.membership, string> is [customers.membership, string, #1] and the <customers.name, string> is not [customers.name, string, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, string> is not [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "21.2.4",
+    "input": "List the {customers.membership, string} of <customers> where the <customers.city, string> is [customers.city, string, #1] and the <customers.name, string> is not [customers.name, string, #1].",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, string> is not [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "22.1.1",
+    "input": "Show the {customers.name, string} of <customers> where the <customers.membership, string> is [customers.membership, string, #1], the <customers.city, string> is [customers.city, string, #1], and the <customers.customer_id, numeric> is less than [customers.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], the <TABLE1.COL3, string> is [TABLE1.COL3, string, #1], and the <TABLE1.COL4, numeric> is less than [TABLE1.COL4, numeric, #1]."
+  },
+  {
+    "id": "22.1.2",
+    "input": "Show the {items.item_id, numeric} of <items> where the <items.category, string> is [items.category, string, #1], the <items.item_name, string> is [items.item_name, string, #1], and the <items.price, numeric> is less than [items.price, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], the <TABLE1.COL3, string> is [TABLE1.COL3, string, #1], and the <TABLE1.COL4, numeric> is less than [TABLE1.COL4, numeric, #1]."
+  },
+  {
+    "id": "22.1.3",
+    "input": "Show the {customers.name, string} of <customers> where the <customers.city, string> is [customers.city, string, #1], the <customers.membership, string> is [customers.membership, string, #1], and the <customers.customer_id, numeric> is less than [customers.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], the <TABLE1.COL3, string> is [TABLE1.COL3, string, #1], and the <TABLE1.COL4, numeric> is less than [TABLE1.COL4, numeric, #1]."
+  },
+  {
+    "id": "22.1.4",
+    "input": "Show the {items.stock, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1], the <items.category, string> is [items.category, string, #1], and the <items.item_id, numeric> is less than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], the <TABLE1.COL3, string> is [TABLE1.COL3, string, #1], and the <TABLE1.COL4, numeric> is less than [TABLE1.COL4, numeric, #1]."
+  },
+  {
+    "id": "23.1.1",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] or whose <orders.quantity, numeric> is less than [orders.quantity, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.1.2",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] or whose <orders.customer_id, numeric> is less than [orders.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.1.3",
+    "input": "Show the {customers.name, string} of <customers> whose <customers.membership, string> is [customers.membership, string, #1] or whose <customers.customer_id, numeric> is less than [customers.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.1.4",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.category, string> is [items.category, string, #1] or whose <items.stock, numeric> is less than [items.stock, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.2.1",
+    "input": "List the {items.price, numeric} of <items> where either the <items.category, string> is [items.category, string, #1] or the <items.stock, numeric> is below [items.stock, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where either the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or the <TABLE1.COL3, numeric> is below [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.2.2",
+    "input": "List the {orders.order_date, date} of <orders> where either the <orders.status, string> is [orders.status, string, #1] or the <orders.item_id, numeric> is below [orders.item_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> where either the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or the <TABLE1.COL3, numeric> is below [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.2.3",
+    "input": "List the {orders.order_date, date} of <orders> where either the <orders.status, string> is [orders.status, string, #1] or the <orders.quantity, numeric> is below [orders.quantity, numeric, #1].",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> where either the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or the <TABLE1.COL3, numeric> is below [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "23.2.4",
+    "input": "List the {orders.item_id, numeric} of <orders> where either the <orders.status, string> is [orders.status, string, #1] or the <orders.order_id, numeric> is below [orders.order_id, numeric, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where either the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or the <TABLE1.COL3, numeric> is below [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "24.1.1",
+    "input": "Show the {customers.name, string} of <customers> whose <customers.membership, string> is [customers.membership, string, #1] or [customers.membership, string, #2], or whose <customers.customer_id, numeric> is less than [customers.customer_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2], or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "24.1.2",
+    "input": "Show the {items.category, string} of <items> whose <items.item_name, string> is [items.item_name, string, #1] or [items.item_name, string, #2], or whose <items.stock, numeric> is less than [items.stock, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2], or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "24.1.3",
+    "input": "Show the {items.category, string} of <items> whose <items.item_name, string> is [items.item_name, string, #1] or [items.item_name, string, #2], or whose <items.item_id, numeric> is less than [items.item_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2], or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "24.1.4",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] or [orders.status, string, #2], or whose <orders.order_id, numeric> is less than [orders.order_id, numeric, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] or [TABLE1.COL2, string, #2], or whose <TABLE1.COL3, numeric> is less than [TABLE1.COL3, numeric, #1]."
+  },
+  {
+    "id": "25.1.1",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, date> is after [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.1.2",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, date> is after [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.1.3",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, date> is after [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.1.4",
+    "input": "Show the {orders.quantity, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.order_date, date> is after [orders.order_date, date, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, date> is after [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.2.1",
+    "input": "List the {orders.item_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.order_date, date> is later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, date> is later than [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.2.2",
+    "input": "List the {orders.quantity, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.order_date, date> is later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, date> is later than [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.2.3",
+    "input": "List the {orders.customer_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.order_date, date> is later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, date> is later than [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "25.2.4",
+    "input": "List the {orders.order_id, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.order_date, date> is later than [orders.order_date, date, #1].",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, date> is later than [TABLE1.COL3, date, #1]."
+  },
+  {
+    "id": "26.1.1",
+    "input": "How many <customers> are there?",
+    "output": "How many <TABLE1> are there?"
+  },
+  {
+    "id": "26.1.2",
+    "input": "How many <items> are there?",
+    "output": "How many <TABLE1> are there?"
+  },
+  {
+    "id": "26.1.3",
+    "input": "How many <orders> are there?",
+    "output": "How many <TABLE1> are there?"
+  },
+  {
+    "id": "26.2.1",
+    "input": "Count all <orders>.",
+    "output": "Count all <TABLE1>."
+  },
+  {
+    "id": "26.2.2",
+    "input": "Count all <customers>.",
+    "output": "Count all <TABLE1>."
+  },
+  {
+    "id": "26.2.3",
+    "input": "Count all <items>.",
+    "output": "Count all <TABLE1>."
+  },
+  {
+    "id": "26.3.1",
+    "input": "What is the total number of <orders>?",
+    "output": "What is the total number of <TABLE1>?"
+  },
+  {
+    "id": "26.3.2",
+    "input": "What is the total number of <customers>?",
+    "output": "What is the total number of <TABLE1>?"
+  },
+  {
+    "id": "26.3.3",
+    "input": "What is the total number of <items>?",
+    "output": "What is the total number of <TABLE1>?"
+  },
+  {
+    "id": "27.1.1",
+    "input": "How many <customers> have a <customers.name, string> of [customers.name, string, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1]?"
+  },
+  {
+    "id": "27.1.2",
+    "input": "How many <items> have a <items.category, string> of [items.category, string, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1]?"
+  },
+  {
+    "id": "27.1.3",
+    "input": "How many <customers> have a <customers.city, string> of [customers.city, string, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1]?"
+  },
+  {
+    "id": "27.1.4",
+    "input": "How many <items> have a <items.item_name, string> of [items.item_name, string, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1]?"
+  },
+  {
+    "id": "27.2.1",
+    "input": "Count the <orders> whose <orders.status, string> is [orders.status, string, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1]."
+  },
+  {
+    "id": "27.2.2",
+    "input": "Count the <items> whose <items.category, string> is [items.category, string, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1]."
+  },
+  {
+    "id": "27.2.3",
+    "input": "Count the <items> whose <items.item_name, string> is [items.item_name, string, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1]."
+  },
+  {
+    "id": "27.2.4",
+    "input": "Count the <customers> whose <customers.membership, string> is [customers.membership, string, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, string> is [TABLE1.COL1, string, #1]."
+  },
+  {
+    "id": "28.1.1",
+    "input": "How many <orders> have a <orders.order_id, numeric> of at least [orders.order_id, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, numeric> of at least [TABLE1.COL1, numeric, #1]?"
+  },
+  {
+    "id": "28.1.2",
+    "input": "How many <orders> have a <orders.item_id, numeric> of at least [orders.item_id, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, numeric> of at least [TABLE1.COL1, numeric, #1]?"
+  },
+  {
+    "id": "28.1.3",
+    "input": "How many <customers> have a <customers.customer_id, numeric> of at least [customers.customer_id, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, numeric> of at least [TABLE1.COL1, numeric, #1]?"
+  },
+  {
+    "id": "28.1.4",
+    "input": "How many <orders> have a <orders.customer_id, numeric> of at least [orders.customer_id, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, numeric> of at least [TABLE1.COL1, numeric, #1]?"
+  },
+  {
+    "id": "28.2.1",
+    "input": "Count the <items> whose <items.item_id, numeric> is at least [items.item_id, numeric, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, numeric> is at least [TABLE1.COL1, numeric, #1]."
+  },
+  {
+    "id": "28.2.2",
+    "input": "Count the <orders> whose <orders.order_id, numeric> is at least [orders.order_id, numeric, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, numeric> is at least [TABLE1.COL1, numeric, #1]."
+  },
+  {
+    "id": "28.2.3",
+    "input": "Count the <orders> whose <orders.customer_id, numeric> is at least [orders.customer_id, numeric, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, numeric> is at least [TABLE1.COL1, numeric, #1]."
+  },
+  {
+    "id": "28.2.4",
+    "input": "Count the <orders> whose <orders.quantity, numeric> is at least [orders.quantity, numeric, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, numeric> is at least [TABLE1.COL1, numeric, #1]."
+  },
+  {
+    "id": "29.1.1",
+    "input": "How many <orders> have an <orders.order_date, date> after [orders.order_date, date, #1]?",
+    "output": "How many <TABLE1> have an <TABLE1.COL1, date> after [TABLE1.COL1, date, #1]?"
+  },
+  {
+    "id": "29.2.1",
+    "input": "Count the <orders> whose <orders.order_date, date> is later than [orders.order_date, date, #1].",
+    "output": "Count the <TABLE1> whose <TABLE1.COL1, date> is later than [TABLE1.COL1, date, #1]."
+  },
+  {
+    "id": "30.1.1",
+    "input": "How many <items> have a <items.category, string> of [items.category, string, #1] and a <items.stock, numeric> below [items.stock, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1] and a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]?"
+  },
+  {
+    "id": "30.1.2",
+    "input": "How many <items> have a <items.item_name, string> of [items.item_name, string, #1] and a <items.price, numeric> below [items.price, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1] and a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]?"
+  },
+  {
+    "id": "30.1.3",
+    "input": "How many <orders> have a <orders.status, string> of [orders.status, string, #1] and a <orders.quantity, numeric> below [orders.quantity, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1] and a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]?"
+  },
+  {
+    "id": "30.1.4",
+    "input": "How many <items> have a <items.item_name, string> of [items.item_name, string, #1] and a <items.stock, numeric> below [items.stock, numeric, #1]?",
+    "output": "How many <TABLE1> have a <TABLE1.COL1, string> of [TABLE1.COL1, string, #1] and a <TABLE1.COL2, numeric> below [TABLE1.COL2, numeric, #1]?"
+  },
+  {
+    "id": "31.1.1",
+    "input": "What is the average {items.stock, numeric} of all <items>?",
+    "output": "What is the average {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "31.1.2",
+    "input": "What is the average {items.price, numeric} of all <items>?",
+    "output": "What is the average {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "31.1.3",
+    "input": "What is the average {orders.quantity, numeric} of all <orders>?",
+    "output": "What is the average {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "31.2.1",
+    "input": "Show the average {orders.quantity, numeric} of <orders>.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "31.2.2",
+    "input": "Show the average {items.stock, numeric} of <items>.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "31.2.3",
+    "input": "Show the average {items.price, numeric} of <items>.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "32.1.1",
+    "input": "What is the total {items.price, numeric} of all <items>?",
+    "output": "What is the total {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "32.1.2",
+    "input": "What is the total {orders.quantity, numeric} of all <orders>?",
+    "output": "What is the total {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "32.1.3",
+    "input": "What is the total {items.stock, numeric} of all <items>?",
+    "output": "What is the total {TABLE1.COL1, numeric} of all <TABLE1>?"
+  },
+  {
+    "id": "32.2.1",
+    "input": "Show the total {items.stock, numeric} across all <items>.",
+    "output": "Show the total {TABLE1.COL1, numeric} across all <TABLE1>."
+  },
+  {
+    "id": "32.2.2",
+    "input": "Show the total {items.price, numeric} across all <items>.",
+    "output": "Show the total {TABLE1.COL1, numeric} across all <TABLE1>."
+  },
+  {
+    "id": "32.2.3",
+    "input": "Show the total {orders.quantity, numeric} across all <orders>.",
+    "output": "Show the total {TABLE1.COL1, numeric} across all <TABLE1>."
+  },
+  {
+    "id": "33.1.1",
+    "input": "What is the maximum {orders.quantity, numeric} among all <orders>?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "33.1.2",
+    "input": "What is the maximum {items.stock, numeric} among all <items>?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "33.1.3",
+    "input": "What is the maximum {orders.order_date, date} among all <orders>?",
+    "output": "What is the maximum {TABLE1.COL1, date} among all <TABLE1>?"
+  },
+  {
+    "id": "33.1.4",
+    "input": "What is the maximum {items.price, numeric} among all <items>?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "33.2.1",
+    "input": "Show the highest {orders.quantity, numeric} of <orders>.",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "33.2.2",
+    "input": "Show the highest {orders.order_date, date} of <orders>.",
+    "output": "Show the highest {TABLE1.COL1, date} of <TABLE1>."
+  },
+  {
+    "id": "33.2.3",
+    "input": "Show the highest {items.price, numeric} of <items>.",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "33.2.4",
+    "input": "Show the highest {items.stock, numeric} of <items>.",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "34.1.1",
+    "input": "What is the minimum {orders.order_date, date} among all <orders>?",
+    "output": "What is the minimum {TABLE1.COL1, date} among all <TABLE1>?"
+  },
+  {
+    "id": "34.1.2",
+    "input": "What is the minimum {orders.quantity, numeric} among all <orders>?",
+    "output": "What is the minimum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "34.1.3",
+    "input": "What is the minimum {items.stock, numeric} among all <items>?",
+    "output": "What is the minimum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "34.1.4",
+    "input": "What is the minimum {items.price, numeric} among all <items>?",
+    "output": "What is the minimum {TABLE1.COL1, numeric} among all <TABLE1>?"
+  },
+  {
+    "id": "34.2.1",
+    "input": "Show the lowest {items.price, numeric} of <items>.",
+    "output": "Show the lowest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "34.2.2",
+    "input": "Show the lowest {orders.order_date, date} of <orders>.",
+    "output": "Show the lowest {TABLE1.COL1, date} of <TABLE1>."
+  },
+  {
+    "id": "34.2.3",
+    "input": "Show the lowest {items.stock, numeric} of <items>.",
+    "output": "Show the lowest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "34.2.4",
+    "input": "Show the lowest {orders.quantity, numeric} of <orders>.",
+    "output": "Show the lowest {TABLE1.COL1, numeric} of <TABLE1>."
+  },
+  {
+    "id": "35.1.1",
+    "input": "What is the average {orders.quantity, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1]?",
+    "output": "What is the average {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "35.1.2",
+    "input": "What is the average {items.stock, numeric} of <items> whose <items.item_name, string> is [items.item_name, string, #1]?",
+    "output": "What is the average {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "35.1.3",
+    "input": "What is the average {items.stock, numeric} of <items> whose <items.category, string> is [items.category, string, #1]?",
+    "output": "What is the average {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "35.1.4",
+    "input": "What is the average {items.price, numeric} of <items> whose <items.item_name, string> is [items.item_name, string, #1]?",
+    "output": "What is the average {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "35.2.1",
+    "input": "Show the average {items.stock, numeric} of <items> where the <items.category, string> is [items.category, string, #1].",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "35.2.2",
+    "input": "Show the average {orders.quantity, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "35.2.3",
+    "input": "Show the average {items.price, numeric} of <items> where the <items.category, string> is [items.category, string, #1].",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "35.2.4",
+    "input": "Show the average {items.price, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1].",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "36.1.1",
+    "input": "What is the total {items.stock, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.price, numeric> is at least [items.price, numeric, #1]?",
+    "output": "What is the total {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is at least [TABLE1.COL3, numeric, #1]?"
+  },
+  {
+    "id": "36.1.2",
+    "input": "What is the total {orders.quantity, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1] and the <orders.item_id, numeric> is at least [orders.item_id, numeric, #1]?",
+    "output": "What is the total {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is at least [TABLE1.COL3, numeric, #1]?"
+  },
+  {
+    "id": "36.1.3",
+    "input": "What is the total {items.stock, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.item_id, numeric> is at least [items.item_id, numeric, #1]?",
+    "output": "What is the total {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is at least [TABLE1.COL3, numeric, #1]?"
+  },
+  {
+    "id": "36.1.4",
+    "input": "What is the total {items.price, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1] and the <items.item_id, numeric> is at least [items.item_id, numeric, #1]?",
+    "output": "What is the total {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and the <TABLE1.COL3, numeric> is at least [TABLE1.COL3, numeric, #1]?"
+  },
+  {
+    "id": "37.1.1",
+    "input": "What is the maximum {orders.quantity, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1]?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "37.1.2",
+    "input": "What is the maximum {orders.order_date, date} of <orders> whose <orders.status, string> is [orders.status, string, #1]?",
+    "output": "What is the maximum {TABLE1.COL1, date} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "37.1.3",
+    "input": "What is the maximum {items.price, numeric} of <items> whose <items.item_name, string> is [items.item_name, string, #1]?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "37.1.4",
+    "input": "What is the maximum {items.stock, numeric} of <items> whose <items.category, string> is [items.category, string, #1]?",
+    "output": "What is the maximum {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]?"
+  },
+  {
+    "id": "37.2.1",
+    "input": "Show the highest {orders.quantity, numeric} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "37.2.2",
+    "input": "Show the highest {items.price, numeric} of <items> where the <items.category, string> is [items.category, string, #1].",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "37.2.3",
+    "input": "Show the highest {orders.order_date, date} of <orders> where the <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the highest {TABLE1.COL1, date} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "37.2.4",
+    "input": "Show the highest {items.price, numeric} of <items> where the <items.item_name, string> is [items.item_name, string, #1].",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1> where the <TABLE1.COL2, string> is [TABLE1.COL2, string, #1]."
+  },
+  {
+    "id": "38.1.1",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the number of <items>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "38.1.2",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the number of <orders>.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the number of <TABLE1>."
+  },
+  {
+    "id": "38.1.3",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the number of <orders>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "38.1.4",
+    "input": "For each <customers.city, string> in <customers>, show the {customers.city, string} and the number of <customers>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "38.2.1",
+    "input": "Show each {items.category, string} together with how many <items> have it.",
+    "output": "Show each {TABLE1.COL1, string} together with how many <TABLE1> have it."
+  },
+  {
+    "id": "38.2.2",
+    "input": "Show each {orders.status, string} together with how many <orders> have it.",
+    "output": "Show each {TABLE1.COL1, string} together with how many <TABLE1> have it."
+  },
+  {
+    "id": "38.2.3",
+    "input": "Show each {customers.membership, string} together with how many <customers> have it.",
+    "output": "Show each {TABLE1.COL1, string} together with how many <TABLE1> have it."
+  },
+  {
+    "id": "38.2.4",
+    "input": "Show each {orders.item_id, numeric} together with how many <orders> have it.",
+    "output": "Show each {TABLE1.COL1, numeric} together with how many <TABLE1> have it."
+  },
+  {
+    "id": "39.1.1",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the average {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the average {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "39.1.2",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the average {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the average {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "39.1.3",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the average {items.stock, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the average {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "39.1.4",
+    "input": "For each <orders.customer_id, numeric> in <orders>, show the {orders.customer_id, numeric} and the average {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the average {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "39.2.1",
+    "input": "Show the average {orders.quantity, numeric} of <orders> for each {orders.item_id, numeric}.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "39.2.2",
+    "input": "Show the average {orders.quantity, numeric} of <orders> for each {orders.status, string}.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "39.2.3",
+    "input": "Show the average {items.stock, numeric} of <items> for each {items.category, string}.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "39.2.4",
+    "input": "Show the average {items.price, numeric} of <items> for each {items.category, string}.",
+    "output": "Show the average {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "40.1.1",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the total {items.stock, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.1.2",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the total {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the total {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.1.3",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the total {items.price, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.1.4",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the total {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.2.1",
+    "input": "Show the total {orders.quantity, numeric} of <orders> for each {orders.customer_id, numeric}.",
+    "output": "Show the total {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.2.2",
+    "input": "Show the total {orders.quantity, numeric} of <orders> for each {orders.item_id, numeric}.",
+    "output": "Show the total {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "40.2.3",
+    "input": "Show the total {orders.quantity, numeric} of <orders> for each {orders.status, string}.",
+    "output": "Show the total {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "40.2.4",
+    "input": "Show the total {items.stock, numeric} of <items> for each {items.category, string}.",
+    "output": "Show the total {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "41.1.1",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the maximum {orders.quantity, numeric}.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the maximum {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "41.1.2",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the maximum {items.price, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the maximum {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "41.1.3",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the maximum {items.stock, numeric}.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the maximum {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "41.1.4",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the maximum {orders.order_date, date}.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the maximum {TABLE1.COL2, date}."
+  },
+  {
+    "id": "41.2.1",
+    "input": "Show the highest {orders.quantity, numeric} of <orders> for each {orders.item_id, numeric}.",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "41.2.2",
+    "input": "Show the highest {orders.order_date, date} of <orders> for each {orders.customer_id, numeric}.",
+    "output": "Show the highest {TABLE1.COL1, date} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "41.2.3",
+    "input": "Show the highest {orders.quantity, numeric} of <orders> for each {orders.status, string}.",
+    "output": "Show the highest {TABLE1.COL1, numeric} of <TABLE1> for each {TABLE1.COL2, string}."
+  },
+  {
+    "id": "41.2.4",
+    "input": "Show the highest {orders.order_date, date} of <orders> for each {orders.item_id, numeric}.",
+    "output": "Show the highest {TABLE1.COL1, date} of <TABLE1> for each {TABLE1.COL2, numeric}."
+  },
+  {
+    "id": "42.1.1",
+    "input": "For each <customers.city, string> in <customers> whose <customers.membership, string> is [customers.membership, string, #1], show the {customers.city, string} and the number of <customers>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "42.1.2",
+    "input": "For each <customers.city, string> in <customers> whose <customers.name, string> is [customers.name, string, #1], show the {customers.city, string} and the number of <customers>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "42.1.3",
+    "input": "For each <items.category, string> in <items> whose <items.item_name, string> is [items.item_name, string, #1], show the {items.category, string} and the number of <items>.",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], show the {TABLE1.COL1, string} and the number of <TABLE1>."
+  },
+  {
+    "id": "42.1.4",
+    "input": "For each <orders.customer_id, numeric> in <orders> whose <orders.status, string> is [orders.status, string, #1], show the {orders.customer_id, numeric} and the number of <orders>.",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1], show the {TABLE1.COL1, numeric} and the number of <TABLE1>."
+  },
+  {
+    "id": "43.1.1",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the number of <orders> when that number is at least [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1> when that number is at least [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "43.1.2",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the number of <items> when that number is at least [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1> when that number is at least [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "43.1.3",
+    "input": "For each <customers.city, string> in <customers>, show the {customers.city, string} and the number of <customers> when that number is at least [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the number of <TABLE1> when that number is at least [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "43.1.4",
+    "input": "For each <orders.customer_id, numeric> in <orders>, show the {orders.customer_id, numeric} and the number of <orders> when that number is at least [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the number of <TABLE1> when that number is at least [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "43.2.1",
+    "input": "Show each {orders.status, string} with [AGG_VALUE, numeric, #1] or more <orders>, along with the number of <orders>.",
+    "output": "Show each {TABLE1.COL1, string} with [AGG_VALUE, numeric, #1] or more <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "43.2.2",
+    "input": "Show each {items.category, string} with [AGG_VALUE, numeric, #1] or more <items>, along with the number of <items>.",
+    "output": "Show each {TABLE1.COL1, string} with [AGG_VALUE, numeric, #1] or more <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "43.2.3",
+    "input": "Show each {customers.membership, string} with [AGG_VALUE, numeric, #1] or more <customers>, along with the number of <customers>.",
+    "output": "Show each {TABLE1.COL1, string} with [AGG_VALUE, numeric, #1] or more <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "43.2.4",
+    "input": "Show each {orders.item_id, numeric} with [AGG_VALUE, numeric, #1] or more <orders>, along with the number of <orders>.",
+    "output": "Show each {TABLE1.COL1, numeric} with [AGG_VALUE, numeric, #1] or more <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "44.1.1",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the average {orders.quantity, numeric} when that average is above [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the average {TABLE1.COL2, numeric} when that average is above [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "44.1.2",
+    "input": "For each <orders.customer_id, numeric> in <orders>, show the {orders.customer_id, numeric} and the average {orders.quantity, numeric} when that average is above [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the average {TABLE1.COL2, numeric} when that average is above [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "44.1.3",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the average {items.price, numeric} when that average is above [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the average {TABLE1.COL2, numeric} when that average is above [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "44.1.4",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the average {orders.quantity, numeric} when that average is above [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the average {TABLE1.COL2, numeric} when that average is above [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "45.1.1",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the total {items.stock, numeric} when that total is less than [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric} when that total is less than [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "45.1.2",
+    "input": "For each <orders.status, string> in <orders>, show the {orders.status, string} and the total {orders.quantity, numeric} when that total is less than [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric} when that total is less than [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "45.1.3",
+    "input": "For each <orders.item_id, numeric> in <orders>, show the {orders.item_id, numeric} and the total {orders.quantity, numeric} when that total is less than [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, numeric> in <TABLE1>, show the {TABLE1.COL1, numeric} and the total {TABLE1.COL2, numeric} when that total is less than [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "45.1.4",
+    "input": "For each <items.category, string> in <items>, show the {items.category, string} and the total {items.price, numeric} when that total is less than [AGG_VALUE, numeric, #1].",
+    "output": "For each <TABLE1.COL1, string> in <TABLE1>, show the {TABLE1.COL1, string} and the total {TABLE1.COL2, numeric} when that total is less than [AGG_VALUE, numeric, #1]."
+  },
+  {
+    "id": "46.1.1",
+    "input": "Show the {customers.city, string} of all <customers> sorted by <customers.customer_id, numeric> from highest to lowest.",
+    "output": "Show the {TABLE1.COL1, string} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from highest to lowest."
+  },
+  {
+    "id": "46.1.2",
+    "input": "Show the {orders.order_id, numeric} of all <orders> sorted by <orders.item_id, numeric> from highest to lowest.",
+    "output": "Show the {TABLE1.COL1, numeric} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from highest to lowest."
+  },
+  {
+    "id": "46.1.3",
+    "input": "Show the {items.item_name, string} of all <items> sorted by <items.item_id, numeric> from highest to lowest.",
+    "output": "Show the {TABLE1.COL1, string} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from highest to lowest."
+  },
+  {
+    "id": "46.1.4",
+    "input": "Show the {orders.order_date, date} of all <orders> sorted by <orders.item_id, numeric> from highest to lowest.",
+    "output": "Show the {TABLE1.COL1, date} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from highest to lowest."
+  },
+  {
+    "id": "46.2.1",
+    "input": "List the {orders.quantity, numeric} of <orders> in descending order of <orders.order_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in descending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "46.2.2",
+    "input": "List the {items.item_id, numeric} of <items> in descending order of <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in descending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "46.2.3",
+    "input": "List the {orders.customer_id, numeric} of <orders> in descending order of <orders.quantity, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in descending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "46.2.4",
+    "input": "List the {items.stock, numeric} of <items> in descending order of <items.item_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in descending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "47.1.1",
+    "input": "Show the {items.item_name, string} of all <items> sorted by <items.stock, numeric> from lowest to highest.",
+    "output": "Show the {TABLE1.COL1, string} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from lowest to highest."
+  },
+  {
+    "id": "47.1.2",
+    "input": "Show the {orders.customer_id, numeric} of all <orders> sorted by <orders.quantity, numeric> from lowest to highest.",
+    "output": "Show the {TABLE1.COL1, numeric} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from lowest to highest."
+  },
+  {
+    "id": "47.1.3",
+    "input": "Show the {orders.quantity, numeric} of all <orders> sorted by <orders.customer_id, numeric> from lowest to highest.",
+    "output": "Show the {TABLE1.COL1, numeric} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from lowest to highest."
+  },
+  {
+    "id": "47.1.4",
+    "input": "Show the {items.category, string} of all <items> sorted by <items.item_id, numeric> from lowest to highest.",
+    "output": "Show the {TABLE1.COL1, string} of all <TABLE1> sorted by <TABLE1.COL2, numeric> from lowest to highest."
+  },
+  {
+    "id": "47.2.1",
+    "input": "List the {orders.quantity, numeric} of <orders> in ascending order of <orders.item_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in ascending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "47.2.2",
+    "input": "List the {items.item_name, string} of <items> in ascending order of <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> in ascending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "47.2.3",
+    "input": "List the {orders.customer_id, numeric} of <orders> in ascending order of <orders.item_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> in ascending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "47.2.4",
+    "input": "List the {items.item_name, string} of <items> in ascending order of <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> in ascending order of <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.1.1",
+    "input": "Show the {items.stock, numeric} of the 5 <items> with the highest <items.item_id, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.1.2",
+    "input": "Show the {items.stock, numeric} of the 5 <items> with the highest <items.price, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.1.3",
+    "input": "Show the {items.category, string} of the 5 <items> with the highest <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.1.4",
+    "input": "Show the {items.item_id, numeric} of the 5 <items> with the highest <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.2.1",
+    "input": "List the {items.item_id, numeric} of the top 5 <items> by <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of the top 5 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.2.2",
+    "input": "List the {orders.item_id, numeric} of the top 5 <orders> by <orders.order_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of the top 5 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.2.3",
+    "input": "List the {items.category, string} of the top 5 <items> by <items.item_id, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of the top 5 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "48.2.4",
+    "input": "List the {orders.quantity, numeric} of the top 5 <orders> by <orders.customer_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of the top 5 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.1.1",
+    "input": "Show the {items.price, numeric} of the 3 <items> with the lowest <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 3 <TABLE1> with the lowest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.1.2",
+    "input": "Show the {orders.customer_id, numeric} of the 3 <orders> with the lowest <orders.quantity, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 3 <TABLE1> with the lowest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.1.3",
+    "input": "Show the {orders.quantity, numeric} of the 3 <orders> with the lowest <orders.order_id, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 3 <TABLE1> with the lowest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.1.4",
+    "input": "Show the {orders.status, string} of the 3 <orders> with the lowest <orders.order_id, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of the 3 <TABLE1> with the lowest <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.2.1",
+    "input": "List the {orders.order_date, date} of the bottom 3 <orders> by <orders.customer_id, numeric>.",
+    "output": "List the {TABLE1.COL1, date} of the bottom 3 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.2.2",
+    "input": "List the {items.item_name, string} of the bottom 3 <items> by <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of the bottom 3 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.2.3",
+    "input": "List the {customers.name, string} of the bottom 3 <customers> by <customers.customer_id, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of the bottom 3 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "49.2.4",
+    "input": "List the {items.stock, numeric} of the bottom 3 <items> by <items.item_id, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of the bottom 3 <TABLE1> by <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "50.1.1",
+    "input": "Show the {orders.quantity, numeric} of the 10 <orders> with the highest <orders.item_id, numeric>, breaking ties by <orders.order_id, numeric> in ascending order.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 10 <TABLE1> with the highest <TABLE1.COL2, numeric>, breaking ties by <TABLE1.COL3, numeric> in ascending order."
+  },
+  {
+    "id": "50.1.2",
+    "input": "Show the {items.category, string} of the 10 <items> with the highest <items.price, numeric>, breaking ties by <items.stock, numeric> in ascending order.",
+    "output": "Show the {TABLE1.COL1, string} of the 10 <TABLE1> with the highest <TABLE1.COL2, numeric>, breaking ties by <TABLE1.COL3, numeric> in ascending order."
+  },
+  {
+    "id": "50.1.3",
+    "input": "Show the {orders.quantity, numeric} of the 10 <orders> with the highest <orders.customer_id, numeric>, breaking ties by <orders.order_id, numeric> in ascending order.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 10 <TABLE1> with the highest <TABLE1.COL2, numeric>, breaking ties by <TABLE1.COL3, numeric> in ascending order."
+  },
+  {
+    "id": "50.1.4",
+    "input": "Show the {orders.order_id, numeric} of the 10 <orders> with the highest <orders.customer_id, numeric>, breaking ties by <orders.order_date, date> in ascending order.",
+    "output": "Show the {TABLE1.COL1, numeric} of the 10 <TABLE1> with the highest <TABLE1.COL2, numeric>, breaking ties by <TABLE1.COL3, date> in ascending order."
+  },
+  {
+    "id": "51.1.1",
+    "input": "Show the {orders.customer_id, numeric} of the 5 <orders> with the highest <orders.order_date, date> among those whose <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, date> among those whose <TABLE1.COL3, string> is [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "51.1.2",
+    "input": "Show the {items.item_id, numeric} of the 5 <items> with the highest <items.price, numeric> among those whose <items.category, string> is [items.category, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric> among those whose <TABLE1.COL3, string> is [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "51.1.3",
+    "input": "Show the {items.category, string} of the 5 <items> with the highest <items.stock, numeric> among those whose <items.item_name, string> is [items.item_name, string, #1].",
+    "output": "Show the {TABLE1.COL1, string} of the 5 <TABLE1> with the highest <TABLE1.COL2, numeric> among those whose <TABLE1.COL3, string> is [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "51.1.4",
+    "input": "Show the {orders.item_id, numeric} of the 5 <orders> with the highest <orders.order_date, date> among those whose <orders.status, string> is [orders.status, string, #1].",
+    "output": "Show the {TABLE1.COL1, numeric} of the 5 <TABLE1> with the highest <TABLE1.COL2, date> among those whose <TABLE1.COL3, string> is [TABLE1.COL3, string, #1]."
+  },
+  {
+    "id": "52.1.1",
+    "input": "Show the 3 {orders.status, string} with the most <orders>, along with the number of <orders>.",
+    "output": "Show the 3 {TABLE1.COL1, string} with the most <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "52.1.2",
+    "input": "Show the 3 {customers.city, string} with the most <customers>, along with the number of <customers>.",
+    "output": "Show the 3 {TABLE1.COL1, string} with the most <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "52.1.3",
+    "input": "Show the 3 {orders.item_id, numeric} with the most <orders>, along with the number of <orders>.",
+    "output": "Show the 3 {TABLE1.COL1, numeric} with the most <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "52.1.4",
+    "input": "Show the 3 {items.category, string} with the most <items>, along with the number of <items>.",
+    "output": "Show the 3 {TABLE1.COL1, string} with the most <TABLE1>, along with the number of <TABLE1>."
+  },
+  {
+    "id": "52.2.1",
+    "input": "List the top 3 {items.category, string} by number of <items>, with their counts.",
+    "output": "List the top 3 {TABLE1.COL1, string} by number of <TABLE1>, with their counts."
+  },
+  {
+    "id": "52.2.2",
+    "input": "List the top 3 {customers.city, string} by number of <customers>, with their counts.",
+    "output": "List the top 3 {TABLE1.COL1, string} by number of <TABLE1>, with their counts."
+  },
+  {
+    "id": "52.2.3",
+    "input": "List the top 3 {customers.membership, string} by number of <customers>, with their counts.",
+    "output": "List the top 3 {TABLE1.COL1, string} by number of <TABLE1>, with their counts."
+  },
+  {
+    "id": "52.2.4",
+    "input": "List the top 3 {orders.status, string} by number of <orders>, with their counts.",
+    "output": "List the top 3 {TABLE1.COL1, string} by number of <TABLE1>, with their counts."
+  },
+  {
+    "id": "53.1.1",
+    "input": "Show the {items.item_id, numeric} of <items> whose <items.stock, numeric> is above the average <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is above the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.1.2",
+    "input": "Show the {orders.status, string} of <orders> whose <orders.quantity, numeric> is above the average <orders.quantity, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is above the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.1.3",
+    "input": "Show the {items.item_name, string} of <items> whose <items.price, numeric> is above the average <items.price, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is above the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.1.4",
+    "input": "Show the {orders.order_date, date} of <orders> whose <orders.quantity, numeric> is above the average <orders.quantity, numeric>.",
+    "output": "Show the {TABLE1.COL1, date} of <TABLE1> whose <TABLE1.COL2, numeric> is above the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.2.1",
+    "input": "List the {items.category, string} of <items> with a <items.stock, numeric> higher than the average <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> higher than the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.2.2",
+    "input": "List the {items.price, numeric} of <items> with a <items.stock, numeric> higher than the average <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with a <TABLE1.COL2, numeric> higher than the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.2.3",
+    "input": "List the {items.item_name, string} of <items> with a <items.stock, numeric> higher than the average <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> higher than the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "53.2.4",
+    "input": "List the {items.category, string} of <items> with a <items.price, numeric> higher than the average <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with a <TABLE1.COL2, numeric> higher than the average <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.1.1",
+    "input": "Show the {items.item_name, string} of <items> whose <items.stock, numeric> is equal to the maximum <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.1.2",
+    "input": "Show the {items.price, numeric} of <items> whose <items.stock, numeric> is equal to the maximum <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.1.3",
+    "input": "Show the {items.category, string} of <items> whose <items.stock, numeric> is equal to the maximum <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.1.4",
+    "input": "Show the {orders.order_id, numeric} of <orders> whose <orders.quantity, numeric> is equal to the maximum <orders.quantity, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.2.1",
+    "input": "List the {orders.item_id, numeric} of <orders> with the maximum <orders.quantity, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.2.2",
+    "input": "List the {items.stock, numeric} of <items> with the maximum <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.2.3",
+    "input": "List the {items.item_name, string} of <items> with the maximum <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "54.2.4",
+    "input": "List the {items.category, string} of <items> with the maximum <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with the maximum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.1.1",
+    "input": "Show the {items.category, string} of <items> whose <items.stock, numeric> is equal to the minimum <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.1.2",
+    "input": "Show the {items.item_name, string} of <items> whose <items.stock, numeric> is equal to the minimum <items.stock, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.1.3",
+    "input": "Show the {orders.customer_id, numeric} of <orders> whose <orders.quantity, numeric> is equal to the minimum <orders.quantity, numeric>.",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.1.4",
+    "input": "Show the {items.item_name, string} of <items> whose <items.price, numeric> is equal to the minimum <items.price, numeric>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, numeric> is equal to the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.2.1",
+    "input": "List the {orders.order_date, date} of <orders> with the minimum <orders.quantity, numeric>.",
+    "output": "List the {TABLE1.COL1, date} of <TABLE1> with the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.2.2",
+    "input": "List the {items.item_id, numeric} of <items> with the minimum <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.2.3",
+    "input": "List the {items.item_name, string} of <items> with the minimum <items.stock, numeric>.",
+    "output": "List the {TABLE1.COL1, string} of <TABLE1> with the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "55.2.4",
+    "input": "List the {items.stock, numeric} of <items> with the minimum <items.price, numeric>.",
+    "output": "List the {TABLE1.COL1, numeric} of <TABLE1> with the minimum <TABLE1.COL2, numeric>."
+  },
+  {
+    "id": "56.1.1",
+    "input": "Show the {items.item_name, string} of <items> whose <items.category, string> is [items.category, string, #1] and whose <items.stock, numeric> is below the average <items.stock, numeric> of all <items>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is below the average <TABLE1.COL3, numeric> of all <TABLE1>."
+  },
+  {
+    "id": "56.1.2",
+    "input": "Show the {items.item_name, string} of <items> whose <items.category, string> is [items.category, string, #1] and whose <items.price, numeric> is below the average <items.price, numeric> of all <items>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is below the average <TABLE1.COL3, numeric> of all <TABLE1>."
+  },
+  {
+    "id": "56.1.3",
+    "input": "Show the {orders.item_id, numeric} of <orders> whose <orders.status, string> is [orders.status, string, #1] and whose <orders.quantity, numeric> is below the average <orders.quantity, numeric> of all <orders>.",
+    "output": "Show the {TABLE1.COL1, numeric} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is below the average <TABLE1.COL3, numeric> of all <TABLE1>."
+  },
+  {
+    "id": "56.1.4",
+    "input": "Show the {items.category, string} of <items> whose <items.item_name, string> is [items.item_name, string, #1] and whose <items.stock, numeric> is below the average <items.stock, numeric> of all <items>.",
+    "output": "Show the {TABLE1.COL1, string} of <TABLE1> whose <TABLE1.COL2, string> is [TABLE1.COL2, string, #1] and whose <TABLE1.COL3, numeric> is below the average <TABLE1.COL3, numeric> of all <TABLE1>."
+  }
+]
