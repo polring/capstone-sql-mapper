@@ -35,7 +35,7 @@ def predict_pairs(model, tokenizer, questions, batch_size, device):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", required=True, type=Path, help="F32 capstone_sql contract 3 GGUF")
+    parser.add_argument("--model", required=True, type=Path, help="F32 capstone_sql GGUF with whole-tag tokens")
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--question", help="generalized question with its original tags")
     source.add_argument("--input", type=Path, help="read questions from the input fields of a JSON array")
