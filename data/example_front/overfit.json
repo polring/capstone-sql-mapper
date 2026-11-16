@@ -1,0 +1,33 @@
+{
+  "description": "앞모델 재현 확인: 서로 다른 정답 문장 32개를 외우는지 확인한다.",
+  "overfit": 32,
+  "threads": null,
+  "eval_every": null,
+  "eval_batch_size": null,
+  "model_config": {
+    "vocab_size": null,
+    "d_model": null,
+    "num_layers": null,
+    "num_heads": null,
+    "ffn_dim": null,
+    "context_length": null,
+    "dropout": null,
+    "eps": null,
+    "theta": null
+  },
+  "train_config": {
+    "batch_size": null,
+    "accumulation_steps": null,
+    "epochs": null,
+    "lr": null,
+    "min_lr": null,
+    "warmup_ratio": null,
+    "weight_decay": null,
+    "beta1": null,
+    "beta2": null,
+    "eps": null,
+    "max_grad_norm": null,
+    "patience": null,
+    "precision": null
+  }
+}

@@ -54,10 +54,11 @@ def _metadata(config, tokenizer):
     return entries
 
 
-def write_gguf(model, tokenizer, destination):
+def write_gguf(model, tokenizer, destination, metadata=_metadata):
+    """The front model passes its own tokenizer metadata; tensors are laid out the same way."""
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    entries = _metadata(model.config, tokenizer)
+    entries = metadata(model.config, tokenizer)
     # Keep both embedding and output descriptors even when training shares weights.
     tensors = list(model.named_parameters(remove_duplicate=False))
     header = io.BytesIO()
