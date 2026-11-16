@@ -1,1 +1,89 @@
-{}
+{
+  "tables": {
+    "customers": {
+      "columns": {
+        "customer_id": {
+          "type": "numeric"
+        },
+        "name": {
+          "type": "string",
+          "like": true
+        },
+        "city": {
+          "type": "string"
+        },
+        "membership": {
+          "type": "string"
+        }
+      }
+    },
+    "items": {
+      "columns": {
+        "item_id": {
+          "type": "numeric"
+        },
+        "item_name": {
+          "type": "string",
+          "like": true
+        },
+        "category": {
+          "type": "string"
+        },
+        "price": {
+          "type": "numeric",
+          "aggregate": [
+            "AVG",
+            "SUM",
+            "MIN",
+            "MAX"
+          ]
+        },
+        "stock": {
+          "type": "numeric",
+          "aggregate": [
+            "AVG",
+            "SUM",
+            "MIN",
+            "MAX"
+          ]
+        }
+      }
+    },
+    "orders": {
+      "columns": {
+        "order_id": {
+          "type": "numeric"
+        },
+        "customer_id": {
+          "type": "numeric"
+        },
+        "item_id": {
+          "type": "numeric"
+        },
+        "quantity": {
+          "type": "numeric",
+          "aggregate": [
+            "AVG",
+            "SUM",
+            "MIN",
+            "MAX"
+          ]
+        },
+        "status": {
+          "type": "string"
+        },
+        "order_date": {
+          "type": "date",
+          "aggregate": [
+            "MIN",
+            "MAX"
+          ]
+        }
+      }
+    }
+  },
+  "generation": {
+    "seed": 42,
+    "max_per_parent": 3
+  }
+}
