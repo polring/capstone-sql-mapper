@@ -1,15 +1,20 @@
 import argparse
+import json
 from pathlib import Path
+import random
 import unittest
 from unittest.mock import patch
 
 import torch
 
 from src.back.generate import Generation
+from src.data_generation.natural_questions import generate as nq
 from src.front.tokenizer import FrontTokenizer
 from training.front.dataset import IGNORE, PairDataset, collate_pairs, overfit_pairs
 from training.front.evaluate import score_pairs
 from training.front.train import training_split_paths
+
+IN_FORMS = json.loads(nq.GENERALIZED_MAPPINGS_PATH.read_text(encoding="utf-8"))["predicates"]["in"]
 
 NAMES = ["customers", "orders", "membership", "quantity"]
 ROWS = [
@@ -33,6 +38,22 @@ class FrontTrainingTests(unittest.TestCase):
             output = tokenizer.encode_output(row["output"])
             self.assertTrue(targets[i, :sep].eq(IGNORE).all())
             self.assertEqual(targets[i, sep:sep + len(output) + 1].tolist(), [*output, tokenizer.eos_id])
+
+    def test_questions_from_every_in_template_enter_the_dataset(self):
+        mappings = json.loads(nq.MAPPINGS_PATH.read_text(encoding="utf-8"))
+        values = ", ".join(f"[customers.city, string, #{n}]" for n in (1, 2))
+        rows = []
+        for index, form in enumerate(IN_FORMS, 1):
+            condition = form.format(col="the <customers.city, string>", values=values)
+            output = f"List the {{customers.name, string}} of <customers> where {condition}."
+            question, _ = nq.realize(output, nq.parse_tags(output), mappings, random.Random(index))
+            rows.append({"id": f"{index}.1.1.1", "input": question, "output": output})
+        self.assertTrue(all("(" in r["output"] and "(" in r["input"] for r in rows))
+        tokenizer = FrontTokenizer.fit([t for r in rows for t in (r["input"], r["output"])], 1024)
+        ds = PairDataset(rows, tokenizer)
+        self.assertEqual(len(ds), len(IN_FORMS))
+        for row in rows:
+            self.assertEqual(tokenizer.decode_output(tokenizer.encode_output(row["output"])), row["output"])
 
     def test_overfit_sample_has_distinct_targets_across_source_sqls(self):
         selected = overfit_pairs(ROWS, 3, seed=0)
