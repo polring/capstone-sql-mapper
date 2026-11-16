@@ -5,10 +5,21 @@ from pathlib import Path
 
 import torch
 
-from inference.back import predict_pairs, read_questions
+from inference.back import read_questions
 from src.back.generate import generate_results
 from src.data_generation.generalized_pairs.generate import write_pairs
 from src.front.gguf import load_gguf
+
+
+def predict_pairs(model, tokenizer, questions, batch_size, device):
+    """Like the back model's, but a row cut off by the context limit fails instead of being saved."""
+    for start in range(0, len(questions), batch_size):
+        batch = questions[start:start + batch_size]
+        results = generate_results(model, tokenizer, batch, device=device)
+        for index, (question, result) in enumerate(zip(batch, results, strict=True), start + 1):
+            if result.stop_reason != "eos":
+                raise ValueError(f"row {index}: model reached its context limit before completing the tagged sentence")
+            yield {"input": question, "output": result.sql}
 
 
 def main(argv=None):

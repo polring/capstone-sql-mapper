@@ -7,11 +7,12 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import torch
 
 from src.back.config import ModelConfig
-from src.back.generate import generate_results
+from src.back.generate import Generation, generate_results
 from src.back.gguf import load_gguf as load_back_gguf
 from src.back.model import BackModel
 from src.front.gguf import load_gguf
@@ -113,6 +114,13 @@ class FrontGgufTests(unittest.TestCase):
         self.assertEqual(json.loads(target.read_text(encoding="utf-8")),
                          [{"input": QUESTION, "output": "customers"},
                           {"input": "How many orders?", "output": "customers"}])
+
+    def test_batch_inference_rejects_rows_cut_off_by_context(self):
+        from inference.front import predict_pairs
+        results = [Generation("<customers>", "eos"), Generation("<custo", "context")]
+        with patch("inference.front.generate_results", return_value=results):
+            with self.assertRaisesRegex(ValueError, "row 2: model reached its context limit"):
+                list(predict_pairs(self.model, self.tokenizer, ["a", "b"], 2, "cpu"))
 
 
 if __name__ == "__main__":
