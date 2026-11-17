@@ -11,7 +11,8 @@ from src.data_generation.build_back import split_pairs
 from src.data_generation.generalized_pairs.catalog import Block, Phrase
 from src.data_generation.generalized_pairs.contrasts import ContrastPair
 from src.data_generation.generalized_pairs.generate import (
-    MAPPINGS, check_ordinary_capacity, generate_pairs, load_catalog, prepare_quota_streams, write_pairs,
+    AUTO_MAX_QUESTIONS, MAPPINGS, check_ordinary_capacity, generate_pairs, load_catalog,
+    prepare_quota_streams, write_pairs,
 )
 from src.data_generation.generalized_pairs.sql_types import Distribution, apportion, subtype_names
 
@@ -145,7 +146,7 @@ class TypeDistributionTest(unittest.TestCase):
         self.assertEqual(Counter(emitted_type(r["output"]) for r in rows),
                          {(f, key): 1 for f, ids in keys.items() for key in ids})
 
-    def test_simple_rows_profile_builds_100_training_pairs(self):
+    def test_simple_rows_profile_splits_by_sql_instead_of_pair_count(self):
         options = self.path({
             "family_percent": {"rows": 100},
             "example_weights": {"ordinary": 1},
@@ -153,7 +154,9 @@ class TypeDistributionTest(unittest.TestCase):
         })
         rows = list(generate_pairs(103, 42, sql_types=options))
         training, validation = split_pairs(rows, seed=42, validation_ratio=0.05)
-        self.assertEqual((len(training), len(validation)), (100, 3))
+        self.assertEqual(len(training) + len(validation), 103)
+        unique_sql = {row["output"] for row in rows}
+        self.assertEqual(len({row["output"] for row in validation}), max(1, round(len(unique_sql) * 0.05)))
         self.assertEqual(Counter(emitted_type(row["output"]) for row in rows), {
             ("rows", "where0/plain"): 72, ("rows", "where0/limit"): 31,
         })
@@ -177,9 +180,10 @@ class TypeDistributionTest(unittest.TestCase):
         # Each family rounds its contrast quota down to a whole number of pairs.
         self.assertEqual(paired, sum(count // 100 // 2 * 2 for count in families.values()))
 
-        # At the same scale, 0.03% of the rows family requires 75 different bare SELECTs/wordings.
-        raw["subtype_percent"]["rows"]["where0/plain"] = 0.03
-        with self.assertRaisesRegex(ValueError, "rows/where0/plain.*75 ordinary records.*at most 74"):
+        # There are four bare SELECTs and each can contribute at most the automatic cap.
+        available = 4 * AUTO_MAX_QUESTIONS
+        raw["subtype_percent"]["rows"]["where0/plain"] = 0.12
+        with self.assertRaisesRegex(ValueError, rf"rows/where0/plain.*300 ordinary records.*at most {available}"):
             next(generate_pairs(500_000, 42, sql_types=self.path(raw)))
 
     def test_partially_matched_sqls_fill_their_remaining_ordinary_slots(self):
@@ -282,11 +286,12 @@ class TypeDistributionTest(unittest.TestCase):
     def test_scarce_type_uses_all_available_wording_in_any_source_order(self):
         path = self.path({"family_percent": {"rows": 100}, "example_weights": {"ordinary": 1},
                           "subtype_percent": {"rows": {"where0/plain": 100}}})
+        available = 4 * AUTO_MAX_QUESTIONS
         for seed in (0, 2):
-            rows = list(generate_pairs(74, seed, sql_types=path))
-            self.assertEqual(len({(r["output"], r["input"]) for r in rows}), 74)
-            with self.assertRaisesRegex(ValueError, "at most 74 available"):
-                next(generate_pairs(75, seed, sql_types=path))
+            rows = list(generate_pairs(available, seed, sql_types=path))
+            self.assertEqual(len({(r["output"], r["input"]) for r in rows}), available)
+            with self.assertRaisesRegex(ValueError, rf"at most {available} available"):
+                next(generate_pairs(available + 1, seed, sql_types=path))
 
     def test_config_errors_and_insufficient_capacity_preserve_output(self):
         profile = {"family_percent": {"rows": 100}, "example_weights": {"ordinary": 1}}

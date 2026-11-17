@@ -354,7 +354,10 @@ class GeneralizedPairsTest(unittest.TestCase):
                 if kind == "rank_direction":
                     variants = {left.replace("highest", "lowest")}
                 elif kind == "average_scope":
-                    variants = {left.replace("all rows in the table", "only rows in that same subset")}
+                    cues = self.mappings["contrast_cues"]
+                    variants = {left.replace(full, subset, 1)
+                                for full in cues["all_rows"] if full in left
+                                for subset in cues["same_subset"]}
                 elif kind == "filter_level":
                     expected = re.sub(r"rows whose <TABLE1.COL2, numeric>", "groups whose aggregate", left)
                     variants = {expected.replace("[TABLE1.COL2, numeric, #1]", "[AGG_VALUE, numeric, #1]")}
@@ -411,10 +414,10 @@ class GeneralizedPairsTest(unittest.TestCase):
                 self.assertEqual(re.search(r" (ASC|DESC)\b", order)[1], direction)
                 self.assertTrue(sql.endswith(" LIMIT " + count[2]))
                 if re.search(r"(?:ASC|DESC), ", order):
-                    self.assertRegex(q, r"tie|equal values")
+                    self.assertRegex(q, r"tie|equal values|secondary sort key")
                     seen.add("tie")
                 seen.add(count[1])
-            if "its average across" in q:
+            if re.search(r"its (?:average|mean) (?:across|over|for)", q):
                 self.assertIn("(SELECT AVG(", sql)
                 seen.add("average")
         self.assertEqual(seen, {"count", "top", "bottom", "tie", "average"})

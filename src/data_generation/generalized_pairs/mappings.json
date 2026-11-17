@@ -12,7 +12,12 @@
       "how many <TABLE1> are there{where}?",
       "how many <TABLE1> rows{where}?",
       "count <TABLE1> records{where}.",
-      "row count for <TABLE1>{where}?"
+      "row count for <TABLE1>{where}?",
+      "from <TABLE1>, how many records are there{where}?",
+      "can you tally the entries in <TABLE1>{where}?",
+      "what number of <TABLE1> rows do we have{where}?",
+      "i just need the number of rows in <TABLE1>{where}.",
+      "give the total count of entries in <TABLE1>{where}."
     ],
     "group_count": [
       "for each {group_col} in <TABLE1>, how many rows are there? show {key} with its count.{where}{having}{order}{limit}",
@@ -20,7 +25,10 @@
       "how many <TABLE1> records share each {group_col}? list {key} and the number of records.{where}{having}{order}{limit}",
       "break <TABLE1> down by {group_col}. give me {key} and the size of each group.{where}{having}{order}{limit}",
       "per {group_col}, show {key} and its row count.{where}{having}{order}{limit}",
-      "how many per {group_col}? return {key} and its count.{where}{having}{order}{limit}"
+      "how many per {group_col}? return {key} and its count.{where}{having}{order}{limit}",
+      "for each distinct {group_col} in <TABLE1>, report {key} and the number of matching rows.{where}{having}{order}{limit}",
+      "tally the <TABLE1> rows separately by {group_col}. give me {key} alongside the tally.{where}{having}{order}{limit}",
+      "can you show {key} and the group size for each {group_col} in <TABLE1>?{where}{having}{order}{limit}"
     ],
     "ranked": [
       " give me the {edge} {n} by {key}, {rank} first.{tie}",
@@ -28,7 +36,10 @@
       " rank by {key}, {rank} first, and take the first {n}.{tie}",
       " i only need the {edge} {n} by {key}, starting with the {rank} value.{tie}",
       " which {n} rank {rank} by {key}? list them {rank} first.{tie}",
-      "{explicit_order}{explicit_limit}"
+      "{explicit_order}{explicit_limit}",
+      " rank the results by {key} with the {rank} values first and return up to {n}.{tie}",
+      " by {key}, start at the {rank} end of the ranking and keep the first {n}.{tie}",
+      " return at most {n} results after ranking by {key}, {rank} first.{tie}"
     ],
     "average_comparison": [
       "show {target} from <TABLE1> where {measure} {op} its average across {population}.{outer}",
@@ -38,17 +49,22 @@
       "from <TABLE1>, give me {target} for records whose {measure} {op} the average value of that field for {population}.{outer}",
       "return {target} from <TABLE1> if the row's {measure} {op} the mean of {measure} over {population}.{outer}",
       "list {target} where {measure} {op} its mean over {population}.{outer}",
-      "{target} where {measure} {op} its average over {population}?{outer}"
+      "{target} where {measure} {op} its average over {population}?{outer}",
+      "show {target} from <TABLE1> when the row's {measure} {op} the mean over {population}.{outer}",
+      "for {target}, compare each <TABLE1> row's {measure} with its average for {population}. include the row if its {measure} {op} the average.{outer}",
+      "give me {target} from <TABLE1> with {measure} that {op} the average of that field over {population}.{outer}"
     ],
     "ranked_date_asc": [
       " take the {n} oldest by {key}, earliest first.{tie}",
       " first {n} by {key}, oldest first.{tie}",
-      " order by {key} from earliest to latest and return {n}.{tie}"
+      " order by {key} from earliest to latest and return {n}.{tie}",
+      " sort by {key}, oldest first, and keep up to {n}.{tie}"
     ],
     "ranked_date_desc": [
       " take the {n} most recent by {key}, newest first.{tie}",
       " latest {n} by {key}, newest first.{tie}",
-      " order by {key} from newest to oldest and return {n}.{tie}"
+      " order by {key} from newest to oldest and return {n}.{tie}",
+      " sort by {key}, newest first, and keep up to {n}.{tie}"
     ]
   },
   "contrast_questions": {
@@ -56,38 +72,58 @@
       "how many <TABLE1> rows are there where {measure} {op} {value}{extra}?",
       "count the <TABLE1> records where {measure} {op} {value}{extra}.",
       "from <TABLE1>, give me a row count where {measure} {op} {value}{extra}.",
-      "how many entries in <TABLE1> satisfy the condition that {measure} {op} {value}{extra}?"
+      "how many entries in <TABLE1> satisfy the condition that {measure} {op} {value}{extra}?",
+      "what is the row count in <TABLE1> if we keep records whose {measure} {op} {value}{extra}?",
+      "give the number of records from <TABLE1> for which {measure} {op} {value}{extra}."
     ],
     "rank_direction": [
       "show {target} from <TABLE1> for the {n} {unit} ranked {rank} by {sort_key}.{tail}",
       "from <TABLE1>, list {target} for the {n} {unit} with the {rank} values of {sort_key}, {rank} first.{tail}",
       "return {target} from <TABLE1>. rank by {sort_key}, {rank} first, and keep up to {n}.{tail}",
-      "i need {target} from <TABLE1> for up to {n} {unit}, starting with the {rank} values of {sort_key}.{tail}"
+      "i need {target} from <TABLE1> for up to {n} {unit}, starting with the {rank} values of {sort_key}.{tail}",
+      "for <TABLE1>, give me {target} for the {n} {unit} with {sort_key} ranked {rank} first.{tail}",
+      "list {target} from <TABLE1>, selecting the {n} {unit} with the {rank} {sort_key} values and listing those first.{tail}"
     ],
     "average_scope": [
       "show {target} from <TABLE1> where {measure} {op} the average for that field. return only rows where {filter}. take the average over {scope}.",
       "from <TABLE1>, list {target} when {measure} {op} its mean. keep only rows where {filter}. use {scope} to calculate the mean.",
       "i need {target} from <TABLE1> when {measure} {op} its mean. only return rows where {filter}. calculate the mean over {scope}.",
-      "return {target} from <TABLE1> if {measure} {op} its average. restrict the output to rows where {filter}. base the average on {scope}."
+      "return {target} from <TABLE1> if {measure} {op} its average. restrict the output to rows where {filter}. base the average on {scope}.",
+      "retrieve {target} from <TABLE1> if {measure} {op} its mean. for the output, require that {filter}. calculate the mean using {scope}.",
+      "for <TABLE1>, return {target} for rows whose {measure} {op} its average. keep only rows where {filter}. use {scope} to compute the average."
     ],
     "filter_level": [
       "for each {group_col} in <TABLE1>, show {key} and {agg}. keep {level} {op} {threshold}.{tail}",
       "group <TABLE1> by {group_col}. return {key} and {agg}. include only {level} {op} {threshold}.{tail}",
       "break <TABLE1> down by {group_col} and report {key} alongside {agg}. include {level} {op} {threshold}.{tail}",
-      "give me one result per {group_col} in <TABLE1>, with {key} and {agg}. keep only {level} {op} {threshold}.{tail}"
+      "give me one result per {group_col} in <TABLE1>, with {key} and {agg}. keep only {level} {op} {threshold}.{tail}",
+      "use {group_col} to group <TABLE1> and report {key} and {agg}. retain {level} {op} {threshold}.{tail}",
+      "summarize <TABLE1> by {group_col}. display {key} with {agg}. only keep {level} {op} {threshold}.{tail}"
     ],
     "aggregate_boundary": [
       "give {agg} where {measure} {op} {value}{extra}.",
       "what is {agg} where {measure} {op} {value}{extra}?",
       "calculate {agg} for rows where {measure} {op} {value}{extra}.",
-      "return {agg} for <TABLE1> where {measure} {op} {value}{extra}."
+      "return {agg} for <TABLE1> where {measure} {op} {value}{extra}.",
+      "find {agg} over <TABLE1> records for which {measure} {op} {value}{extra}.",
+      "work out {agg} for entries where {measure} {op} {value}{extra}."
     ]
   },
   "contrast_cues": {
-    "all_rows": ["all rows in the table"],
-    "same_subset": ["only rows in that same subset"],
-    "row_level": ["rows whose {measure}"],
-    "group_level": ["groups whose aggregate"]
+    "all_rows": [
+      "all rows in the table",
+      "the full table without applying the output filter"
+    ],
+    "same_subset": [
+      "only rows in that same subset",
+      "only the rows satisfying that same filter"
+    ],
+    "row_level": [
+      "rows whose {measure}"
+    ],
+    "group_level": [
+      "groups whose aggregate"
+    ]
   },
   "questions": {
     "rows": [
@@ -109,7 +145,91 @@
       "which {target}{where}?{order}{limit}",
       "get {target}{where}.{order}{limit}",
       "show {target}{where}.{order}{limit}",
-      "return {target}{where}.{order}{limit}"
+      "return {target}{where}.{order}{limit}",
+      "what is the {target} of each record in <TABLE1>{where}?{order}{limit}",
+      "can i see {target} for every row in <TABLE1>{where}?{order}{limit}",
+      "i want a list of {target} from <TABLE1>{where}.{order}{limit}",
+      "what values would i get for {target} from <TABLE1>{where}?{order}{limit}",
+      "bring back {target} for the matching entries in <TABLE1>{where}.{order}{limit}",
+      "could you return the {target} column from <TABLE1>{where}?{order}{limit}",
+      "for the entries in <TABLE1>, can i see {target} from rows{where}?{order}{limit}",
+      "please look up {target} in the records of <TABLE1>{where}.{order}{limit}",
+      "the output should contain the {target} values from <TABLE1> rows{where}.{order}{limit}",
+      "give me the value in {target} for each record in <TABLE1>{where}.{order}{limit}",
+      "do we have a list of {target} for the records in <TABLE1>{where}?{order}{limit}",
+      "what would <TABLE1> show under {target} for each entry{where}?{order}{limit}",
+      "let me see what is stored as {target} on the <TABLE1> rows{where}.{order}{limit}",
+      "return just {target} by using the rows in <TABLE1>{where}.{order}{limit}",
+      "read {target} from each <TABLE1> record{where} and show it to me.{order}{limit}",
+      "i'm looking for {target} on all <TABLE1> entries{where}.{order}{limit}",
+      "which values are recorded under {target} on rows in <TABLE1>{where}?{order}{limit}",
+      "could you check <TABLE1> and tell me the {target} of each row{where}?{order}{limit}",
+      "what i need from each entry in <TABLE1> is {target}{where}.{order}{limit}",
+      "what should appear in a list of {target} for <TABLE1> records{where}?{order}{limit}",
+      "i only want the {target} field from the <TABLE1> rows{where}.{order}{limit}",
+      "a list of {target} for the <TABLE1> rows{where} would help.{order}{limit}",
+      "could i have the {target} values that <TABLE1> has for its records{where}?{order}{limit}",
+      "check the {target} column in <TABLE1> and give the value for each row{where}.{order}{limit}",
+      "take {target} from every applicable row in <TABLE1>{where}.{order}{limit}",
+      "what is recorded in {target} for the <TABLE1> entries{where}?{order}{limit}",
+      "can you give me {target} once for every entry in <TABLE1>{where}?{order}{limit}",
+      "what is stored in {target} on each row of <TABLE1>{where}?{order}{limit}",
+      "i need a row-by-row list of {target} from <TABLE1>{where}.{order}{limit}",
+      "we need {target} for each relevant record in <TABLE1>{where}.{order}{limit}",
+      "leave me with just {target} for the entries in <TABLE1>{where}.{order}{limit}",
+      "can you display {target} for the relevant <TABLE1> records{where}?{order}{limit}",
+      "please display only {target} across the rows in <TABLE1>{where}.{order}{limit}",
+      "the column to retrieve is {target}, from the <TABLE1> records{where}.{order}{limit}",
+      "list the {target} values supplied by the <TABLE1> rows{where}.{order}{limit}",
+      "the only field to report is {target}; use entries in <TABLE1>{where}.{order}{limit}",
+      "read out {target} from each matching <TABLE1> entry{where}.{order}{limit}",
+      "make a list with {target} from each <TABLE1> record{where}.{order}{limit}",
+      "specifically, i want {target} from each of the <TABLE1> rows{where}.{order}{limit}",
+      "can i get the data under {target} in <TABLE1>{where}?{order}{limit}",
+      "which {target} values does <TABLE1> record for the entries{where}?{order}{limit}",
+      "find the {target} value by going through each of the <TABLE1> rows{where}.{order}{limit}",
+      "read {target} for the rows in <TABLE1>{where}; that's all i need.{order}{limit}",
+      "i would like to look at {target} for the records in <TABLE1>{where}.{order}{limit}",
+      "extract the {target} column for rows in <TABLE1>{where}.{order}{limit}",
+      "send me the {target} field for the entries in <TABLE1>{where}.{order}{limit}",
+      "what would the {target} column alone look like for <TABLE1> rows{where}?{order}{limit}",
+      "i want to review {target} for the rows held in <TABLE1>{where}.{order}{limit}",
+      "could you fetch {target} from the entries in <TABLE1>{where}?{order}{limit}",
+      "could you display {target} for each row in <TABLE1>{where}?{order}{limit}",
+      "could you read out the {target} field from the records of <TABLE1>{where}?{order}{limit}",
+      "could you give me a list of {target} for the rows in <TABLE1>{where}?{order}{limit}",
+      "could you look up the value of {target} on each <TABLE1> record{where}?{order}{limit}",
+      "could you return only the {target} column for entries from <TABLE1>{where}?{order}{limit}",
+      "would you fetch {target} from the entries in <TABLE1>{where}?{order}{limit}",
+      "would you display {target} for each row in <TABLE1>{where}?{order}{limit}",
+      "would you read out the {target} field from the records of <TABLE1>{where}?{order}{limit}",
+      "would you give me a list of {target} for the rows in <TABLE1>{where}?{order}{limit}",
+      "would you look up the value of {target} on each <TABLE1> record{where}?{order}{limit}",
+      "would you return only the {target} column for entries from <TABLE1>{where}?{order}{limit}",
+      "can you help me fetch {target} from the entries in <TABLE1>{where}?{order}{limit}",
+      "can you help me display {target} for each row in <TABLE1>{where}?{order}{limit}",
+      "can you help me read out the {target} field from the records of <TABLE1>{where}?{order}{limit}",
+      "can you help me get a list of {target} for the rows in <TABLE1>{where}?{order}{limit}",
+      "can you help me look up the value of {target} on each <TABLE1> record{where}?{order}{limit}",
+      "can you help me return only the {target} column for entries from <TABLE1>{where}?{order}{limit}",
+      "i'd like you to fetch {target} from the entries in <TABLE1>{where}.{order}{limit}",
+      "i'd like you to display {target} for each row in <TABLE1>{where}.{order}{limit}",
+      "i'd like you to read out the {target} field from the records of <TABLE1>{where}.{order}{limit}",
+      "i'd like you to give me a list of {target} for the rows in <TABLE1>{where}.{order}{limit}",
+      "i'd like you to look up the value of {target} on each <TABLE1> record{where}.{order}{limit}",
+      "i'd like you to return only the {target} column for entries from <TABLE1>{where}.{order}{limit}",
+      "what i want to do is fetch {target} from the entries in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is display {target} for each row in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is read out the {target} field from the records of <TABLE1>{where}.{order}{limit}",
+      "what i want is a list of {target} for the rows in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is look up the value of {target} on each <TABLE1> record{where}.{order}{limit}",
+      "what i want to do is return only the {target} column for entries from <TABLE1>{where}.{order}{limit}",
+      "my request is to fetch {target} from the entries in <TABLE1>{where}.{order}{limit}",
+      "my request is to display {target} for each row in <TABLE1>{where}.{order}{limit}",
+      "my request is to read out the {target} field from the records of <TABLE1>{where}.{order}{limit}",
+      "my request is for a list of {target} for the rows in <TABLE1>{where}.{order}{limit}",
+      "my request is to look up the value of {target} on each <TABLE1> record{where}.{order}{limit}",
+      "my request is to return only the {target} column for entries from <TABLE1>{where}.{order}{limit}"
     ],
     "all_rows": [
       "show {*} from <TABLE1>{where}.{order}{limit}",
@@ -128,7 +248,92 @@
       "list {*} from <TABLE1>{where}.{order}{limit}",
       "which <TABLE1> rows{where}? show {*}.{order}{limit}",
       "all <TABLE1> details{where}, please. return {*}.{order}{limit}",
-      "get {*} from <TABLE1>{where}.{order}{limit}"
+      "get {*} from <TABLE1>{where}.{order}{limit}",
+      "for every row in <TABLE1>{where}, show me {*}.{order}{limit}",
+      "can i see {*} for the entries in <TABLE1>{where}?{order}{limit}",
+      "leave every field in the output. show {*} for <TABLE1> records{where}.{order}{limit}",
+      "give me a complete view of each row in <TABLE1>{where}, including {*}.{order}{limit}",
+      "i want the matching <TABLE1> rows{where} with {*} included.{order}{limit}",
+      "bring up the records from <TABLE1>{where} and show {*}.{order}{limit}",
+      "what do the complete <TABLE1> entries{where} look like? give me {*}.{order}{limit}",
+      "please pull {*} for each entry under <TABLE1>{where}.{order}{limit}",
+      "can you look through <TABLE1> and return {*} for the records{where}?{order}{limit}",
+      "read {*} from rows in <TABLE1>{where}.{order}{limit}",
+      "let me see each <TABLE1> entry{where} with {*} attached.{order}{limit}",
+      "i need information about the <TABLE1> records{where}. include {*}.{order}{limit}",
+      "return the complete <TABLE1> entries{where}; i need {*}.{order}{limit}",
+      "look at the records found in <TABLE1>{where} and give me {*}.{order}{limit}",
+      "show {*} of <TABLE1>{where}.{order}{limit}",
+      "display {*} for all <TABLE1> rows{where}.{order}{limit}",
+      "take the entries in <TABLE1>{where}. show {*} for them.{order}{limit}",
+      "can you show every field {*} for each matching <TABLE1> row{where}?{order}{limit}",
+      "retrieve a full record for each entry in <TABLE1>{where}. include {*}.{order}{limit}",
+      "what does <TABLE1> store for its entries{where}? include every field {*}.{order}{limit}",
+      "show everything {*} for every record in <TABLE1>{where}.{order}{limit}",
+      "could i have the records from <TABLE1>{where} with no columns left out? include {*}.{order}{limit}",
+      "list each qualifying row in <TABLE1>{where} using {*}.{order}{limit}",
+      "what is in the matching records in <TABLE1>{where}? i want {*}.{order}{limit}",
+      "i'd like to see all details {*} of the entries in <TABLE1>{where}.{order}{limit}",
+      "from <TABLE1>, fetch the entries{where} and give {*} for each.{order}{limit}",
+      "don't narrow the columns. give me {*} from the <TABLE1> rows{where}.{order}{limit}",
+      "go through the rows in <TABLE1>{where} and print {*} for each row.{order}{limit}",
+      "provide the full row data {*} from <TABLE1>{where}.{order}{limit}",
+      "which records in <TABLE1>{where} are available? return {*}.{order}{limit}",
+      "for the rows in <TABLE1>{where}, return every column {*}.{order}{limit}",
+      "i need to inspect the complete records in <TABLE1>{where}. show {*}.{order}{limit}",
+      "how do the entries in <TABLE1>{where} read in full? show {*}.{order}{limit}",
+      "display the complete details {*} of every <TABLE1> entry{where}.{order}{limit}",
+      "use the rows in <TABLE1>{where}. i want their full contents {*}.{order}{limit}",
+      "can you return a full set of columns {*} for the matching <TABLE1> rows{where}?{order}{limit}",
+      "show the complete contents {*} of the matching entries in <TABLE1>{where}.{order}{limit}",
+      "show me the row details {*} for each qualifying entry in <TABLE1>{where}.{order}{limit}",
+      "i want a view of the <TABLE1> records{where} that includes {*}.{order}{limit}",
+      "what are the entries in <TABLE1>{where}? include all their fields {*}.{order}{limit}",
+      "give me the full contents {*} of the matching <TABLE1> rows{where}.{order}{limit}",
+      "could you retrieve {*} for the entries matching the request in <TABLE1>{where}?{order}{limit}",
+      "use all columns {*} when listing the records in <TABLE1>{where}.{order}{limit}",
+      "show the <TABLE1> entries{where} in full, with {*}.{order}{limit}",
+      "read out the full record {*} for each entry from <TABLE1>{where}.{order}{limit}",
+      "i want to see each relevant row from <TABLE1>{where} as a full record with {*}.{order}{limit}",
+      "what does each row of <TABLE1>{where} contain? list {*}.{order}{limit}",
+      "please give the matching <TABLE1> entries{where} with all fields {*}.{order}{limit}",
+      "the fields i want are {*}. use the entries in <TABLE1>{where}.{order}{limit}",
+      "could you fetch the complete rows from <TABLE1>{where} using {*}?{order}{limit}",
+      "could you display every column {*} for the entries in <TABLE1>{where}?{order}{limit}",
+      "could you look up {*} for the records stored in <TABLE1>{where}?{order}{limit}",
+      "could you show every field {*} for each relevant <TABLE1> row{where}?{order}{limit}",
+      "could you return full entries from <TABLE1>{where} with {*} included?{order}{limit}",
+      "could you read the complete record {*} for each matching entry in <TABLE1>{where}?{order}{limit}",
+      "would you fetch the complete rows from <TABLE1>{where} using {*}?{order}{limit}",
+      "would you display every column {*} for the entries in <TABLE1>{where}?{order}{limit}",
+      "would you look up {*} for the records stored in <TABLE1>{where}?{order}{limit}",
+      "would you show every field {*} for each relevant <TABLE1> row{where}?{order}{limit}",
+      "would you return full entries from <TABLE1>{where} with {*} included?{order}{limit}",
+      "would you read the complete record {*} for each matching entry in <TABLE1>{where}?{order}{limit}",
+      "can you help me fetch the complete rows from <TABLE1>{where} using {*}?{order}{limit}",
+      "can you help me display every column {*} for the entries in <TABLE1>{where}?{order}{limit}",
+      "can you help me look up {*} for the records stored in <TABLE1>{where}?{order}{limit}",
+      "can you help me show every field {*} for each relevant <TABLE1> row{where}?{order}{limit}",
+      "can you help me return full entries from <TABLE1>{where} with {*} included?{order}{limit}",
+      "can you help me read the complete record {*} for each matching entry in <TABLE1>{where}?{order}{limit}",
+      "i'd like you to fetch the complete rows from <TABLE1>{where} using {*}.{order}{limit}",
+      "i'd like you to display every column {*} for the entries in <TABLE1>{where}.{order}{limit}",
+      "i'd like you to look up {*} for the records stored in <TABLE1>{where}.{order}{limit}",
+      "i'd like you to show every field {*} for each relevant <TABLE1> row{where}.{order}{limit}",
+      "i'd like you to return full entries from <TABLE1>{where} with {*} included.{order}{limit}",
+      "i'd like you to read the complete record {*} for each matching entry in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is fetch the complete rows from <TABLE1>{where} using {*}.{order}{limit}",
+      "what i want to do is display every column {*} for the entries in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is look up {*} for the records stored in <TABLE1>{where}.{order}{limit}",
+      "what i want to do is show every field {*} for each relevant <TABLE1> row{where}.{order}{limit}",
+      "what i want to do is return full entries from <TABLE1>{where} with {*} included.{order}{limit}",
+      "what i want to do is read the complete record {*} for each matching entry in <TABLE1>{where}.{order}{limit}",
+      "my request is to fetch the complete rows from <TABLE1>{where} using {*}.{order}{limit}",
+      "my request is to display every column {*} for the entries in <TABLE1>{where}.{order}{limit}",
+      "my request is to look up {*} for the records stored in <TABLE1>{where}.{order}{limit}",
+      "my request is to show every field {*} for each relevant <TABLE1> row{where}.{order}{limit}",
+      "my request is to return full entries from <TABLE1>{where} with {*} included.{order}{limit}",
+      "my request is to read the complete record {*} for each matching entry in <TABLE1>{where}.{order}{limit}"
     ],
     "aggregate": [
       "what is {agg} for <TABLE1>{where}?",
@@ -147,7 +352,93 @@
       "{agg} in <TABLE1>{where}?",
       "give {agg} for <TABLE1>{where}.",
       "from <TABLE1>, find {agg}{where}.",
-      "calculate {agg} for <TABLE1>{where}."
+      "calculate {agg} for <TABLE1>{where}.",
+      "could you compute {agg} for the records in <TABLE1>{where}?",
+      "i would like to know {agg} across the <TABLE1> rows{where}.",
+      "what does {agg} come to on the entries in <TABLE1>{where}?",
+      "do we know {agg} for the matching rows of <TABLE1>{where}?",
+      "work out {agg} from the set of <TABLE1> records{where}.",
+      "please return {agg}, using the entries in <TABLE1>{where}.",
+      "what is {agg}, given the records of <TABLE1>{where}?",
+      "work out {agg} by looking through the rows in <TABLE1>{where}.",
+      "calculate {agg} using only the relevant <TABLE1> rows{where}.",
+      "i want just {agg}, based on the records in <TABLE1>{where}.",
+      "compute one result, {agg}, across the <TABLE1> entries{where}.",
+      "i need you to evaluate {agg} using the rows of <TABLE1>{where}.",
+      "what value is obtained for {agg} using <TABLE1> records{where}?",
+      "what does {agg} work out to if we use the rows of <TABLE1>{where}?",
+      "can you report {agg} after looking at <TABLE1> entries{where}?",
+      "please tell me what {agg} is over the rows in <TABLE1>{where}.",
+      "give me the result for {agg} on the <TABLE1> records{where}.",
+      "could you derive {agg} from the rows recorded in <TABLE1>{where}?",
+      "i'm after {agg} over the entries listed in <TABLE1>{where}.",
+      "for {agg}, use the <TABLE1> entries{where} as input.",
+      "could i have {agg} across the records found in <TABLE1>{where}?",
+      "what do you get for {agg} when the source is the <TABLE1> rows{where}?",
+      "i need the result of {agg} based on the rows in <TABLE1>{where}.",
+      "from <TABLE1>, can you work out {agg} over the entries{where}?",
+      "what value do you get for {agg} over the entries of <TABLE1>{where}?",
+      "what is the result of taking {agg} across <TABLE1> records{where}?",
+      "show me {agg} calculated from matching records in <TABLE1>{where}.",
+      "run the calculation for {agg} on the rows in <TABLE1>{where}.",
+      "supply the result of {agg} for the rows of <TABLE1>{where}.",
+      "i'm checking {agg}. compute it from the <TABLE1> rows{where}.",
+      "what answer does {agg} give for the <TABLE1> records{where}?",
+      "give {agg} as a single result for the entries in <TABLE1>{where}.",
+      "the result i need is {agg}, based on the relevant rows in <TABLE1>{where}.",
+      "report {agg} after looking through the <TABLE1> records{where}.",
+      "derive {agg} from the records in <TABLE1>{where}.",
+      "report {agg} as a single result across <TABLE1> records{where}.",
+      "please give {agg} across records stored in <TABLE1>{where}.",
+      "what is the computed result for {agg} in <TABLE1> over the entries{where}?",
+      "can we get {agg} for the rows held in <TABLE1>{where}?",
+      "tell me the value of {agg} across the rows in <TABLE1>{where}.",
+      "could you calculate and report {agg} for entries from <TABLE1>{where}?",
+      "the calculation should return {agg} over the <TABLE1> rows{where}.",
+      "get {agg} from the records in <TABLE1>{where} and show that result.",
+      "i'd like to see {agg} based on entries in <TABLE1>{where}.",
+      "what does calculating {agg} over <TABLE1> rows{where} produce?",
+      "produce {agg} using the matching records from <TABLE1>{where}.",
+      "please evaluate {agg} for all relevant <TABLE1> records{where}.",
+      "for this summary, i want {agg} over the rows of <TABLE1>{where}.",
+      "can you determine {agg} using the records available in <TABLE1>{where}?",
+      "show {agg} after taking the <TABLE1> records{where} together.",
+      "could you compute {agg} from the records of <TABLE1>{where}?",
+      "could you report {agg} for the relevant entries in <TABLE1>{where}?",
+      "could you work out {agg} across the rows held in <TABLE1>{where}?",
+      "could you calculate {agg} using the records in <TABLE1>{where}?",
+      "could you evaluate {agg} across matching rows in <TABLE1>{where}?",
+      "could you determine {agg} for the rows of <TABLE1>{where}?",
+      "would you compute {agg} from the records of <TABLE1>{where}?",
+      "would you report {agg} for the relevant entries in <TABLE1>{where}?",
+      "would you work out {agg} across the rows held in <TABLE1>{where}?",
+      "would you calculate {agg} using the records in <TABLE1>{where}?",
+      "would you evaluate {agg} across matching rows in <TABLE1>{where}?",
+      "would you determine {agg} for the rows of <TABLE1>{where}?",
+      "can you help me compute {agg} from the records of <TABLE1>{where}?",
+      "can you help me report {agg} for the relevant entries in <TABLE1>{where}?",
+      "can you help me work out {agg} across the rows held in <TABLE1>{where}?",
+      "can you help me calculate {agg} using the records in <TABLE1>{where}?",
+      "can you help me evaluate {agg} across matching rows in <TABLE1>{where}?",
+      "can you help me determine {agg} for the rows of <TABLE1>{where}?",
+      "i'd like you to compute {agg} from the records of <TABLE1>{where}.",
+      "i'd like you to report {agg} for the relevant entries in <TABLE1>{where}.",
+      "i'd like you to work out {agg} across the rows held in <TABLE1>{where}.",
+      "i'd like you to calculate {agg} using the records in <TABLE1>{where}.",
+      "i'd like you to evaluate {agg} across matching rows in <TABLE1>{where}.",
+      "i'd like you to determine {agg} for the rows of <TABLE1>{where}.",
+      "what i want to do is compute {agg} from the records of <TABLE1>{where}.",
+      "what i want to do is report {agg} for the relevant entries in <TABLE1>{where}.",
+      "what i want to do is work out {agg} across the rows held in <TABLE1>{where}.",
+      "what i want to do is calculate {agg} using the records in <TABLE1>{where}.",
+      "what i want to do is evaluate {agg} across matching rows in <TABLE1>{where}.",
+      "what i want to do is determine {agg} for the rows of <TABLE1>{where}.",
+      "my request is to compute {agg} from the records of <TABLE1>{where}.",
+      "my request is to report {agg} for the relevant entries in <TABLE1>{where}.",
+      "my request is to work out {agg} across the rows held in <TABLE1>{where}.",
+      "my request is to calculate {agg} using the records in <TABLE1>{where}.",
+      "my request is to evaluate {agg} across matching rows in <TABLE1>{where}.",
+      "my request is to determine {agg} for the rows of <TABLE1>{where}."
     ],
     "group": [
       "for each {group_col} in <TABLE1>, show {key} and {agg}.{where}{having}{order}{limit}",
@@ -165,7 +456,93 @@
       "for each {group_col}, what summary does <TABLE1> give? return {key} and {agg} for that group.{where}{having}{order}{limit}",
       "per {group_col}, give {key} and {agg}.{where}{having}{order}{limit}",
       "by {group_col}, list {key} and {agg}.{where}{having}{order}{limit}",
-      "group by {group_col}. show {key} and {agg}.{where}{having}{order}{limit}"
+      "group by {group_col}. show {key} and {agg}.{where}{having}{order}{limit}",
+      "use {group_col} to split <TABLE1> into groups, then display {key} and {agg} for each one.{where}{having}{order}{limit}",
+      "can i get {key} with {agg}, one result per {group_col} in <TABLE1>?{where}{having}{order}{limit}",
+      "i want the results grouped by {group_col} in <TABLE1>. give me {key} and {agg} in each result.{where}{having}{order}{limit}",
+      "which values of {group_col} appear in <TABLE1>? report {key} and {agg} for each.{where}{having}{order}{limit}",
+      "show {key} with {agg}, computed per {group_col} across <TABLE1>.{where}{having}{order}{limit}",
+      "do we have a per-{group_col} summary of <TABLE1> with {key} and {agg}?{where}{having}{order}{limit}",
+      "give me a separate line for every {group_col} value in <TABLE1> containing {key} and {agg}.{where}{having}{order}{limit}",
+      "take the rows in <TABLE1> that share {group_col}. for each set, provide {key} and {agg}.{where}{having}{order}{limit}",
+      "report {key} and {agg} separately for each distinct {group_col} found in <TABLE1>.{where}{having}{order}{limit}",
+      "what does a summary of <TABLE1> by {group_col} look like? show {key} and {agg}.{where}{having}{order}{limit}",
+      "i need to see {key} beside {agg} for each distinct value of {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "produce {key} and {agg} for every group formed from {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "use each distinct {group_col} as a group in <TABLE1>. list {key} and {agg} for that group.{where}{having}{order}{limit}",
+      "report {key} and calculate {agg} for each {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "from <TABLE1>, can you return {key} together with {agg} for each {group_col}?{where}{having}{order}{limit}",
+      "summarize the <TABLE1> rows after partitioning by {group_col}. include {key} and {agg}.{where}{having}{order}{limit}",
+      "combine the rows of <TABLE1> that have the same {group_col}; return {key} and {agg} for the group.{where}{having}{order}{limit}",
+      "can you show one summary row for each {group_col} in <TABLE1>, with {key} and {agg}?{where}{having}{order}{limit}",
+      "use {group_col} as the grouping field for <TABLE1>. display {key} and {agg}.{where}{having}{order}{limit}",
+      "tell me {key} and {agg} for the records in <TABLE1>, aggregated per {group_col}.{where}{having}{order}{limit}",
+      "how do groups by {group_col} in <TABLE1> compare? show {key} and {agg} for each.{where}{having}{order}{limit}",
+      "take each distinct {group_col} in <TABLE1> and put {key} and {agg} on one line per group.{where}{having}{order}{limit}",
+      "make a summary of <TABLE1> that reports {key} with {agg} rather than individual rows, grouped by {group_col}.{where}{having}{order}{limit}",
+      "what would the output be if we grouped <TABLE1> by {group_col} and returned {key} and {agg}?{where}{having}{order}{limit}",
+      "group the records in <TABLE1> with equal {group_col} values and provide {key} and {agg} for each set.{where}{having}{order}{limit}",
+      "i'm after {key} together with {agg}, based on groups of like {group_col} values from <TABLE1>.{where}{having}{order}{limit}",
+      "can we see {key} plus {agg}, calculated separately across each {group_col} group in <TABLE1>?{where}{having}{order}{limit}",
+      "don't combine different {group_col} values in <TABLE1>. give me {key} and {agg} separately.{where}{having}{order}{limit}",
+      "read <TABLE1> by {group_col}; for each group i need {key} alongside {agg}.{where}{having}{order}{limit}",
+      "display the {group_col} breakdown of <TABLE1> with {key} and {agg} for every group.{where}{having}{order}{limit}",
+      "i need {key} and {agg} in each row of a {group_col} summary for <TABLE1>.{where}{having}{order}{limit}",
+      "what are the grouped results for <TABLE1> by {group_col}, including {key} and {agg}?{where}{having}{order}{limit}",
+      "use {group_col} to decide which <TABLE1> entries belong together, then show {key} and {agg}.{where}{having}{order}{limit}",
+      "group <TABLE1> on {group_col}. what are {key} and {agg} in each group?{where}{having}{order}{limit}",
+      "if two rows have the same {group_col}, put them together. for <TABLE1>, give {key} and {agg} per group.{where}{having}{order}{limit}",
+      "could you provide {key} and {agg} separately for each {group_col} represented in <TABLE1>?{where}{having}{order}{limit}",
+      "show a single summary per {group_col} from <TABLE1> and pair {key} with {agg}.{where}{having}{order}{limit}",
+      "report the breakdown for <TABLE1> at the {group_col} level. return {key} with {agg}.{where}{having}{order}{limit}",
+      "i'd like a listing of {key} and {agg} by {group_col}, using <TABLE1>.{where}{having}{order}{limit}",
+      "within the <TABLE1> data, gather records by {group_col} and show {key} and {agg} per group.{where}{having}{order}{limit}",
+      "pair {key} with {agg} once for each group defined by {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "find all the {group_col} groups in <TABLE1> and give {key} with {agg} for each group.{where}{having}{order}{limit}",
+      "for a per-group report on <TABLE1>, use {group_col} and present {key} alongside {agg}.{where}{having}{order}{limit}",
+      "put <TABLE1> records with matching {group_col} values into the same group. report {key} and {agg}.{where}{having}{order}{limit}",
+      "return {key} and {agg} from <TABLE1>, using each {group_col} as a group key.{where}{having}{order}{limit}",
+      "show {key} paired with {agg} at the {group_col} level in <TABLE1>.{where}{having}{order}{limit}",
+      "create one summary row for each distinct {group_col} in <TABLE1>, with {key} plus {agg}.{where}{having}{order}{limit}",
+      "for each distinct {group_col} value in <TABLE1>, report {key} together with {agg}.{where}{having}{order}{limit}",
+      "which {group_col} groups does <TABLE1> yield? show {key} and {agg} for those groups.{where}{having}{order}{limit}",
+      "show {key} and {agg} after grouping the <TABLE1> records according to {group_col}.{where}{having}{order}{limit}",
+      "could you group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group?{where}{having}{order}{limit}",
+      "could you provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}?{where}{having}{order}{limit}",
+      "could you take each {group_col} group in <TABLE1> and show {key} alongside {agg}?{where}{having}{order}{limit}",
+      "could you list {key} and {agg} once per {group_col} group in <TABLE1>?{where}{having}{order}{limit}",
+      "could you split up the <TABLE1> records by {group_col} and show {key} plus {agg}?{where}{having}{order}{limit}",
+      "could you report {key} with {agg}, computed separately for each {group_col} in <TABLE1>?{where}{having}{order}{limit}",
+      "would you group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group?{where}{having}{order}{limit}",
+      "would you provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}?{where}{having}{order}{limit}",
+      "would you take each {group_col} group in <TABLE1> and show {key} alongside {agg}?{where}{having}{order}{limit}",
+      "would you list {key} and {agg} once per {group_col} group in <TABLE1>?{where}{having}{order}{limit}",
+      "would you split up the <TABLE1> records by {group_col} and show {key} plus {agg}?{where}{having}{order}{limit}",
+      "would you report {key} with {agg}, computed separately for each {group_col} in <TABLE1>?{where}{having}{order}{limit}",
+      "can you help me group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group?{where}{having}{order}{limit}",
+      "can you help me provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}?{where}{having}{order}{limit}",
+      "can you help me take each {group_col} group in <TABLE1> and show {key} alongside {agg}?{where}{having}{order}{limit}",
+      "can you help me list {key} and {agg} once per {group_col} group in <TABLE1>?{where}{having}{order}{limit}",
+      "can you help me split up the <TABLE1> records by {group_col} and show {key} plus {agg}?{where}{having}{order}{limit}",
+      "can you help me report {key} with {agg}, computed separately for each {group_col} in <TABLE1>?{where}{having}{order}{limit}",
+      "i'd like you to group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group.{where}{having}{order}{limit}",
+      "i'd like you to provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}.{where}{having}{order}{limit}",
+      "i'd like you to take each {group_col} group in <TABLE1> and show {key} alongside {agg}.{where}{having}{order}{limit}",
+      "i'd like you to list {key} and {agg} once per {group_col} group in <TABLE1>.{where}{having}{order}{limit}",
+      "i'd like you to split up the <TABLE1> records by {group_col} and show {key} plus {agg}.{where}{having}{order}{limit}",
+      "i'd like you to report {key} with {agg}, computed separately for each {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "what i want to do is group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group.{where}{having}{order}{limit}",
+      "what i want to do is provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}.{where}{having}{order}{limit}",
+      "what i want to do is take each {group_col} group in <TABLE1> and show {key} alongside {agg}.{where}{having}{order}{limit}",
+      "what i want to do is list {key} and {agg} once per {group_col} group in <TABLE1>.{where}{having}{order}{limit}",
+      "what i want to do is split up the <TABLE1> records by {group_col} and show {key} plus {agg}.{where}{having}{order}{limit}",
+      "what i want to do is report {key} with {agg}, computed separately for each {group_col} in <TABLE1>.{where}{having}{order}{limit}",
+      "my request is to group the records of <TABLE1> by {group_col} and report {key} with {agg} for each group.{where}{having}{order}{limit}",
+      "my request is to provide a group summary of <TABLE1> by {group_col}, including {key} and {agg}.{where}{having}{order}{limit}",
+      "my request is to take each {group_col} group in <TABLE1> and show {key} alongside {agg}.{where}{having}{order}{limit}",
+      "my request is to list {key} and {agg} once per {group_col} group in <TABLE1>.{where}{having}{order}{limit}",
+      "my request is to split up the <TABLE1> records by {group_col} and show {key} plus {agg}.{where}{having}{order}{limit}",
+      "my request is to report {key} with {agg}, computed separately for each {group_col} in <TABLE1>.{where}{having}{order}{limit}"
     ],
     "scalar": [
       "show {target} from <TABLE1> where {measure} {op} {stat} {measure} across {population}.{outer}",
@@ -182,7 +559,93 @@
       "use <TABLE1> to list {target}. the benchmark is {stat} {measure} across {population}. keep a row if its {measure} {op} that benchmark.{outer}",
       "looking at {target} in <TABLE1>, what do i get if i keep only rows whose {measure} {op} {stat} {measure} across {population}?{outer}",
       "return {target} if {measure} {op} {stat} {measure} for {population}.{outer}",
-      "get {target} where {measure} {op} {stat} {measure} over {population}.{outer}"
+      "get {target} where {measure} {op} {stat} {measure} over {population}.{outer}",
+      "which {target} values in <TABLE1> belong to rows whose {measure} {op} {stat} {measure} for {population}?{outer}",
+      "could you pick out {target} from <TABLE1> when the row's {measure} {op} {stat} {measure} over {population}?{outer}",
+      "for {target}, first take {stat} {measure} across {population} in <TABLE1>. then select rows whose {measure} {op} that result.{outer}",
+      "i want {target} from <TABLE1> and i need to compare {measure} with a reference. use {stat} {measure} over {population} and keep rows where {measure} {op} it.{outer}",
+      "give me the {target} of <TABLE1> entries whose {measure} {op} {stat} {measure} among {population}.{outer}",
+      "can i have {target} for the <TABLE1> records that have {measure} which {op} {stat} {measure} across {population}?{outer}",
+      "show me {target} from <TABLE1>. the condition is that {measure} {op} {stat} {measure} across {population}.{outer}",
+      "find {target} in <TABLE1> if a row's {measure} {op} {stat} {measure} derived from {population}.{outer}",
+      "display {target} for the rows in <TABLE1> whose {measure} {op} {stat} {measure} within {population}.{outer}",
+      "i am looking for {target} among entries in <TABLE1> with {measure} that {op} {stat} {measure} for {population}.{outer}",
+      "what {target} remains in <TABLE1> once we restrict it to rows where {measure} {op} {stat} {measure} over {population}?{outer}",
+      "tell me {target} from <TABLE1> for each record whose {measure} {op} {stat} {measure} computed over {population}.{outer}",
+      "use {target} as the result for qualifying rows in <TABLE1>. calculate {stat} {measure} across {population} and keep rows whose {measure} {op} it.{outer}",
+      "need {target} from <TABLE1>. use {stat} {measure} among {population} as reference and require that {measure} {op} that reference.{outer}",
+      "can you show {target} if the value in {measure} {op} {stat} {measure} from {population} in <TABLE1>?{outer}",
+      "pull out {target} from <TABLE1> where each entry's {measure} {op} {stat} {measure} across {population}.{outer}",
+      "for the output i need {target} from <TABLE1>. keep entries with {measure} that {op} {stat} {measure} for {population}.{outer}",
+      "what would a list of {target} from <TABLE1> look like for rows where {measure} {op} {stat} {measure} over {population}?{outer}",
+      "show {target} from <TABLE1> after comparing each row's {measure} with {stat} {measure} over {population}. return rows where {measure} {op} that reference.{outer}",
+      "select {target} from <TABLE1> for the entries whose {measure} {op} {stat} {measure} calculated for {population}.{outer}",
+      "show {target} from <TABLE1> for the records passing this test: {measure} {op} {stat} {measure} over {population}.{outer}",
+      "bring me {target} from <TABLE1>. for the comparison value use {stat} {measure} for {population}. only include rows where {measure} {op} that value.{outer}",
+      "which rows give the {target} values i need? look in <TABLE1> for {measure} that {op} {stat} {measure} taken over {population}.{outer}",
+      "check the entries of <TABLE1> for {target} using this requirement: {measure} {op} {stat} {measure} over {population}.{outer}",
+      "for {target} from <TABLE1>, compare each row's {measure} with {stat} {measure} from {population}. keep it if its {measure} {op} the result.{outer}",
+      "can we get {target} from <TABLE1> restricted to rows with {measure} that {op} {stat} {measure} across {population}?{outer}",
+      "use <TABLE1> and give me {target} per matching row. an entry passes if {measure} {op} {stat} {measure} for {population}.{outer}",
+      "find the records in <TABLE1> and show their {target} when {measure} {op} {stat} {measure} over {population}.{outer}",
+      "for every matching entry in <TABLE1>, give {target}. decide whether it matches by testing if {measure} {op} {stat} {measure} across {population}.{outer}",
+      "start with <TABLE1> and return {target}, only for records with {measure} that {op} {stat} {measure} from {population}.{outer}",
+      "get a list of {target} from <TABLE1>, using the requirement that {measure} {op} {stat} {measure} across {population}.{outer}",
+      "i want {target} from <TABLE1> for rows where the value of {measure} {op} {stat} {measure} computed on {population}.{outer}",
+      "could you find {target} on the rows of <TABLE1> that qualify because {measure} {op} {stat} {measure} among {population}?{outer}",
+      "for {target} in <TABLE1>, keep a row only if its own {measure} {op} {stat} {measure} taken from {population}.{outer}",
+      "i'd like the {target} entries from <TABLE1>. include a row when its {measure} {op} {stat} {measure} across {population}.{outer}",
+      "retrieve {target} from <TABLE1>. its row must have {measure} that {op} {stat} {measure} over {population}.{outer}",
+      "give me {target} from the rows of <TABLE1> satisfying this relation: {measure} {op} {stat} {measure} across {population}.{outer}",
+      "for the list of {target}, take <TABLE1> entries where {measure} {op} {stat} {measure} for {population}.{outer}",
+      "from the <TABLE1> rows, keep {target} wherever {measure} {op} {stat} {measure} computed over {population}.{outer}",
+      "i only need {target} from <TABLE1> if a row's {measure} {op} {stat} {measure} taken over {population}.{outer}",
+      "show the {target} field from <TABLE1> for each row where {measure} {op} {stat} {measure} among {population}.{outer}",
+      "which {target} should appear if we compare {measure} inside <TABLE1> against {stat} {measure} over {population} and require that {measure} {op} it?{outer}",
+      "from <TABLE1>, give me {target} subject to the comparison that {measure} {op} {stat} {measure} across {population}.{outer}",
+      "to decide whether to return {target} from <TABLE1>, test if {measure} {op} {stat} {measure} for {population}.{outer}",
+      "for {target} in <TABLE1>, check whether the row's {measure} {op} {stat} {measure} over {population}. return those that pass.{outer}",
+      "please report {target} in <TABLE1> for all rows where {measure} {op} {stat} {measure} among {population}.{outer}",
+      "use {target} as the returned field, taking rows from <TABLE1> if {measure} {op} {stat} {measure} for {population}.{outer}",
+      "can you retrieve {target} from the set of <TABLE1> rows for which {measure} {op} {stat} {measure} taken across {population}?{outer}",
+      "return each matching record's {target} from <TABLE1>; require that {measure} {op} {stat} {measure} for {population}.{outer}",
+      "for all entries in <TABLE1>, show {target} when {measure} {op} {stat} {measure} over {population}.{outer}",
+      "could you return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}?{outer}",
+      "could you fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}?{outer}",
+      "could you look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}?{outer}",
+      "could you display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}?{outer}",
+      "could you list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}?{outer}",
+      "could you produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}?{outer}",
+      "would you return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}?{outer}",
+      "would you fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}?{outer}",
+      "would you look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}?{outer}",
+      "would you display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}?{outer}",
+      "would you list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}?{outer}",
+      "would you produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}?{outer}",
+      "can you help me return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}?{outer}",
+      "can you help me fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}?{outer}",
+      "can you help me look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}?{outer}",
+      "can you help me display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}?{outer}",
+      "can you help me list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}?{outer}",
+      "can you help me produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}?{outer}",
+      "i'd like you to return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}.{outer}",
+      "i'd like you to fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}.{outer}",
+      "i'd like you to look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}.{outer}",
+      "i'd like you to display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}.{outer}",
+      "i'd like you to list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}.{outer}",
+      "i'd like you to produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}.{outer}",
+      "what i want to do is return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}.{outer}",
+      "what i want to do is fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}.{outer}",
+      "what i want to do is look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}.{outer}",
+      "what i want to do is display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}.{outer}",
+      "what i want to do is list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}.{outer}",
+      "what i want to do is produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}.{outer}",
+      "my request is to return {target} from <TABLE1> where a row's {measure} {op} {stat} {measure} across {population}.{outer}",
+      "my request is to fetch {target} from <TABLE1> for rows where {measure} {op} {stat} {measure} over {population}.{outer}",
+      "my request is to look up {target} in <TABLE1> when the value of {measure} {op} {stat} {measure} computed for {population}.{outer}",
+      "my request is to display {target} from <TABLE1> on rows where {measure} {op} {stat} {measure} among {population}.{outer}",
+      "my request is to list {target} from <TABLE1> for records whose {measure} {op} {stat} {measure} over {population}.{outer}",
+      "my request is to produce {target} for each row in <TABLE1> whose {measure} {op} {stat} {measure} calculated across {population}.{outer}"
     ]
   },
   "aggregates": {
@@ -194,7 +657,10 @@
       "the total number of rows",
       "the count of matching rows",
       "the number of entries",
-      "the total row count"
+      "the total row count",
+      "the tally of rows",
+      "the tally of matching records",
+      "the total number of records"
     ],
     "AVG": [
       "the average {col}",
@@ -204,7 +670,10 @@
       "the arithmetic average of {col}",
       "the mean of the {col} values",
       "the average across the values of {col}",
-      "the arithmetic mean for {col}"
+      "the arithmetic mean for {col}",
+      "the mean across all {col} entries",
+      "the average computed for {col}",
+      "the arithmetic mean of the recorded {col} values"
     ],
     "SUM": [
       "the sum of {col}",
@@ -214,7 +683,10 @@
       "the sum across all values of {col}",
       "the combined total of {col}",
       "the result of adding up {col}",
-      "the total obtained by summing {col}"
+      "the total obtained by summing {col}",
+      "the total after adding the {col} values",
+      "the sum of the entries in {col}",
+      "the total across the {col} entries"
     ],
     "MIN": [
       "the minimum {col}",
@@ -224,7 +696,10 @@
       "the lowest recorded value for {col}",
       "the minimum value of {col}",
       "the smallest {col}",
-      "the minimum observed for {col}"
+      "the minimum observed for {col}",
+      "the lowest value found in {col}",
+      "the minimum among the {col} values",
+      "the smallest recorded {col} value"
     ],
     "MAX": [
       "the maximum {col}",
@@ -234,7 +709,10 @@
       "the highest recorded value for {col}",
       "the maximum value of {col}",
       "the largest {col}",
-      "the maximum observed for {col}"
+      "the maximum observed for {col}",
+      "the highest value found in {col}",
+      "the maximum among the {col} values",
+      "the peak value of {col}"
     ],
     "MIN_date": [
       "the earliest {col}",
@@ -244,7 +722,10 @@
       "the earliest recorded value of {col}",
       "the oldest date in {col}",
       "the earliest date listed under {col}",
-      "the minimum date for {col}"
+      "the minimum date for {col}",
+      "the oldest recorded {col} date",
+      "the first {col} date in chronological order",
+      "the earliest value in {col}"
     ],
     "MAX_date": [
       "the latest {col}",
@@ -254,7 +735,10 @@
       "the latest recorded value of {col}",
       "the most recent date in {col}",
       "the latest date listed under {col}",
-      "the maximum date for {col}"
+      "the maximum date for {col}",
+      "the newest recorded {col} date",
+      "the last {col} date in chronological order",
+      "the latest value in {col}"
     ]
   },
   "scalar_stats": {
@@ -264,7 +748,9 @@
       "the arithmetic mean of",
       "the average value of",
       "the mean value of",
-      "the arithmetic average of"
+      "the arithmetic average of",
+      "the computed average of",
+      "the arithmetic mean value of"
     ],
     "MIN": [
       "the minimum",
@@ -272,7 +758,9 @@
       "the smallest",
       "the least value of",
       "the minimum value of",
-      "the lowest recorded value of"
+      "the lowest recorded value of",
+      "the smallest recorded value of",
+      "the observed minimum of"
     ],
     "MAX": [
       "the maximum",
@@ -280,7 +768,9 @@
       "the largest",
       "the greatest value of",
       "the maximum value of",
-      "the highest recorded value of"
+      "the highest recorded value of",
+      "the peak value of",
+      "the observed maximum of"
     ]
   },
   "comparisons": {
@@ -291,7 +781,10 @@
       "is exactly",
       "is the same as",
       "has the same value as",
-      "exactly matches"
+      "exactly matches",
+      "exactly equals",
+      "has precisely the value",
+      "matches exactly"
     ],
     "!=": [
       "differs from",
@@ -300,7 +793,10 @@
       "is different from",
       "has a value other than",
       "is anything other than",
-      "does not have the same value as"
+      "does not have the same value as",
+      "does not match",
+      "is unequal to",
+      "fails to match"
     ],
     "<": [
       "is less than",
@@ -309,7 +805,10 @@
       "is under",
       "is smaller than",
       "is strictly less than",
-      "is lower than"
+      "is lower than",
+      "is strictly below",
+      "is smaller in value than",
+      "comes in below"
     ],
     ">": [
       "is greater than",
@@ -318,7 +817,10 @@
       "is over",
       "is larger than",
       "is strictly greater than",
-      "is higher than"
+      "is higher than",
+      "is strictly above",
+      "goes beyond",
+      "comes in higher than"
     ],
     "<=": [
       "is at most",
@@ -327,7 +829,10 @@
       "does not exceed",
       "is at or below",
       "is no higher than",
-      "is either below or equal to"
+      "is either below or equal to",
+      "does not go above",
+      "stays at or below",
+      "is no more than"
     ],
     ">=": [
       "is at least",
@@ -336,7 +841,10 @@
       "is at or above",
       "is no lower than",
       "is either above or equal to",
-      "meets or exceeds"
+      "meets or exceeds",
+      "is not below",
+      "is equal to or higher than",
+      "is greater than or exactly equal to"
     ]
   },
   "date_comparisons": {
@@ -347,7 +855,10 @@
       "is the same date as",
       "falls exactly on",
       "matches the date",
-      "is the very same day as"
+      "is the very same day as",
+      "is dated",
+      "has the same calendar date as",
+      "occurs on"
     ],
     "!=": [
       "is not on",
@@ -356,7 +867,10 @@
       "is on a different date from",
       "does not fall on",
       "is any date except",
-      "is a date other than"
+      "is a date other than",
+      "does not occur on",
+      "has a date different from",
+      "is not dated"
     ],
     "<": [
       "is before",
@@ -365,7 +879,10 @@
       "falls before",
       "comes before",
       "is strictly earlier than",
-      "is dated earlier than"
+      "is dated earlier than",
+      "occurs before",
+      "is chronologically before",
+      "predates"
     ],
     ">": [
       "is after",
@@ -374,7 +891,10 @@
       "falls after",
       "follows",
       "is strictly later than",
-      "is dated later than"
+      "is dated later than",
+      "occurs after",
+      "is chronologically after",
+      "has a date later than"
     ],
     "<=": [
       "is on or before",
@@ -383,7 +903,10 @@
       "falls on or before",
       "is earlier than or the same day as",
       "is not later than",
-      "falls no later than"
+      "falls no later than",
+      "occurs on or before",
+      "does not fall after",
+      "has a date no later than"
     ],
     ">=": [
       "is on or after",
@@ -392,7 +915,10 @@
       "falls on or after",
       "is later than or the same day as",
       "is not earlier than",
-      "falls no earlier than"
+      "falls no earlier than",
+      "occurs on or after",
+      "does not fall before",
+      "has a date no earlier than"
     ]
   },
   "predicates": {
@@ -404,7 +930,11 @@
       "{col} is among the values ({values})",
       "the list ({values}) includes {col}",
       "{col} matches a value in ({values})",
-      "at least one entry in ({values}) equals {col}"
+      "at least one entry in ({values}) equals {col}",
+      "{col} is one of {values}",
+      "{col} matches any of {values}",
+      "{col} is in the list {values}",
+      "{col} has a value from this list: {values}"
     ],
     "between": [
       "{col} is between {a} and {b}, inclusive",
@@ -414,7 +944,11 @@
       "{col} is in the closed interval with endpoints {a} and {b}",
       "{col} falls in the range between {a} and {b}, endpoints included",
       "the inclusive range defined by {a} and {b} contains {col}",
-      "{col} is anywhere between {a} and {b}, including either boundary"
+      "{col} is anywhere between {a} and {b}, including either boundary",
+      "{col} is at least {a} and at most {b}",
+      "{col} ranges from {a} to {b} with both limits included",
+      "{col} is within {a} through {b}, inclusive",
+      "{col} is no lower than {a} and no higher than {b}"
     ],
     "prefix": [
       "{col} starts with {a}",
@@ -424,7 +958,11 @@
       "{a} is the prefix of {col}",
       "{col} has {a} at the start",
       "the first part of {col} matches {a}",
-      "{col} starts with the sequence {a}"
+      "{col} starts with the sequence {a}",
+      "{col} matches the pattern beginning with {a}",
+      "{col} has text beginning with {a}",
+      "the text in {col} begins with the sequence {a}",
+      "{col} contains {a} at the very beginning"
     ],
     "suffix": [
       "{col} ends with {a}",
@@ -434,7 +972,11 @@
       "{a} is the suffix of {col}",
       "{col} has {a} at the end",
       "the final part of {col} matches {a}",
-      "{col} ends with the sequence {a}"
+      "{col} ends with the sequence {a}",
+      "{col} matches the pattern ending with {a}",
+      "{col} has text ending with {a}",
+      "the text in {col} ends with the sequence {a}",
+      "{col} contains {a} at the very end"
     ],
     "contains": [
       "{col} contains {a}",
@@ -444,7 +986,11 @@
       "{col} contains the substring {a}",
       "{a} appears within {col}",
       "{col} includes {a} anywhere in its text",
-      "{a} is part of the text in {col}"
+      "{a} is part of the text in {col}",
+      "{col} matches text containing {a} anywhere",
+      "{col} has {a} at some position in its text",
+      "the text in {col} includes the sequence {a}",
+      "{col} contains {a} as part of its text"
     ]
   },
   "clauses": {
@@ -454,7 +1000,9 @@
       " satisfying the condition that {filters}",
       " such that {filters}",
       " for which it is true that {filters}",
-      " meeting the condition that {filters}"
+      " meeting the condition that {filters}",
+      " with the requirement that {filters}",
+      " for rows in which {filters}"
     ],
     "group_where": [
       " before grouping, keep only rows where {filters}.",
@@ -466,7 +1014,11 @@
       " apply the row condition before grouping, keeping only records where {filters}.",
       " for the group calculation, use only entries where {filters}.",
       " group only rows where {filters}.",
-      " before grouping, require that {filters}."
+      " before grouping, require that {filters}.",
+      " filter the source rows to records where {filters} before any groups are formed.",
+      " build groups only from rows in which {filters}.",
+      " the rows used in the groups must satisfy this condition: {filters}.",
+      " before computing the groups, discard rows unless {filters}."
     ],
     "having": [
       " keep only groups where this aggregate {op} {value}.",
@@ -477,7 +1029,11 @@
       " a group qualifies if its aggregate {op} {value}.",
       " filter the groups to those for which the aggregate {op} {value}.",
       " the only groups i need are those where the aggregate {op} {value}.",
-      " keep groups whose result {op} {value}."
+      " keep groups whose result {op} {value}.",
+      " once the groups are summarized, retain only groups whose aggregate {op} {value}.",
+      " discard a group unless its aggregate {op} {value}.",
+      " return a group only when the calculated result {op} {value}.",
+      " after aggregation, require that the group result {op} {value}."
     ],
     "all": [
       "all rows",
@@ -487,7 +1043,10 @@
       "the full set of rows",
       "all entries in the table",
       "the table as a whole",
-      "the entire set of records"
+      "the entire set of records",
+      "every available row",
+      "the complete set of table rows",
+      "all records without any filtering"
     ],
     "inner": [
       "rows where {filters}",
@@ -497,7 +1056,10 @@
       "just the entries where {filters}",
       "the rows for which {filters}",
       "the subset consisting of rows where {filters}",
-      "the records that meet the condition that {filters}"
+      "the records that meet the condition that {filters}",
+      "rows that pass the filter: {filters}",
+      "the records for which {filters}",
+      "the rows meeting this requirement: {filters}"
     ],
     "outer": [
       " only return rows where {filters}.",
@@ -508,7 +1070,11 @@
       " also require the rows you return to satisfy the condition that {filters}.",
       " filter the returned rows further to those where {filters}.",
       " a row can appear in the output only if {filters}.",
-      " keep rows where {filters}."
+      " keep rows where {filters}.",
+      " add this condition to the returned rows: {filters}.",
+      " only show a row if it also holds that {filters}.",
+      " filter the output further by requiring that {filters}.",
+      " of the rows that pass, return only those for which {filters}."
     ],
     "shared": [
       " only return rows from that same subset.",
@@ -518,7 +1084,10 @@
       " only rows in the subset used to calculate that value may appear in the output.",
       " also restrict the output to the rows used for that calculation.",
       " apply the calculation's row filters to the output as well.",
-      " keep a matching row only if it belongs to the subset used in the calculation."
+      " keep a matching row only if it belongs to the subset used in the calculation.",
+      " require the output rows to satisfy the very same filter.",
+      " only include rows from the population used for the comparison value.",
+      " use that same set of records as the source of the returned rows."
     ],
     "order": [
       " sort by {key} in {direction} order.",
@@ -528,7 +1097,10 @@
       " use {key} as the sort key, in {direction} order.",
       " list the results by {key} in {direction} order.",
       " i want the results in {direction} order of {key}.",
-      " put the rows in {direction} order according to {key}."
+      " put the rows in {direction} order according to {key}.",
+      " sort the returned rows on {key}, in {direction} order.",
+      " put the results in {direction} sequence by {key}.",
+      " arrange the returned rows by {key}, in {direction} order."
     ],
     "tie": [
       " break ties by {key} in {direction} order.",
@@ -538,7 +1110,10 @@
       " when two results tie, compare {key} in {direction} order.",
       " use {key} in {direction} order as the tiebreaker.",
       " within each tie, list the results by {key} in {direction} order.",
-      " resolve equal values of the first sort key by taking {key} in {direction} order."
+      " resolve equal values of the first sort key by taking {key} in {direction} order.",
+      " use {key} as the secondary sort key in {direction} order.",
+      " for equal values of the primary sort key, apply {direction} order by {key}.",
+      " for tied records, use {direction} order on {key}."
     ],
     "limit": [
       " return at most {n} {result_unit}.",
@@ -550,27 +1125,37 @@
       " i only need the first {n} {result_unit}.",
       " restrict the output to at most {n} {result_unit}.",
       " give me up to {n} {result_unit} in total.",
-      " first {n} {result_unit} only."
+      " first {n} {result_unit} only.",
+      " the output should contain no more than {n} {result_unit}.",
+      " limit the returned rows to a maximum of {n}.",
+      " at most {n} {result_unit}, please.",
+      " set the maximum number of returned rows to {n}."
     ],
     "date_asc": [
       " sort by {key}, oldest first.",
       " by {key}, earliest first.",
       " order by {key} from earliest to latest.",
-      " use chronological order for {key}."
+      " use chronological order for {key}.",
+      " sort the results by {key}, with the earliest dates first.",
+      " list the rows in chronological order by {key}."
     ],
     "date_desc": [
       " sort by {key}, newest first.",
       " by {key}, latest first.",
       " order by {key} from most recent to oldest.",
-      " use reverse chronological order for {key}."
+      " use reverse chronological order for {key}.",
+      " sort the results by {key}, with the latest dates first.",
+      " list the rows in reverse chronological order by {key}."
     ],
     "date_tie_asc": [
       " for ties, use {key}, earliest first.",
-      " break ties by {key}, oldest first."
+      " break ties by {key}, oldest first.",
+      " use {key} as the tiebreaker, earliest date first."
     ],
     "date_tie_desc": [
       " for ties, use {key}, latest first.",
-      " break ties by {key}, newest first."
+      " break ties by {key}, newest first.",
+      " use {key} as the tiebreaker, latest date first."
     ]
   }
 }
