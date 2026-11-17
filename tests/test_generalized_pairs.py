@@ -209,8 +209,12 @@ class GeneralizedPairsTest(unittest.TestCase):
             pred = next(p for p in predicates if key in p.words[0])
             self.assertEqual(pred.sql, f"{col.ref} LIKE '" + pattern.format(a=col.value(1).words[0]) + "'")
         values = next(p for p in predicates if " IN " in p.sql and "#3" in p.sql)
-        for text in (values.sql, *values.distinct_questions({}, 3, random.Random(42))):
-            self.assertEqual([v[2] for v in VALUE.finditer(text)], ["1", "2", "3"])
+        self.assertEqual(values.sql, f"{col.ref} IN ({', '.join(col.value(n).sql for n in (1, 2, 3))})")
+        questions = list(values.distinct_questions({}, len(values.words), random.Random(42)))
+        self.assertEqual(len(questions), len(values.words))
+        for question in questions:
+            self.assertNotRegex(question, r"[()]")
+            self.assertEqual([v[2] for v in VALUE.finditer(question)], ["1", "2", "3"])
         for kind in ("numeric", "date"):
             col = Column(1, kind)
             pred = next(p for p in self.catalog.predicates(col) if " BETWEEN " in p.sql)

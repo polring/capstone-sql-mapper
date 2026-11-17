@@ -41,14 +41,18 @@ class FrontTrainingTests(unittest.TestCase):
 
     def test_questions_from_every_in_template_enter_the_dataset(self):
         mappings = json.loads(nq.MAPPINGS_PATH.read_text(encoding="utf-8"))
-        values = ", ".join(f"[customers.city, string, #{n}]" for n in (1, 2))
+        value_tags = [f"[customers.city, string, #{n}]" for n in (1, 2)]
+        values = ", ".join(value_tags)
         rows = []
         for index, form in enumerate(IN_FORMS, 1):
             condition = form.format(col="the <customers.city, string>", values=values)
             output = f"List the {{customers.name, string}} of <customers> where {condition}."
-            question, _ = nq.realize(output, nq.parse_tags(output), mappings, random.Random(index))
+            question, realized = nq.realize(output, nq.parse_tags(output), mappings, random.Random(index))
+            self.assertNotRegex(output, r"[()]")
+            self.assertNotRegex(question, r"[()]")
+            self.assertEqual(list(realized), value_tags)
+            self.assertIn(", ".join(realized[tag]["text"] for tag in value_tags), question)
             rows.append({"id": f"{index}.1.1.1", "input": question, "output": output})
-        self.assertTrue(all("(" in r["output"] and "(" in r["input"] for r in rows))
         tokenizer = FrontTokenizer.fit([t for r in rows for t in (r["input"], r["output"])], 1024)
         ds = PairDataset(rows, tokenizer)
         self.assertEqual(len(ds), len(IN_FORMS))

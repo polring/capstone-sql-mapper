@@ -923,18 +923,18 @@
   },
   "predicates": {
     "in": [
-      "{col} is one of ({values})",
-      "{col} matches any of ({values})",
-      "{col} belongs to the list ({values})",
-      "{col} equals one of the following values ({values})",
-      "{col} is among the values ({values})",
-      "the list ({values}) includes {col}",
-      "{col} matches a value in ({values})",
-      "at least one entry in ({values}) equals {col}",
+      "{col} has one of the values listed here, {values}",
+      "{col} matches at least one entry from the list {values}",
+      "{col} belongs to the list {values}",
+      "{col} equals one of the following values, {values}",
+      "{col} is among the values {values}",
+      "one of the listed values, {values}, matches {col}",
+      "{col} matches a value in {values}",
+      "at least one of the values {values} equals {col}",
       "{col} is one of {values}",
       "{col} matches any of {values}",
       "{col} is in the list {values}",
-      "{col} has a value from this list: {values}"
+      "{col} has a value from the list {values}"
     ],
     "between": [
       "{col} is between {a} and {b}, inclusive",
