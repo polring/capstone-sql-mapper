@@ -209,8 +209,12 @@ class GeneralizedPairsTest(unittest.TestCase):
             pred = next(p for p in predicates if key in p.words[0])
             self.assertEqual(pred.sql, f"{col.ref} LIKE '" + pattern.format(a=col.value(1).words[0]) + "'")
         values = next(p for p in predicates if " IN " in p.sql and "#3" in p.sql)
-        for text in (values.sql, *values.distinct_questions({}, 3, random.Random(42))):
-            self.assertEqual([v[2] for v in VALUE.finditer(text)], ["1", "2", "3"])
+        self.assertEqual(values.sql, f"{col.ref} IN ({', '.join(col.value(n).sql for n in (1, 2, 3))})")
+        questions = list(values.distinct_questions({}, len(values.words), random.Random(42)))
+        self.assertEqual(len(questions), len(values.words))
+        for question in questions:
+            self.assertNotRegex(question, r"[()]")
+            self.assertEqual([v[2] for v in VALUE.finditer(question)], ["1", "2", "3"])
         for kind in ("numeric", "date"):
             col = Column(1, kind)
             pred = next(p for p in self.catalog.predicates(col) if " BETWEEN " in p.sql)
@@ -354,7 +358,10 @@ class GeneralizedPairsTest(unittest.TestCase):
                 if kind == "rank_direction":
                     variants = {left.replace("highest", "lowest")}
                 elif kind == "average_scope":
-                    variants = {left.replace("all rows in the table", "only rows in that same subset")}
+                    cues = self.mappings["contrast_cues"]
+                    variants = {left.replace(full, subset, 1)
+                                for full in cues["all_rows"] if full in left
+                                for subset in cues["same_subset"]}
                 elif kind == "filter_level":
                     expected = re.sub(r"rows whose <TABLE1.COL2, numeric>", "groups whose aggregate", left)
                     variants = {expected.replace("[TABLE1.COL2, numeric, #1]", "[AGG_VALUE, numeric, #1]")}
@@ -411,10 +418,10 @@ class GeneralizedPairsTest(unittest.TestCase):
                 self.assertEqual(re.search(r" (ASC|DESC)\b", order)[1], direction)
                 self.assertTrue(sql.endswith(" LIMIT " + count[2]))
                 if re.search(r"(?:ASC|DESC), ", order):
-                    self.assertRegex(q, r"tie|equal values")
+                    self.assertRegex(q, r"tie|equal values|secondary sort key")
                     seen.add("tie")
                 seen.add(count[1])
-            if "its average across" in q:
+            if re.search(r"its (?:average|mean) (?:across|over|for)", q):
                 self.assertIn("(SELECT AVG(", sql)
                 seen.add("average")
         self.assertEqual(seen, {"count", "top", "bottom", "tie", "average"})

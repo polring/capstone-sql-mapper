@@ -9,7 +9,7 @@ import sqlite3
 
 
 TAG_ATOMS = ("string", "numeric", "date", "AGG_VALUE", "#1", "#2", "#3")
-# IN 조건 문장 틀이 "is one of ({values})"처럼 괄호를 쓴다.
+# 기존 태그 문장과 추론 입력에 들어올 수 있는 괄호도 지원한다.
 TEXT_CHARS = " 0123456789.,?'-()"
 TAG_CHARS = " <>{}[].,*"
 NAME = r"[A-Za-z_][A-Za-z_0-9]*"

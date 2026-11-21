@@ -10,20 +10,134 @@ TAG_ATOMS = ["TABLE1", *(f"COL{i}" for i in range(1, 7)), "AGG_VALUE",
              "string", "numeric", "date", "#1", "#2", "#3"]
 # Seed order is part of the checkpoint and GGUF contract, including tags that a
 # particular training split never contains.
-_FIELD_NAMES = tuple(f"TABLE1.COL{col}, {kind}" for col in range(1, 7)
-                     for kind in ("string", "numeric", "date"))
-ATOMIC_TAGS = ("<TABLE1>", *(f"<{field}>" for field in _FIELD_NAMES),
-               *(f"{{{field}}}" for field in _FIELD_NAMES), "{*}",
-               *(f"[{field}, #{slot}]" for field in _FIELD_NAMES for slot in range(1, 4)),
-               *(f"[AGG_VALUE, numeric, #{slot}]" for slot in range(1, 4)))
+AGGREGATE_TAGS = (
+    "{COUNT(*)}",
+    "{AVG(<TABLE1.COL1, numeric>)}",
+    "{AVG(<TABLE1.COL2, numeric>)}",
+    "{SUM(<TABLE1.COL1, numeric>)}",
+    "{SUM(<TABLE1.COL2, numeric>)}",
+    "{MIN(<TABLE1.COL1, numeric>)}",
+    "{MIN(<TABLE1.COL1, date>)}",
+    "{MIN(<TABLE1.COL2, numeric>)}",
+    "{MIN(<TABLE1.COL2, date>)}",
+    "{MAX(<TABLE1.COL1, numeric>)}",
+    "{MAX(<TABLE1.COL1, date>)}",
+    "{MAX(<TABLE1.COL2, numeric>)}",
+    "{MAX(<TABLE1.COL2, date>)}",
+)
+ATOMIC_TAGS = (
+    "<TABLE1>",
+
+    "<TABLE1.COL1, string>",
+    "<TABLE1.COL1, numeric>",
+    "<TABLE1.COL1, date>",
+    "<TABLE1.COL2, string>",
+    "<TABLE1.COL2, numeric>",
+    "<TABLE1.COL2, date>",
+    "<TABLE1.COL3, string>",
+    "<TABLE1.COL3, numeric>",
+    "<TABLE1.COL3, date>",
+    "<TABLE1.COL4, string>",
+    "<TABLE1.COL4, numeric>",
+    "<TABLE1.COL4, date>",
+    "<TABLE1.COL5, string>",
+    "<TABLE1.COL5, numeric>",
+    "<TABLE1.COL5, date>",
+    "<TABLE1.COL6, string>",
+    "<TABLE1.COL6, numeric>",
+    "<TABLE1.COL6, date>",
+
+    "{TABLE1.COL1, string}",
+    "{TABLE1.COL1, numeric}",
+    "{TABLE1.COL1, date}",
+    "{TABLE1.COL2, string}",
+    "{TABLE1.COL2, numeric}",
+    "{TABLE1.COL2, date}",
+    "{TABLE1.COL3, string}",
+    "{TABLE1.COL3, numeric}",
+    "{TABLE1.COL3, date}",
+    "{TABLE1.COL4, string}",
+    "{TABLE1.COL4, numeric}",
+    "{TABLE1.COL4, date}",
+    "{TABLE1.COL5, string}",
+    "{TABLE1.COL5, numeric}",
+    "{TABLE1.COL5, date}",
+    "{TABLE1.COL6, string}",
+    "{TABLE1.COL6, numeric}",
+    "{TABLE1.COL6, date}",
+    "{*}",
+
+    "[TABLE1.COL1, string, #1]",
+    "[TABLE1.COL1, string, #2]",
+    "[TABLE1.COL1, string, #3]",
+    "[TABLE1.COL1, numeric, #1]",
+    "[TABLE1.COL1, numeric, #2]",
+    "[TABLE1.COL1, numeric, #3]",
+    "[TABLE1.COL1, date, #1]",
+    "[TABLE1.COL1, date, #2]",
+    "[TABLE1.COL1, date, #3]",
+    "[TABLE1.COL2, string, #1]",
+    "[TABLE1.COL2, string, #2]",
+    "[TABLE1.COL2, string, #3]",
+    "[TABLE1.COL2, numeric, #1]",
+    "[TABLE1.COL2, numeric, #2]",
+    "[TABLE1.COL2, numeric, #3]",
+    "[TABLE1.COL2, date, #1]",
+    "[TABLE1.COL2, date, #2]",
+    "[TABLE1.COL2, date, #3]",
+    "[TABLE1.COL3, string, #1]",
+    "[TABLE1.COL3, string, #2]",
+    "[TABLE1.COL3, string, #3]",
+    "[TABLE1.COL3, numeric, #1]",
+    "[TABLE1.COL3, numeric, #2]",
+    "[TABLE1.COL3, numeric, #3]",
+    "[TABLE1.COL3, date, #1]",
+    "[TABLE1.COL3, date, #2]",
+    "[TABLE1.COL3, date, #3]",
+    "[TABLE1.COL4, string, #1]",
+    "[TABLE1.COL4, string, #2]",
+    "[TABLE1.COL4, string, #3]",
+    "[TABLE1.COL4, numeric, #1]",
+    "[TABLE1.COL4, numeric, #2]",
+    "[TABLE1.COL4, numeric, #3]",
+    "[TABLE1.COL4, date, #1]",
+    "[TABLE1.COL4, date, #2]",
+    "[TABLE1.COL4, date, #3]",
+    "[TABLE1.COL5, string, #1]",
+    "[TABLE1.COL5, string, #2]",
+    "[TABLE1.COL5, string, #3]",
+    "[TABLE1.COL5, numeric, #1]",
+    "[TABLE1.COL5, numeric, #2]",
+    "[TABLE1.COL5, numeric, #3]",
+    "[TABLE1.COL5, date, #1]",
+    "[TABLE1.COL5, date, #2]",
+    "[TABLE1.COL5, date, #3]",
+    "[TABLE1.COL6, string, #1]",
+    "[TABLE1.COL6, string, #2]",
+    "[TABLE1.COL6, string, #3]",
+    "[TABLE1.COL6, numeric, #1]",
+    "[TABLE1.COL6, numeric, #2]",
+    "[TABLE1.COL6, numeric, #3]",
+    "[TABLE1.COL6, date, #1]",
+    "[TABLE1.COL6, date, #2]",
+    "[TABLE1.COL6, date, #3]",
+
+    "[AGG_VALUE, numeric, #1]",
+    "[AGG_VALUE, numeric, #2]",
+    "[AGG_VALUE, numeric, #3]",
+
+    *AGGREGATE_TAGS,
+)
 SEEDS = tuple(TAG_ATOMS + KEYWORDS + ["<=", ">=", "!="]) + ATOMIC_TAGS
 SQL_CHARS = " 0123456789<>=.,{}()[]*'%"
 FIELDS = r"TABLE1\.COL[1-6], (?:string|numeric|date)"
 TAG = (rf"(?:<TABLE1>|<{FIELDS}>|\{{{FIELDS}\}}|\{{\*\}}"
        rf"|\[(?:{FIELDS}|AGG_VALUE, numeric), #[1-3]\])")
 TAG_RE = re.compile(TAG)
-QUESTION_RE = re.compile(rf"(?P<tag>{TAG})|(?P<word>[A-Za-z]+)|.", re.DOTALL)
-LEXEME_RE = re.compile(rf"{TAG}|#[0-9]+|[A-Za-z_][A-Za-z_0-9]*|<=|>=|!=|.", re.DOTALL)
+_ATOMIC_TAG_PATTERN = "|".join((TAG, *map(re.escape, AGGREGATE_TAGS)))
+_ATOMIC_TAG_RE = re.compile(_ATOMIC_TAG_PATTERN)
+QUESTION_RE = re.compile(rf"(?P<tag>{_ATOMIC_TAG_PATTERN})|(?P<word>[A-Za-z]+)|.", re.DOTALL)
+LEXEME_RE = re.compile(rf"{_ATOMIC_TAG_PATTERN}|#[0-9]+|[A-Za-z_][A-Za-z_0-9]*|<=|>=|!=|.", re.DOTALL)
 
 
 def _merge(tokens, pair, new_id):
@@ -73,7 +187,7 @@ class BackTokenizer:
         for question in questions:
             if not question.isascii():
                 raise ValueError("expected an ASCII generalized question")
-            frequencies.update(re.findall(r"[A-Za-z]+", TAG_RE.sub(" ", question)))
+            frequencies.update(re.findall(r"[A-Za-z]+", _ATOMIC_TAG_RE.sub(" ", question)))
 
         words = {tuple(w.encode("ascii")): count for w, count in frequencies.items()}
         merges = []
@@ -137,7 +251,7 @@ class BackTokenizer:
     def from_dict(cls, state):
         if state.get("seeds") != list(cls.seeds):
             raise ValueError("incompatible tokenizer: an atomic-tag checkpoint is required; "
-                             "retrain the back model to use whole-tag IDs")
+                             "retrain the back model with the current whole-tag vocabulary")
         tok = cls(state["vocab_size"], state["merges"])
         if state.get("sql_ids") != list(tok.sql_ids):
             raise ValueError("checkpoint SQL whitelist does not match this tokenizer")

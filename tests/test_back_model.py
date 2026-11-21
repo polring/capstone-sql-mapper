@@ -1,7 +1,7 @@
 import unittest
 
 from src.back.config import ModelConfig
-from src.back.tokenizer import ATOMIC_TAGS, BackTokenizer
+from src.back.tokenizer import AGGREGATE_TAGS, ATOMIC_TAGS, BackTokenizer
 
 
 class TokenizerTests(unittest.TestCase):
@@ -33,7 +33,7 @@ class TokenizerTests(unittest.TestCase):
         self.assertIn(self.tok.eos_id, self.tok.sql_ids)
 
     def test_whole_tag_ids_are_shared_unique_and_independent_of_training_examples(self):
-        self.assertEqual(len(set(ATOMIC_TAGS)), 95)
+        self.assertEqual(len(set(ATOMIC_TAGS)), 108)
         ids = []
         for tag in ATOMIC_TAGS:
             token, = self.tok.encode_question(tag)
@@ -41,7 +41,19 @@ class TokenizerTests(unittest.TestCase):
             self.assertEqual(self.tok.decode_sql([token]), tag)
             self.assertIn(token, self.tok.sql_ids)
             ids.append(token)
-        self.assertEqual(ids, list(range(297, 392)))
+        self.assertEqual(ids, list(range(297, 405)))
+
+    def test_select_aggregates_use_whole_tags_but_bare_calls_use_sql_tokens(self):
+        self.assertEqual(len(AGGREGATE_TAGS), 13)
+        tag = "{MAX(<TABLE1.COL2, date>)}"
+        call = "MAX(<TABLE1.COL2, date>)"
+        sql = f"SELECT {{TABLE1.COL1, string}}, {tag} FROM <TABLE1> ORDER BY {call} DESC"
+        ids = self.tok.encode_sql(sql)
+        self.assertEqual(self.tok.decode_sql(ids), sql)
+        self.assertIn(self.tok.encode_sql(tag)[0], ids)
+        self.assertEqual([self.tok.decode_sql([i]) for i in self.tok.encode_sql(call)],
+                         ["MAX", "(", "<TABLE1.COL2, date>", ")"])
+        self.assertEqual(BackTokenizer.fit(AGGREGATE_TAGS * 2, vocab_size=512).merges, [])
 
     def test_sql_matches_inner_tags_in_expressions_and_quoted_values(self):
         sql = "SELECT {MAX(<TABLE1.COL6, numeric>)} FROM <TABLE1> WHERE <TABLE1.COL2, string> = '[TABLE1.COL2, string, #1]'"
